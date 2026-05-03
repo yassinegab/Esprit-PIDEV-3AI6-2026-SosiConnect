@@ -19,7 +19,7 @@ public class OpenAITtsService {
 
     public OpenAITtsService() {
         this.client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(10))
+                .connectTimeout(Duration.ofSeconds(30))
                 .build();
     }
 
@@ -33,33 +33,41 @@ public class OpenAITtsService {
         long waitTime = 1000; // 1 second start
 
         while (retryCount <= maxRetries) {
-            JSONObject body = new JSONObject();
-            body.put("model", "tts-1");
-            body.put("input", text);
-            body.put("voice", "nova");
-            body.put("response_format", "mp3");
+            try {
+                JSONObject body = new JSONObject();
+                body.put("model", "tts-1");
+                body.put("input", text);
+                body.put("voice", "nova");
+                body.put("response_format", "mp3");
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
-                    .timeout(Duration.ofSeconds(60))
-                    .build();
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(API_URL))
+                        .header("Authorization", "Bearer " + API_KEY)
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                        .timeout(Duration.ofSeconds(60))
+                        .build();
 
-            HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+                HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
 
-            if (response.statusCode() == 200) {
-                return response.body();
-            } else if (response.statusCode() == 429 && retryCount < maxRetries) {
+                if (response.statusCode() == 200) {
+                    return response.body();
+                } else if (response.statusCode() == 429 && retryCount < maxRetries) {
+                    retryCount++;
+                    System.out.println("TTS Rate limit hit. Retrying in " + waitTime + "ms... (Attempt " + retryCount + ")");
+                    Thread.sleep(waitTime);
+                    waitTime *= 2; // Exponential backoff
+                } else if (response.statusCode() == 429) {
+                    throw new Exception("Rate limit reached (429). Please wait a moment before trying again.");
+                } else {
+                    throw new Exception("TTS Error: " + response.statusCode());
+                }
+            } catch (java.net.http.HttpConnectTimeoutException | java.net.ConnectException e) {
                 retryCount++;
-                System.out.println("TTS Rate limit hit. Retrying in " + waitTime + "ms... (Attempt " + retryCount + ")");
+                if (retryCount > maxRetries) throw e;
+                System.err.println("OpenAI TTS connection timeout, retrying... (Attempt " + retryCount + ")");
                 Thread.sleep(waitTime);
-                waitTime *= 2; // Exponential backoff
-            } else if (response.statusCode() == 429) {
-                throw new Exception("Rate limit reached (429). Please wait a moment before trying again.");
-            } else {
-                throw new Exception("TTS Error: " + response.statusCode());
+                waitTime *= 2;
             }
         }
         throw new Exception("Failed to generate speech after retries.");

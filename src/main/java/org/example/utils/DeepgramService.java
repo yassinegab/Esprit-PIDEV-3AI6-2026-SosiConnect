@@ -18,7 +18,7 @@ public class DeepgramService {
 
     public DeepgramService() {
         this.client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(10))
+                .connectTimeout(Duration.ofSeconds(30))
                 .build();
     }
 
@@ -27,26 +27,39 @@ public class DeepgramService {
             throw new IllegalStateException("Deepgram API Key is missing in .env");
         }
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL))
-                .header("Authorization", "Token " + API_KEY)
-                .header("Content-Type", "audio/wav") // Or audio/webm if supported
-                .POST(HttpRequest.BodyPublishers.ofByteArray(audioData))
-                .timeout(Duration.ofSeconds(30))
-                .build();
+        int maxRetries = 2;
+        int attempt = 0;
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        while (attempt <= maxRetries) {
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(API_URL))
+                        .header("Authorization", "Token " + API_KEY)
+                        .header("Content-Type", "audio/wav")
+                        .POST(HttpRequest.BodyPublishers.ofByteArray(audioData))
+                        .timeout(Duration.ofSeconds(60))
+                        .build();
 
-        if (response.statusCode() == 200) {
-            JSONObject json = new JSONObject(response.body());
-            return json.getJSONObject("results")
-                    .getJSONArray("channels")
-                    .getJSONObject(0)
-                    .getJSONArray("alternatives")
-                    .getJSONObject(0)
-                    .getString("transcript");
-        } else {
-            throw new Exception("STT Error: " + response.statusCode() + " - " + response.body());
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    JSONObject json = new JSONObject(response.body());
+                    return json.getJSONObject("results")
+                            .getJSONArray("channels")
+                            .getJSONObject(0)
+                            .getJSONArray("alternatives")
+                            .getJSONObject(0)
+                            .getString("transcript");
+                } else {
+                    throw new Exception("STT Error: " + response.statusCode() + " - " + response.body());
+                }
+            } catch (java.net.http.HttpConnectTimeoutException | java.net.ConnectException e) {
+                attempt++;
+                if (attempt > maxRetries) throw e;
+                System.err.println("Deepgram connection timeout, retrying... (Attempt " + attempt + ")");
+                Thread.sleep(1000 * attempt);
+            }
         }
+        throw new Exception("Failed to transcribe after retries");
     }
 }

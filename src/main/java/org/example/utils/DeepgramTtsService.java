@@ -19,7 +19,7 @@ public class DeepgramTtsService {
 
     public DeepgramTtsService() {
         this.client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(10))
+                .connectTimeout(Duration.ofSeconds(30))
                 .build();
     }
 
@@ -28,23 +28,36 @@ public class DeepgramTtsService {
             throw new IllegalStateException("Deepgram API Key is missing in .env");
         }
 
-        JSONObject body = new JSONObject();
-        body.put("text", text);
+        int maxRetries = 2;
+        int attempt = 0;
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL))
-                .header("Authorization", "Token " + API_KEY)
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
-                .timeout(Duration.ofSeconds(60))
-                .build();
+        while (attempt <= maxRetries) {
+            try {
+                JSONObject body = new JSONObject();
+                body.put("text", text);
 
-        HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(API_URL))
+                        .header("Authorization", "Token " + API_KEY)
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                        .timeout(Duration.ofSeconds(60))
+                        .build();
 
-        if (response.statusCode() == 200) {
-            return response.body();
-        } else {
-            throw new Exception("Deepgram TTS Error: " + response.statusCode());
+                HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+
+                if (response.statusCode() == 200) {
+                    return response.body();
+                } else {
+                    throw new Exception("Deepgram TTS Error: " + response.statusCode());
+                }
+            } catch (java.net.http.HttpConnectTimeoutException | java.net.ConnectException e) {
+                attempt++;
+                if (attempt > maxRetries) throw e;
+                System.err.println("Deepgram TTS connection timeout, retrying... (Attempt " + attempt + ")");
+                Thread.sleep(1000 * attempt);
+            }
         }
+        throw new Exception("Failed to generate speech after retries");
     }
 }

@@ -22,7 +22,7 @@ public class AiService {
 
     public AiService() {
         this.client = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(10))
+                .connectTimeout(Duration.ofSeconds(30))
                 .build();
     }
 
@@ -45,75 +45,87 @@ public class AiService {
     }
 
     public String analyzeText(String prompt, String context) {
-        try {
-            JSONObject body = new JSONObject();
-            body.put("model", "qwen/qwen-2.5-vl-72b-instruct");
-            
-            JSONArray messages = new JSONArray();
-            
-            // System prompt
-            StringBuilder systemContent = new StringBuilder("You are ChatWell, SosiApp's intelligent Mental Health and Wellbeing Assistant.\n" +
-                    "Your personality: Extremely empathetic, professional, calm, and encouraging.\n" +
-                    "Your rules:\n" +
-                    "1. ONLY discuss wellbeing, mental health, stress, diet, and physical health.\n" +
-                    "2. If the user is stressed or sad, offer validation and small, actionable wellness tips.\n" +
-                    "3. KEEP RESPONSES CONCISE (max 3-4 sentences) so they are easy to hear via voice synthesis.\n" +
-                    "4. If a user is in crisis, recommend professional medical help immediately.\n\n");
-            
-            if (context != null && !context.isEmpty()) {
-                systemContent.append("CURRENT USER WELLBEING DATA:\n").append(context).append("\n\n");
+        int maxRetries = 2;
+        int attempt = 0;
+        
+        while (attempt <= maxRetries) {
+            try {
+                JSONObject body = new JSONObject();
+                body.put("model", "qwen/qwen-2.5-vl-72b-instruct");
+
+                JSONArray messages = new JSONArray();
+
+                // System prompt
+                StringBuilder systemContent = new StringBuilder("You are ChatWell, SosiApp's intelligent Mental Health and Wellbeing Assistant.\n" +
+                        "Your personality: Extremely empathetic, professional, calm, and encouraging.\n" +
+                        "Your rules:\n" +
+                        "1. ONLY discuss wellbeing, mental health, stress, diet, and physical health.\n" +
+                        "2. If the user is stressed or sad, offer validation and small, actionable wellness tips.\n" +
+                        "3. KEEP RESPONSES CONCISE (max 3-4 sentences) so they are easy to hear via voice synthesis.\n" +
+                        "4. If a user is in crisis, recommend professional medical help immediately.\n\n");
+
+                if (context != null && !context.isEmpty()) {
+                    systemContent.append("CURRENT USER WELLBEING DATA:\n").append(context).append("\n\n");
+                }
+
+                JSONObject systemMessage = new JSONObject();
+                systemMessage.put("role", "system");
+                systemMessage.put("content", systemContent.toString());
+                messages.put(systemMessage);
+
+                // Add history
+                for (int i = 0; i < chatHistory.length(); i++) {
+                    messages.put(chatHistory.get(i));
+                }
+
+                // Add current prompt
+                JSONObject userMessage = new JSONObject();
+                userMessage.put("role", "user");
+                userMessage.put("content", prompt);
+                messages.put(userMessage);
+
+                body.put("messages", messages);
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(API_URL))
+                        .header("Authorization", "Bearer " + API_KEY)
+                        .header("HTTP-Referer", "http://localhost")
+                        .header("X-Title", "SosiApp ChatWell")
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                        .timeout(Duration.ofSeconds(30))
+                        .build();
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    JSONObject jsonResponse = new JSONObject(response.body());
+                    String aiResponse = jsonResponse.getJSONArray("choices")
+                            .getJSONObject(0)
+                            .getJSONObject("message")
+                            .getString("content");
+
+                    // Save to history
+                    addToHistory("user", prompt);
+                    addToHistory("assistant", aiResponse);
+
+                    return aiResponse;
+                } else if (response.statusCode() == 429 && attempt < maxRetries) {
+                    attempt++;
+                    Thread.sleep(2000 * attempt);
+                } else {
+                    return "Je suis désolé, je rencontre une difficulté technique. Pouvez-vous répéter ?";
+                }
+            } catch (java.net.http.HttpConnectTimeoutException | java.net.ConnectException e) {
+                attempt++;
+                if (attempt > maxRetries) break;
+                try { Thread.sleep(1000 * attempt); } catch (InterruptedException ignored) {}
+            } catch (Exception e) {
+                e.printStackTrace();
+                break;
             }
-
-            JSONObject systemMessage = new JSONObject();
-            systemMessage.put("role", "system");
-            systemMessage.put("content", systemContent.toString());
-            messages.put(systemMessage);
-
-            // Add history
-            for (int i = 0; i < chatHistory.length(); i++) {
-                messages.put(chatHistory.get(i));
-            }
-
-            // Add current prompt
-            JSONObject userMessage = new JSONObject();
-            userMessage.put("role", "user");
-            userMessage.put("content", prompt);
-            messages.put(userMessage);
-            
-            body.put("messages", messages);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .header("HTTP-Referer", "http://localhost")
-                    .header("X-Title", "SosiApp ChatWell")
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
-                    .timeout(Duration.ofSeconds(30))
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                JSONObject jsonResponse = new JSONObject(response.body());
-                String aiResponse = jsonResponse.getJSONArray("choices")
-                        .getJSONObject(0)
-                        .getJSONObject("message")
-                        .getString("content");
-                
-                // Save to history
-                addToHistory("user", prompt);
-                addToHistory("assistant", aiResponse);
-                
-                return aiResponse;
-            } else {
-                return "Je suis désolé, je rencontre une difficulté technique. Pouvez-vous répéter ?";
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Une erreur est survenue lors de notre échange.";
         }
+        return "Une erreur est survenue lors de notre échange.";
     }
 
     public void clearHistory() {
@@ -121,77 +133,89 @@ public class AiService {
     }
 
     public String analyzeMeal(String imagePath, String description) {
-        try {
-            byte[] imageBytes = Files.readAllBytes(Paths.get(imagePath));
-            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-            String extension = imagePath.substring(imagePath.lastIndexOf(".") + 1).toLowerCase();
-            String mimeType = "image/jpeg";
-            if (extension.equals("png")) mimeType = "image/png";
-            else if (extension.equals("webp")) mimeType = "image/webp";
+        int maxRetries = 2;
+        int attempt = 0;
 
-            JSONObject body = new JSONObject();
-            body.put("model", "qwen/qwen-2.5-vl-72b-instruct");
+        while (attempt <= maxRetries) {
+            try {
+                byte[] imageBytes = Files.readAllBytes(Paths.get(imagePath));
+                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                String extension = imagePath.substring(imagePath.lastIndexOf(".") + 1).toLowerCase();
+                String mimeType = "image/jpeg";
+                if (extension.equals("png")) mimeType = "image/png";
+                else if (extension.equals("webp")) mimeType = "image/webp";
 
-            JSONArray messages = new JSONArray();
-            JSONObject message = new JSONObject();
-            message.put("role", "user");
+                JSONObject body = new JSONObject();
+                body.put("model", "qwen/qwen-2.5-vl-72b-instruct");
 
-            JSONArray content = new JSONArray();
-            
-            JSONObject textContent = new JSONObject();
-            textContent.put("type", "text");
-            String prompt = "Analyze this meal photo. ";
-            if (description != null && !description.isEmpty()) {
-                prompt += "User description: " + description + ". ";
+                JSONArray messages = new JSONArray();
+                JSONObject message = new JSONObject();
+                message.put("role", "user");
+
+                JSONArray content = new JSONArray();
+
+                JSONObject textContent = new JSONObject();
+                textContent.put("type", "text");
+                String prompt = "Analyze this meal photo. ";
+                if (description != null && !description.isEmpty()) {
+                    prompt += "User description: " + description + ". ";
+                }
+                prompt += "Provide nutritional insights and health recommendations. \n" +
+                          "You MUST respond in JSON format with the following keys:\n" +
+                          "- calories: estimated calories (number)\n" +
+                          "- sugar: estimated sugar in grams (number)\n" +
+                          "- protein: estimated protein in grams (number)\n" +
+                          "- analysis: a concise and encouraging textual analysis\n" +
+                          "- stress_link: a brief insight on how this meal might affect stress or restlessness (e.g., 'High sugar might increase restlessness').\n" +
+                          "\n" +
+                          "Keep it professional and empathetic.";
+                textContent.put("text", prompt);
+                content.put(textContent);
+
+                JSONObject imageContent = new JSONObject();
+                imageContent.put("type", "image_url");
+                JSONObject imageUrl = new JSONObject();
+                imageUrl.put("url", "data:" + mimeType + ";base64," + base64Image);
+                imageContent.put("image_url", imageUrl);
+                content.put(imageContent);
+
+                message.put("content", content);
+                messages.put(message);
+                body.put("messages", messages);
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(API_URL))
+                        .header("Authorization", "Bearer " + API_KEY)
+                        .header("HTTP-Referer", "http://localhost")
+                        .header("X-Title", "SosiApp")
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                        .timeout(Duration.ofSeconds(60))
+                        .build();
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    JSONObject jsonResponse = new JSONObject(response.body());
+                    return jsonResponse.getJSONArray("choices")
+                            .getJSONObject(0)
+                            .getJSONObject("message")
+                            .getString("content");
+                } else if (response.statusCode() == 429 && attempt < maxRetries) {
+                    attempt++;
+                    Thread.sleep(2000 * attempt);
+                } else {
+                    return "Erreur AI: Code " + response.statusCode() + " - " + response.body();
+                }
+            } catch (java.net.http.HttpConnectTimeoutException | java.net.ConnectException e) {
+                attempt++;
+                if (attempt > maxRetries) break;
+                try { Thread.sleep(1000 * attempt); } catch (InterruptedException ignored) {}
+            } catch (Exception e) {
+                e.printStackTrace();
+                break;
             }
-            prompt += "Provide nutritional insights and health recommendations. \n" +
-                      "You MUST respond in JSON format with the following keys:\n" +
-                      "- calories: estimated calories (number)\n" +
-                      "- sugar: estimated sugar in grams (number)\n" +
-                      "- protein: estimated protein in grams (number)\n" +
-                      "- analysis: a concise and encouraging textual analysis\n" +
-                      "- stress_link: a brief insight on how this meal might affect stress or restlessness (e.g., 'High sugar might increase restlessness').\n" +
-                      "\n" +
-                      "Keep it professional and empathetic.";
-            textContent.put("text", prompt);
-            content.put(textContent);
-
-            JSONObject imageContent = new JSONObject();
-            imageContent.put("type", "image_url");
-            JSONObject imageUrl = new JSONObject();
-            imageUrl.put("url", "data:" + mimeType + ";base64," + base64Image);
-            imageContent.put("image_url", imageUrl);
-            content.put(imageContent);
-
-            message.put("content", content);
-            messages.put(message);
-            body.put("messages", messages);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
-                    .header("Authorization", "Bearer " + API_KEY)
-                    .header("HTTP-Referer", "http://localhost")
-                    .header("X-Title", "SosiApp")
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
-                    .timeout(Duration.ofSeconds(60))
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                JSONObject jsonResponse = new JSONObject(response.body());
-                return jsonResponse.getJSONArray("choices")
-                        .getJSONObject(0)
-                        .getJSONObject("message")
-                        .getString("content");
-            } else {
-                return "Erreur AI: Code " + response.statusCode() + " - " + response.body();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Erreur AI Error: " + e.getMessage();
         }
+        return "Erreur AI Error: Connection failed after retries.";
     }
 }

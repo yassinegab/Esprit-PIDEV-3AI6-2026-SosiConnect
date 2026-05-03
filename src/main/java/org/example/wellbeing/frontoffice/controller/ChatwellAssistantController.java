@@ -151,7 +151,12 @@ public class ChatwellAssistantController {
                 Platform.runLater(() -> processUserInput(transcript));
             } catch (Exception e) {
                 e.printStackTrace();
-                Platform.runLater(() -> showError("Failed to understand: " + e.getMessage()));
+                String message = e.getMessage();
+                if (e instanceof java.net.http.HttpConnectTimeoutException || e instanceof java.net.ConnectException) {
+                    message = "Connection timed out. Please check your internet connection and try again.";
+                }
+                final String finalMessage = message;
+                Platform.runLater(() -> showError("Transcription failed: " + finalMessage));
             }
         });
     }
