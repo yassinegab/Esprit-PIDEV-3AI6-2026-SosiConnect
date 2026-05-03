@@ -17,51 +17,47 @@ import java.util.List;
 
 public class HomeController {
 
-    @FXML
-    private Label userNameLabel;
+    // ✅ Instance statique — accessible depuis n'importe quel contrôleur
+    private static HomeController instance;
 
-    @FXML
-    private Label userRoleLabel;
-
-    @FXML
-    private Label avatarLabel;
-
-    @FXML
-    private StackPane contentArea;
-
-    @FXML
-    private VBox dashboardView;
-
-    @FXML
-    private Button btnWellbeing;
-
-    @FXML
-    private Button btnServicesSociaux;
-
-    @FXML
-    private Button btnJournal;
-
-    @FXML
-    private Button btnAideEtdon;
-
-    @FXML
-    private Button btnCycle;
+    @FXML private Label userNameLabel;
+    @FXML private Label userRoleLabel;
+    @FXML private Label avatarLabel;
+    @FXML private StackPane contentArea;
+    @FXML private VBox dashboardView;
+    @FXML private Button btnWellbeing;
+    @FXML private Button btnServicesSociaux;
+    @FXML private Button btnJournal;
+    @FXML private Button btnAideEtdon;
+    @FXML private Button btnCycle;
 
     private List<Button> navButtons;
 
     @FXML
     public void initialize() {
-        navButtons = Arrays.asList(btnWellbeing, btnServicesSociaux, btnJournal, btnAideEtdon, btnCycle);
+        instance = this; // ✅ Enregistrer l'instance au démarrage
+        navButtons = Arrays.asList(
+                btnWellbeing, btnServicesSociaux, btnJournal, btnAideEtdon, btnCycle
+        );
+    }
+
+    // ✅ Méthode statique appelable depuis n'importe quel sous-contrôleur
+    public static void navigateTo(Parent view) {
+        if (instance != null && instance.contentArea != null) {
+            instance.contentArea.getChildren().setAll(view);
+        } else {
+            System.err.println("HomeController instance non disponible.");
+        }
     }
 
     public void setUser(User user) {
         userNameLabel.setText(user.getNom() + " " + user.getPrenom());
         userRoleLabel.setText(user.getRole().name());
-        
-        // Dynamic Initials
         String initials = "";
-        if (user.getNom() != null && !user.getNom().isEmpty()) initials += user.getNom().substring(0, 1).toUpperCase();
-        if (user.getPrenom() != null && !user.getPrenom().isEmpty()) initials += user.getPrenom().substring(0, 1).toUpperCase();
+        if (user.getNom() != null && !user.getNom().isEmpty())
+            initials += user.getNom().substring(0, 1).toUpperCase();
+        if (user.getPrenom() != null && !user.getPrenom().isEmpty())
+            initials += user.getPrenom().substring(0, 1).toUpperCase();
         avatarLabel.setText(initials);
     }
 
@@ -90,7 +86,7 @@ public class HomeController {
 
     @FXML
     private void showServicesSociaux() {
-        loadView("/servicesociaux/frontoffice/ServicesSociauxClientView.fxml", btnServicesSociaux);
+        loadView("/servicesociaux/frontoffice/mainMenu.fxml", btnServicesSociaux);
     }
 
     @FXML

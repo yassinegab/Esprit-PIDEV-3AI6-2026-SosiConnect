@@ -18,7 +18,8 @@ public class MainFX extends Application {
 
         // 👉 OPTION 2 (ton menu)
         javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                getClass().getResource("/servicesociaux/frontoffice/mainMenu.fxml")
+                getClass().getResource("/home/Home.fxml")
+                //getClass().getResource("/servicesociaux/frontoffice/mainMenu.fxml")
          );
 
         Scene scene = new Scene(loader.load(), 880, 680);

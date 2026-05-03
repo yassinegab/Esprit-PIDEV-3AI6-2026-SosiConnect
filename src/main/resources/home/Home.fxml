@@ -127,7 +127,7 @@
     </top>
 
     <center>
-        <StackPane fx:id="contentArea" style="-fx-background-color: #f4f7fa;">
+        <StackPane fx:id="contentArea" id="contentArea" style="-fx-background-color: #f4f7fa;">
             <VBox fx:id="dashboardView" alignment="CENTER" spacing="30.0">
                 <Label text="Bonjour, bienvenue !" styleClass="hero-title" />
                 <VBox alignment="CENTER" maxWidth="500" styleClass="premium-card">
