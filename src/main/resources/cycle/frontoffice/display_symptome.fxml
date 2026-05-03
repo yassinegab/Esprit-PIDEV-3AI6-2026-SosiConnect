@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cycle.frontoffice.controller.DisplaySymptomeController">
+
+    <stylesheets>
+        <URL value="@DisplayCss.css" />
+    </stylesheets>
+
+    <!-- HEADER SECTION -->
+    <HBox styleClass="header-container" alignment="CENTER_LEFT">
+        <Label styleClass="header-title" text="Carnet de Symptômes" />
+        
+        <!-- PUSH BUTTONS TO RIGHT -->
+        <Pane HBox.hgrow="ALWAYS" />
+        
+        <HBox spacing="10">
+            <Button fx:id="btnAddSymptom" onAction="#goToAddSymptom" styleClass="btn-primary" text="+ Nouveau Symptôme" />
+        </HBox>
+    </HBox>
+
+    <!-- CONTENT SECTION -->
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" pannable="true" styleClass="custom-scroll" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
+        <content>
+            <VBox alignment="TOP_CENTER" spacing="15" style="-fx-padding: 20;">
+                
+                <!-- 🧠 AI ADVICE SECTION -->
+                <VBox fx:id="adviceContainer" styleClass="cycle-card" prefWidth="850" spacing="10" style="-fx-background-color: #F8F0FC; -fx-border-color: #E6CBEA; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 15;">
+                    <Label text="✨ Conseils Intelligents du Jour" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #9b59b6;" />
+                    <Label fx:id="lblPhase" text="Phase : Chargement..." style="-fx-font-style: italic; -fx-text-fill: #7f8c8d;" />
+                    <HBox spacing="20">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="200">
+                            <Label text="🍎 Alimentation" style="-fx-font-weight: bold; -fx-text-fill: #e74c3c;" />
+                            <Label fx:id="lblAlimentation" text="..." wrapText="true" style="-fx-text-fill: #333333;" />
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="200">
+                            <Label text="🏃‍♀️ Activité Physique" style="-fx-font-weight: bold; -fx-text-fill: #27ae60;" />
+                            <Label fx:id="lblSport" text="..." wrapText="true" style="-fx-text-fill: #333333;" />
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="20">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="200">
+                            <Label text="🧘‍♀️ Bien-être" style="-fx-font-weight: bold; -fx-text-fill: #f39c12;" />
+                            <Label fx:id="lblBienEtre" text="..." wrapText="true" style="-fx-text-fill: #333333;" />
+                        </VBox>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS" prefWidth="200">
+                            <Label text="💡 Résumé" style="-fx-font-weight: bold; -fx-text-fill: #2980b9;" />
+                            <Label fx:id="lblResume" text="..." wrapText="true" style="-fx-text-fill: #333333;" />
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- 🔥 SYMPTOMS CONTAINER -->
+                <FlowPane fx:id="symptomeContainer" hgap="25" prefWrapLength="850" styleClass="cycle-container" vgap="25" />
+            </VBox>
+        </content>
+    </ScrollPane>
+
+</VBox>

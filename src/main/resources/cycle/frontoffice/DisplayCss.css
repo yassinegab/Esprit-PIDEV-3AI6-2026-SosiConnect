@@ -1,0 +1,197 @@
+/* =========================
+   GLOBAL THEME - PREMIUM UI (CYCLES & SYMPTOMS)
+========================= */
+
+.main-container {
+    -fx-background-color: #f8fafc;
+    -fx-padding: 40;
+    -fx-alignment: top-center;
+}
+
+/* =========================
+   HEADER STYLING
+========================= */
+.header-container {
+    -fx-padding: 0 0 20 0;
+    -fx-spacing: 20;
+    -fx-alignment: center-left;
+}
+
+.header-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1e293b;
+}
+
+/* =========================
+   CARDS (FORMS & DISPLAY)
+========================= */
+.form-card, .cycle-card {
+    -fx-background-color: white;
+    -fx-padding: 30;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 25, 0, 0, 10);
+    -fx-min-width: 450px;
+}
+
+.cycle-card {
+    -fx-min-width: 300px;
+    -fx-pref-width: 300px;
+    -fx-transition: all 0.3s;
+}
+
+.cycle-card:hover {
+    -fx-translate-y: -5;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.25), 25, 0, 0, 12);
+}
+
+/* =========================
+   LABELS & INPUTS
+========================= */
+.form-label, .cycle-label-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
+    -fx-padding: 5 0 2 0;
+}
+
+.cycle-label-value {
+    -fx-font-size: 16px;
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: 800;
+    -fx-padding: 0 0 10 0;
+}
+
+.form-combobox, .form-datepicker, .text-field {
+    -fx-pref-width: 350px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-color: #f8fafc;
+    -fx-padding: 0 5;
+}
+
+.form-combobox:focused, .form-datepicker:focused, .text-field:focused {
+    -fx-border-color: #ff4d6d;
+    -fx-background-color: white;
+}
+
+/* =========================
+   BUTTONS (UNIFIED)
+========================= */
+.button-container {
+    -fx-spacing: 15;
+    -fx-alignment: center;
+    -fx-padding: 30 0 0 0;
+}
+
+.cycle-buttons {
+    -fx-spacing: 10;
+    -fx-padding: 10 0 0 0;
+}
+
+/* Primary (Add, Save) */
+.btn-primary {
+    -fx-background-color: linear-gradient(to right, #ff4d6d, #c9184a);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-opacity: 0.9;
+    -fx-translate-y: -1;
+}
+
+/* Secondary (Cancel, Back) */
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: #64748b;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+    -fx-padding: 10 15;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #334155;
+}
+
+/* Danger (Delete) */
+.btn-delete, .btn-danger {
+    -fx-background-color: linear-gradient(to right, #dc3545, #b02a37);
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.btn-delete:hover, .btn-danger:hover {
+    -fx-opacity: 0.85;
+}
+
+/* Edit / Neutral Active (Blue/Orange) */
+.btn-edit {
+    -fx-background-color: linear-gradient(to right, #3b82f6, #2563eb); /* Modern Blue */
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.btn-edit:hover {
+    -fx-opacity: 0.85;
+}
+
+/* =========================
+   SCROLL PANE OVERRIDES
+========================= */
+.custom-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.custom-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(220, 53, 69, 0.4);
+    -fx-background-radius: 10;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(220, 53, 69, 0.8);
+}
+
+/* =========================
+   CHARTS OVERRIDES (PINK THEME)
+========================= */
+.chart-bar {
+    -fx-bar-fill: #f472b6; /* Light pink for bars */
+}
+
+/* Pie Chart Colors */
+.default-color0.chart-pie { -fx-pie-color: #fbcfe8; }
+.default-color1.chart-pie { -fx-pie-color: #f9a8d4; }
+.default-color2.chart-pie { -fx-pie-color: #f472b6; }
+.default-color3.chart-pie { -fx-pie-color: #ec4899; }
+.default-color4.chart-pie { -fx-pie-color: #db2777; }
+.default-color5.chart-pie { -fx-pie-color: #be185d; }
+.default-color6.chart-pie { -fx-pie-color: #9d174d; }

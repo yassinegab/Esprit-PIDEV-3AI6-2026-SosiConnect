@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cycle.frontoffice.controller.ClientCycleController">
+<VBox alignment="TOP_CENTER" styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cycle.frontoffice.controller.EditCycleController">
 
     <stylesheets>
         <URL value="@DisplayCss.css" />
@@ -15,21 +15,21 @@
 
     <VBox alignment="CENTER_LEFT" spacing="20" styleClass="form-card" maxWidth="450">
 
-        <Label styleClass="header-title" text="Ajouter Menstruation" />
+        <Label styleClass="header-title" text="Modifier le Cycle" />
 
         <VBox spacing="8">
             <Label styleClass="form-label" text="Date de début" />
-            <DatePicker fx:id="DP_datadebut" promptText="Sélectionnez la date" styleClass="form-datepicker" />
+            <DatePicker fx:id="startPicker" promptText="Sélectionnez la date" styleClass="form-datepicker" />
         </VBox>
 
         <VBox spacing="8">
             <Label styleClass="form-label" text="Date de fin" />
-            <DatePicker fx:id="DP_datefin" promptText="Sélectionnez la date" styleClass="form-datepicker" />
+            <DatePicker fx:id="endPicker" promptText="Sélectionnez la date" styleClass="form-datepicker" />
         </VBox>
 
         <HBox alignment="CENTER" spacing="15" styleClass="button-container">
             <Button onAction="#goBack" styleClass="btn-secondary" text="Annuler" />
-            <Button fx:id="BT_ajouter_menstruation" onAction="#ajouterCycle" styleClass="btn-primary" text="Enregistrer" />
+            <Button fx:id="editCbutton" onAction="#handleSave" styleClass="btn-primary" text="Mettre à jour" />
         </HBox>
 
     </VBox>

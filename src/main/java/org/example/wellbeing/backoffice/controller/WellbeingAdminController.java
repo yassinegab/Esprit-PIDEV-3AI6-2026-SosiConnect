@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.example.wellbeing.model.UserWellBeingData;
 import org.example.wellbeing.service.WellbeingService;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.sql.SQLException;
