@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import org.example.user.service.ServiceUser;
 import org.example.user.model.User;
 import org.example.home.controller.HomeController;
+import org.example.backoffice.controller.AdminBaseController;
 
 public class LoginController {
 
@@ -46,7 +47,7 @@ public class LoginController {
             if (user != null) {
                 System.out.println("Login Successful: " + user.getNom());
                 org.example.utils.SessionManager.setCurrentUser(user);
-                navigateToHome(user);
+                navigateAfterLogin(user);
             } else {
                 System.out.println("Invalid email or password.");
             }
@@ -55,18 +56,31 @@ public class LoginController {
         }
     }
 
-    private void navigateToHome(User user) {
+    private void navigateAfterLogin(User user) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/home/Home.fxml"));
+            String fxmlPath = "/home/Home.fxml";
+            boolean isAdmin = "ROLE_ADMIN".equals(user.getUser_role());
+            
+            if (isAdmin) {
+                fxmlPath = "/backoffice/AdminLayout.fxml";
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
             
-            HomeController homeController = loader.getController();
-            homeController.setUser(user);
+            if (!isAdmin) {
+                HomeController homeController = loader.getController();
+                homeController.setUser(user);
+            } else {
+                AdminBaseController adminController = loader.getController();
+                // adminController.setUser(user);
+            }
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Error navigating after login: " + e.getMessage());
         }
     }
 
