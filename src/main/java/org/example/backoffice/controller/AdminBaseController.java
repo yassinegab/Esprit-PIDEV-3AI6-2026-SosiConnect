@@ -75,7 +75,7 @@ public class AdminBaseController {
     }
 
     private void updateActiveButton(Button activeBtn) {
-        // Clear active class from all nav buttons natively
+        for (Button btn : navButtons) {
             btn.getStyleClass().remove("active");
             btn.setStyle(""); // wipe inline messes
         }
