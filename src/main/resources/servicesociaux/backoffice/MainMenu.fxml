@@ -13,29 +13,7 @@
 
     <VBox spacing="14" style="-fx-padding: 0 0 24 0; -fx-background-color: #f0f2f7;">
 
-        <!-- ══ HEADER marine ══════════════════════════════════════ -->
-        <HBox alignment="CENTER_LEFT" spacing="12"
-              style="-fx-background-color: #1a2744; -fx-padding: 16 22;">
-            <Label text="A"
-                   style="-fx-background-color: #c9a882;
-                          -fx-background-radius: 7;
-                          -fx-text-fill: white;
-                          -fx-font-size: 14; -fx-font-weight: bold;
-                          -fx-padding: 5 10;"/>
-            <VBox spacing="1" HBox.hgrow="ALWAYS">
-                <Label text="MediCare — Administration"
-                       style="-fx-text-fill: white;
-                              -fx-font-size: 14; -fx-font-weight: bold;"/>
-                <Label text="Tableau de bord administrateur"
-                       style="-fx-text-fill: rgba(255,255,255,0.45);
-                              -fx-font-size: 10;"/>
-            </VBox>
-            <Label text="● Connecté"
-                   style="-fx-background-color: rgba(30,160,100,0.18);
-                          -fx-text-fill: #5dd4a0;
-                          -fx-background-radius: 10;
-                          -fx-font-size: 10; -fx-padding: 4 10;"/>
-        </HBox>
+    
 
         <VBox spacing="14" style="-fx-padding: 0 18;">
 

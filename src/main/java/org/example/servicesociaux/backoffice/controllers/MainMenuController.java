@@ -2,19 +2,32 @@ package org.example.servicesociaux.backoffice.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
+import org.example.backoffice.controller.AdminBaseController;
 import org.example.servicesociaux.backoffice.services.HopitalService;
 import org.example.servicesociaux.backoffice.services.RendezVousService;
 
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 
-public class MainMenuController {
+/**
+ * MainMenuController — Backoffice Services Sociaux.
+ *
+ * ✅ FIX : Implémente AdminAware pour recevoir AdminBaseController par injection.
+ *          Navigation via adminController.loadView() au lieu du singleton statique.
+ *
+ * Problème corrigé :
+ *   Avant → AdminBaseController.navigateTo(view) utilisait le singleton statique.
+ *           Après un retour vers MainMenu, le singleton était mis à jour mais
+ *           les sous-pages (Hôpital, RDV) gardaient une ancienne référence.
+ *
+ *   Après → adminController est injecté à chaque chargement de MainMenu.
+ *            La référence est toujours fraîche et correcte.
+ */
+public class MainMenuController implements AdminBaseController.AdminAware {
 
     @FXML private Label                    countHopital;
     @FXML private Label                    countRdv;
@@ -24,31 +37,41 @@ public class MainMenuController {
     private final HopitalService    hopitalService = new HopitalService();
     private final RendezVousService rdvService     = new RendezVousService();
 
+    // ✅ Référence injectée par AdminBaseController.loadView()
+    private AdminBaseController adminController;
+
+    @Override
+    public void setAdminController(AdminBaseController admin) {
+        this.adminController = admin;
+    }
+
+    // ══ Init ══════════════════════════════════════════════════
     @FXML
     public void initialize() {
         chargerStats();
         chargerBarChart();
     }
 
-    // ══ STATS ════════════════════════════════════════════════════
+    // ══ Stats ═════════════════════════════════════════════════
     private void chargerStats() {
         try {
-            countHopital.setText(String.valueOf(hopitalService.afficherTous().size()));
+            countHopital.setText(
+                    String.valueOf(hopitalService.afficherTous().size()));
         } catch (Exception e) { countHopital.setText("—"); }
 
         try {
             List<Object[]> rows = hopitalService.afficherAvecRendezVous();
-            int totalRdv  = rows.stream().mapToInt(r -> (int) r[6]).sum();
-            int enAttente = rows.stream().mapToInt(r -> (int) r[7]).sum();
-            countRdv      .setText(String.valueOf(totalRdv));
-            countEnAttente.setText(String.valueOf(enAttente));
+            countRdv      .setText(String.valueOf(
+                    rows.stream().mapToInt(r -> (int) r[6]).sum()));
+            countEnAttente.setText(String.valueOf(
+                    rows.stream().mapToInt(r -> (int) r[7]).sum()));
         } catch (Exception e) {
             countRdv.setText("—");
             countEnAttente.setText("—");
         }
     }
 
-    // ══ BARCHART — beige (#f5e6d3) + orange (#e09030) ════════════
+    // ══ BarChart ══════════════════════════════════════════════
     private void chargerBarChart() {
         try {
             List<Object[]> rows = hopitalService.afficherAvecRendezVous();
@@ -60,7 +83,8 @@ public class MainMenuController {
 
             for (Object[] r : rows) {
                 String nom   = r[1] != null ? (String) r[1] : "?";
-                String label = nom.length() > 10 ? nom.substring(0, 10) + "…" : nom;
+                String label = nom.length() > 10
+                        ? nom.substring(0, 10) + "…" : nom;
                 serieTotal    .getData().add(new XYChart.Data<>(label, (int) r[6]));
                 serieEnAttente.getData().add(new XYChart.Data<>(label, (int) r[7]));
             }
@@ -69,48 +93,52 @@ public class MainMenuController {
             barChart.getData().addAll(serieTotal, serieEnAttente);
             barChart.setLegendVisible(true);
 
-            // Beige doux (#f5e6d3) pour Total RDV
-            // Orange (#e09030) pour En attente
-            barChart.sceneProperty().addListener((obs, old, newScene) -> {
-                if (newScene != null) {
-                    newScene.getRoot().applyCss();
+            // Couleurs barres
+            barChart.sceneProperty().addListener((obs, old, sc) -> {
+                if (sc != null) {
+                    sc.getRoot().applyCss();
                     barChart.lookupAll(".default-color0.chart-bar")
-                            .forEach(n -> n.setStyle("-fx-bar-fill: #f5e6d3;"));
+                            .forEach(n -> n.setStyle("-fx-bar-fill:#f5e6d3;"));
                     barChart.lookupAll(".default-color1.chart-bar")
-                            .forEach(n -> n.setStyle("-fx-bar-fill: #e09030;"));
+                            .forEach(n -> n.setStyle("-fx-bar-fill:#e09030;"));
                 }
             });
 
         } catch (SQLException e) {
-            System.err.println("Erreur barChart admin : " + e.getMessage());
+            System.err.println("Erreur barChart : " + e.getMessage());
         }
     }
 
-    // ══ NAVIGATION ════════════════════════════════════════════════
-    @FXML public void ouvrirHopital() {
-        ouvrirFenetre("/servicesociaux/backoffice/hopital.fxml",
-                "🏥 Administration — Hôpitaux", 1000, 700);
-    }
+    // ══ Navigation ════════════════════════════════════════════
 
-    @FXML public void ouvrirRendezVous() {
-        ouvrirFenetre("/servicesociaux/backoffice/rendezVous.fxml",
-                "📅 Administration — Rendez-vous", 1000, 700);
-    }
-
-    private void ouvrirFenetre(String cheminFxml, String titre, int w, int h) {
-        try {
-            URL url = getClass().getResource(cheminFxml);
-            if (url == null) {
-                System.err.println("❌ FXML introuvable : " + cheminFxml);
-                return;
-            }
-            FXMLLoader loader = new FXMLLoader(url);
-            Stage stage = (Stage) countHopital.getScene().getWindow();
-            stage.setScene(new Scene(loader.load(), w, h));
-            stage.setTitle(titre);
-        } catch (Exception e) {
-            System.err.println("❌ Erreur navigation : " + e.getMessage());
-            e.printStackTrace();
+    /**
+     * ✅ FIX PRINCIPAL : utilise adminController (injecté) au lieu du singleton.
+     *
+     * adminController.loadView() :
+     *   1. Charge le FXML
+     *   2. Injecte this (adminController) dans le controller enfant via AdminAware
+     *   3. Affiche la vue dans adminContentArea
+     *
+     * Résultat : Hôpital et RDV reçoivent la bonne référence et peuvent
+     * revenir à MainMenu correctement via retourAccueil().
+     */
+    @FXML
+    public void ouvrirHopital() {
+        if (adminController == null) {
+            System.err.println("❌ adminController non injecte dans MainMenuController");
+            return;
         }
+        adminController.loadView(
+                "/servicesociaux/backoffice/hopital.fxml", null);
+    }
+
+    @FXML
+    public void ouvrirRendezVous() {
+        if (adminController == null) {
+            System.err.println("❌ adminController non injecte dans MainMenuController");
+            return;
+        }
+        adminController.loadView(
+                "/servicesociaux/backoffice/rendezVous.fxml", null);
     }
 }

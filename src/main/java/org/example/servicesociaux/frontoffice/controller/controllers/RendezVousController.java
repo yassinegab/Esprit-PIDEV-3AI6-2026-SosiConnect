@@ -62,7 +62,7 @@ public class RendezVousController {
     private final RendezVousService    service     = new RendezVousService();
     private final Map<String, Integer> hopitauxMap = new LinkedHashMap<>();
 
-    private ObservableList<RendezVous> masterList   = FXCollections.observableArrayList();
+    private ObservableList<RendezVous> masterList  = FXCollections.observableArrayList();
     private FilteredList<RendezVous>   filteredList;
 
     private int selectedId        = -1;
@@ -110,6 +110,19 @@ public class RendezVousController {
     // ── initialize ──
     @FXML
     public void initialize() {
+
+        // ✅ Masquer colonne ID
+        colId.setVisible(false);
+        colId.setPrefWidth(0);
+        colId.setMinWidth(0);
+        colId.setMaxWidth(0);
+
+        // ✅ Masquer colonne Patient ID
+        colPatient.setVisible(false);
+        colPatient.setPrefWidth(0);
+        colPatient.setMinWidth(0);
+        colPatient.setMaxWidth(0);
+
         annulerBtn.setVisible(false);
         annulerBtn.setManaged(false);
 
@@ -211,7 +224,8 @@ public class RendezVousController {
                     } else {
                         datePicker.setValue(null);
                     }
-                    notesField.setText(selected.getNotes() != null ? selected.getNotes() : "");
+                    notesField.setText(
+                            selected.getNotes() != null ? selected.getNotes() : "");
                     annulerBtn.setVisible(true);
                     annulerBtn.setManaged(true);
                 });
@@ -219,6 +233,7 @@ public class RendezVousController {
         chargerTableau();
     }
 
+    // ── Filtres ──
     private void appliquerFiltres() {
         String search  = searchField.getText() == null ? ""
                 : searchField.getText().toLowerCase().trim();
@@ -228,8 +243,6 @@ public class RendezVousController {
 
         filteredList.setPredicate(rdv -> {
             boolean matchSearch = search.isEmpty()
-                    || String.valueOf(rdv.getId()).contains(search)
-                    || String.valueOf(rdv.getPatientId()).contains(search)
                     || (rdv.getHopitalNom()       != null && rdv.getHopitalNom().toLowerCase().contains(search))
                     || (rdv.getTypeConsultation() != null && rdv.getTypeConsultation().toLowerCase().contains(search))
                     || (rdv.getStatut()           != null && rdv.getStatut().toLowerCase().contains(search))
@@ -244,6 +257,7 @@ public class RendezVousController {
         });
     }
 
+    // ── Statistiques ──
     private void mettreAJourStats() {
         statTotal.setText(String.valueOf(masterList.size()));
         statEnAttente.setText(String.valueOf(masterList.stream()
@@ -256,6 +270,7 @@ public class RendezVousController {
                 .filter(r -> "Annulé".equals(r.getStatut())).count()));
     }
 
+    // ── Export CSV ── (sans ID et Patient ID)
     @FXML
     public void exporterCSV() {
         FileChooser fileChooser = new FileChooser();
@@ -270,13 +285,15 @@ public class RendezVousController {
         if (fichier == null) return;
 
         try (FileWriter fw = new FileWriter(fichier)) {
-            fw.write("ID,Patient ID,Hôpital,Type,Statut,Date & Heure,Notes\n");
+            // ✅ Sans ID et Patient ID
+            fw.write("Hôpital,Type,Statut,Date & Heure,Notes\n");
             for (RendezVous rdv : tableView.getItems()) {
-                fw.write(String.format("%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"\n",
-                        rdv.getId(), rdv.getPatientId(),
-                        safe(rdv.getHopitalNom()), safe(rdv.getTypeConsultation()),
+                fw.write(String.format("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"\n",
+                        safe(rdv.getHopitalNom()),
+                        safe(rdv.getTypeConsultation()),
                         safe(rdv.getStatut()),
-                        rdv.getDateRendezVous() != null ? rdv.getDateRendezVous().toString() : "",
+                        rdv.getDateRendezVous() != null
+                                ? rdv.getDateRendezVous().toString() : "",
                         safe(rdv.getNotes())));
             }
             errorLabel.setStyle("-fx-text-fill: #388e3c; -fx-font-size: 11;");
@@ -286,6 +303,7 @@ public class RendezVousController {
         }
     }
 
+    // ── CRUD ──
     @FXML
     public void ajouter() {
         if (!valider()) return;
@@ -350,7 +368,7 @@ public class RendezVousController {
         annulerBtn.setManaged(false);
     }
 
-    // ✅ NAVIGATION CORRIGÉE — utilise HomeController.navigateTo()
+    // ✅ NAVIGATION — retour via HomeController
     @FXML
     public void retourAccueil() {
         try {
@@ -365,26 +383,37 @@ public class RendezVousController {
         }
     }
 
+    // ── Chargement ──
     private void chargerTableau() {
         try {
             masterList.setAll(service.afficherTous());
             appliquerFiltres();
             mettreAJourStats();
-        } catch (SQLException e) { showMessage("❌ Erreur chargement : " + e.getMessage()); }
+        } catch (SQLException e) {
+            showMessage("❌ Erreur chargement : " + e.getMessage());
+        }
     }
 
+    // ── Validation ──
     private boolean valider() {
-        if (hopitalCombo.getValue() == null)      { showMessage("❌ Veuillez sélectionner un hôpital !"); return false; }
-        if (typeConsultation.getValue() == null)  { showMessage("❌ Le type de consultation est obligatoire !"); return false; }
-        if (statut.getValue() == null)            { showMessage("❌ Le statut est obligatoire !"); return false; }
-        if (datePicker.getValue() == null)        { showMessage("❌ La date est obligatoire !"); return false; }
-        if (datePicker.getValue().isBefore(LocalDate.now())) { showMessage("❌ La date ne peut pas être dans le passé !"); return false; }
+        if (hopitalCombo.getValue() == null) {
+            showMessage("❌ Veuillez sélectionner un hôpital !"); return false; }
+        if (typeConsultation.getValue() == null) {
+            showMessage("❌ Le type de consultation est obligatoire !"); return false; }
+        if (statut.getValue() == null) {
+            showMessage("❌ Le statut est obligatoire !"); return false; }
+        if (datePicker.getValue() == null) {
+            showMessage("❌ La date est obligatoire !"); return false; }
+        if (datePicker.getValue().isBefore(LocalDate.now())) {
+            showMessage("❌ La date ne peut pas être dans le passé !"); return false; }
         return true;
     }
 
     private Date toDateTime(LocalDate date) {
-        int h = Integer.parseInt(heureCombo.getValue()  != null ? heureCombo.getValue()  : "08");
-        int m = Integer.parseInt(minuteCombo.getValue() != null ? minuteCombo.getValue() : "00");
+        int h = Integer.parseInt(
+                heureCombo.getValue()  != null ? heureCombo.getValue()  : "08");
+        int m = Integer.parseInt(
+                minuteCombo.getValue() != null ? minuteCombo.getValue() : "00");
         return java.sql.Timestamp.valueOf(date.atTime(h, m));
     }
 
@@ -398,5 +427,7 @@ public class RendezVousController {
         notesField.clear();
     }
 
-    private String safe(String s) { return s != null ? s.replace("\"", "'") : ""; }
+    private String safe(String s) {
+        return s != null ? s.replace("\"", "'") : "";
+    }
 }

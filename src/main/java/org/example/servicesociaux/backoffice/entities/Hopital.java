@@ -12,7 +12,7 @@ public class Hopital {
     private String specialites;
     private String ville;
     private String type;
-
+    public Hopital() {}
     public Hopital(int id, String nom, String adresse, String telephone,
                    boolean serviceUrgenceDispo, double latitude, double longitude,
                    int capacite, String specialites, String ville, String type) {

@@ -63,7 +63,7 @@ public class HopitalController {
 
     private final HopitalService service = new HopitalService();
 
-    private ObservableList<Object[]> masterList   = FXCollections.observableArrayList();
+    private ObservableList<Object[]> masterList  = FXCollections.observableArrayList();
     private FilteredList<Object[]>   filteredList;
 
     // ── Cellule stylisée ──
@@ -116,6 +116,14 @@ public class HopitalController {
     // ── initialize ──
     @FXML
     public void initialize() {
+
+        // ✅ Masquer la colonne ID — garder la donnée mais invisible
+        colId.setVisible(false);
+        colId.setPrefWidth(0);
+        colId.setMinWidth(0);
+        colId.setMaxWidth(0);
+
+        // ── Liaisons colonnes ──
         colId.setCellValueFactory(d ->
                 new SimpleIntegerProperty((int) d.getValue()[0]).asObject());
         colNom.setCellValueFactory(d ->
@@ -136,6 +144,7 @@ public class HopitalController {
         colRdvWait.setCellValueFactory(d ->
                 new SimpleIntegerProperty((int) d.getValue()[7]).asObject());
 
+        // ── Style cellules ──
         colId      .setCellFactory(col -> createStyledCell());
         colNom     .setCellFactory(col -> createStyledCell());
         colAdresse .setCellFactory(col -> createStyledCell());
@@ -145,6 +154,7 @@ public class HopitalController {
         colNbRdv   .setCellFactory(col -> createStyledCell());
         colRdvWait .setCellFactory(col -> createStyledCell());
 
+        // ── Style tableau ──
         tableView.setStyle(
                 "-fx-background-color: white;" +
                         "-fx-border-color: #e0e0e0;" +
@@ -160,6 +170,7 @@ public class HopitalController {
                         ".table-row-cell:focused .table-cell:selected { -fx-background-color: transparent !important; }"
         );
 
+        // ── Filtres ──
         filterUrgence.getItems().addAll("Tous", "Urgence disponible", "Sans urgence");
         filterUrgence.setValue("Tous");
 
@@ -170,6 +181,7 @@ public class HopitalController {
         );
         sortCombo.setValue("Nom (A → Z)");
 
+        // ── Listeners ──
         searchField.textProperty().addListener((o, ov, nv) -> appliquerFiltres());
         filterUrgence.setOnAction(e -> appliquerFiltres());
         sortCombo.setOnAction(e -> appliquerFiltres());
@@ -177,6 +189,7 @@ public class HopitalController {
         chargerTableau();
     }
 
+    // ── Chargement ──
     private void chargerTableau() {
         try {
             List<Object[]> liste = service.afficherAvecRendezVous();
@@ -189,8 +202,10 @@ public class HopitalController {
         }
     }
 
+    // ── Filtrage + tri ──
     private void appliquerFiltres() {
         if (filteredList == null) return;
+
         String search   = searchField.getText() == null ? ""
                 : searchField.getText().toLowerCase().trim();
         String fUrgence = filterUrgence.getValue() == null ? "Tous"
@@ -234,6 +249,7 @@ public class HopitalController {
         tableView.setItems(sortedData);
     }
 
+    // ── Statistiques ──
     private void mettreAJourStats() {
         int total    = masterList.size();
         int urgences = (int) masterList.stream()
@@ -246,6 +262,7 @@ public class HopitalController {
         statEnAttente.setText(String.valueOf(attente));
     }
 
+    // ── Export CSV ──
     @FXML
     public void exporterCSV() {
         FileChooser fileChooser = new FileChooser();
@@ -261,14 +278,17 @@ public class HopitalController {
         if (fichier == null) return;
 
         try (FileWriter fw = new FileWriter(fichier)) {
-            fw.write("ID,Nom,Adresse,Téléphone,Spécialités,Ville,Urgence,Nb RDV,En attente\n");
+            fw.write("Nom,Adresse,Téléphone,Spécialités,Ville,Urgence,Nb RDV,En attente\n");
             for (Object[] row : tableView.getItems()) {
                 boolean urgence = row[9] != null && (boolean) row[9];
-                fw.write(String.format("%s,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,%s,%s\n",
-                        row[0], str(row[1]).replace("\"", "'"),
-                        str(row[2]).replace("\"", "'"), str(row[3]).replace("\"", "'"),
-                        str(row[4]).replace("\"", "'"), str(row[5]).replace("\"", "'"),
-                        urgence ? "Oui" : "Non", row[6], row[7]));
+                fw.write(String.format("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,%s,%s\n",
+                        str(row[1]).replace("\"", "'"),
+                        str(row[2]).replace("\"", "'"),
+                        str(row[3]).replace("\"", "'"),
+                        str(row[4]).replace("\"", "'"),
+                        str(row[5]).replace("\"", "'"),
+                        urgence ? "Oui" : "Non",
+                        row[6], row[7]));
             }
             showSuccess("✅ Export réussi : " + fichier.getName());
         } catch (IOException e) {
@@ -276,6 +296,7 @@ public class HopitalController {
         }
     }
 
+    // ── Export PDF ──
     @FXML
     public void exporterPDF() {
         FileChooser fc = new FileChooser();
@@ -296,14 +317,14 @@ public class HopitalController {
                     " hôpitaux  |  Avec urgence : " + statUrgence.getText())
                     .setFontSize(11).setFontColor(ColorConstants.GRAY));
 
-            Table table = new Table(new float[]{1, 3, 3, 2, 2, 1, 1, 1});
-            String[] headers = {"ID","Nom","Adresse","Téléphone","Spécialités","Urgence","RDV","Attente"};
+            // ✅ Sans colonne ID dans le PDF
+            Table table = new Table(new float[]{3, 3, 2, 2, 1, 1, 1});
+            String[] headers = {"Nom","Adresse","Téléphone","Spécialités","Urgence","RDV","Attente"};
             for (String h : headers)
                 table.addHeaderCell(new Cell().add(new Paragraph(h).setBold())
                         .setBackgroundColor(new DeviceRgb(248, 187, 208)));
             for (Object[] row : tableView.getItems()) {
                 boolean urgence = row[9] != null && (boolean) row[9];
-                table.addCell(String.valueOf(row[0]));
                 table.addCell(str(row[1]));
                 table.addCell(str(row[2]));
                 table.addCell(str(row[3]));
@@ -319,6 +340,7 @@ public class HopitalController {
         }
     }
 
+    // ── Carte ──
     @FXML
     public void ouvrirCarte() {
         try {
@@ -334,6 +356,7 @@ public class HopitalController {
         }
     }
 
+    // ── Itinéraire ──
     @FXML
     public void calculerItineraire() {
         Object[] selected = tableView.getSelectionModel().getSelectedItem();
@@ -392,7 +415,7 @@ public class HopitalController {
         });
     }
 
-    // ✅ NAVIGATION CORRIGÉE — utilise HomeController.navigateTo()
+    // ✅ NAVIGATION — retour via HomeController
     @FXML
     public void retourAccueil() {
         try {
