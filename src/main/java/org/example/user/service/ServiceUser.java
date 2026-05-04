@@ -2,11 +2,10 @@ package org.example.user.service;
 
 import org.example.IService.IService;
 import org.example.user.model.User;
+import org.example.user.model.UserRole;
 import org.example.utils.MyConnection;
-import org.example.user.model.User;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +26,17 @@ public class ServiceUser implements IService<User> {
     public void ajouter(User user) throws SQLException {
         String query = "INSERT INTO user (nom, prenom, email, password, telephone, age, sexe, taille, poids, handicap, roles, user_role, specialite, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(query);
+        
+        // Hash password if not already hashed
+        String password = user.getPassword();
+        if (!password.startsWith("$2a$")) {
+            password = BCrypt.hashpw(password, BCrypt.gensalt());
+        }
+
         ps.setString(1, user.getNom());
         ps.setString(2, user.getPrenom());
         ps.setString(3, user.getEmail());
-        ps.setString(4, user.getPassword());
+        ps.setString(4, password);
         ps.setString(5, user.getTelephone());
         ps.setInt(6, user.getAge());
         ps.setString(7, user.getSexe());
@@ -46,22 +52,21 @@ public class ServiceUser implements IService<User> {
 
     @Override
     public void modifier(User user) throws SQLException {
-        String query = "UPDATE user SET nom=?, prenom=?, email=?, password=?, telephone=?, age=?, sexe=?, taille=?, poids=?, handicap=?, roles=?, user_role=?, specialite=? WHERE id=?";
+        String query = "UPDATE user SET nom=?, prenom=?, email=?, telephone=?, age=?, sexe=?, taille=?, poids=?, handicap=?, roles=?, user_role=?, specialite=? WHERE id=?";
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setString(1, user.getNom());
         ps.setString(2, user.getPrenom());
         ps.setString(3, user.getEmail());
-        ps.setString(4, user.getPassword());
-        ps.setString(5, user.getTelephone());
-        ps.setInt(6, user.getAge());
-        ps.setString(7, user.getSexe());
-        ps.setDouble(8, user.getTaille());
-        ps.setDouble(9, user.getPoids());
-        ps.setBoolean(10, user.isHandicap());
-        ps.setString(11, user.getRoles());
-        ps.setString(12, user.getUser_role());
-        ps.setString(13, user.getSpecialite());
-        ps.setInt(14, user.getId());
+        ps.setString(4, user.getTelephone());
+        ps.setInt(5, user.getAge());
+        ps.setString(6, user.getSexe());
+        ps.setDouble(7, user.getTaille());
+        ps.setDouble(8, user.getPoids());
+        ps.setBoolean(9, user.isHandicap());
+        ps.setString(10, user.getRoles());
+        ps.setString(11, user.getUser_role());
+        ps.setString(12, user.getSpecialite());
+        ps.setInt(13, user.getId());
         ps.executeUpdate();
     }
 
@@ -76,7 +81,7 @@ public class ServiceUser implements IService<User> {
     @Override
     public List<User> afficher() throws SQLException {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM user";
+        String query = "SELECT * FROM user ORDER BY id DESC";
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(query);
         while (rs.next()) {
@@ -86,13 +91,22 @@ public class ServiceUser implements IService<User> {
     }
 
     public User login(String email, String password) throws SQLException {
-        String query = "SELECT * FROM user WHERE email = ? AND password = ?";
+        String query = "SELECT * FROM user WHERE email = ?";
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setString(1, email);
-        ps.setString(2, password);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            return extractUserFromResultSet(rs);
+            String storedPassword = rs.getString("password");
+            boolean valid = false;
+            if (storedPassword.startsWith("$2a$")) {
+                valid = BCrypt.checkpw(password, storedPassword);
+            } else {
+                valid = password.equals(storedPassword);
+                // Optional: migrate plain password to bcrypt here
+            }
+            if (valid) {
+                return extractUserFromResultSet(rs);
+            }
         }
         return null;
     }
@@ -116,31 +130,56 @@ public class ServiceUser implements IService<User> {
         user.setCreated_at(rs.getTimestamp("created_at"));
         return user;
     }
-    public User getUserById(int id) {
 
-        User user = null;
-
-        String sql = "SELECT * FROM user WHERE id = ?";
-
-        try (Connection conn = MyConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-
+    // Methods for Hospital Module
+    public List<User> getPatients() throws SQLException {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM user WHERE user_role = 'CLIENT' OR user_role = 'PATIENT' ORDER BY nom, prenom";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                user = new User();
-                user.setId(rs.getInt("id"));
-
-                // ⚠️ CHANGE THIS depending on DB column
-                user.setNom(rs.getString("prenom"));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            while (rs.next()) list.add(extractUserFromResultSet(rs));
         }
+        return list;
+    }
 
-        return user;
+    public User findById(int id) throws SQLException {
+        String sql = "SELECT * FROM user WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return extractUserFromResultSet(rs);
+        }
+        return null;
+    }
+
+    public int countAllUsers() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM user";
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
+    }
+
+    public int countByRole(UserRole role) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM user WHERE user_role = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            String roleName = role.name();
+            if (role == UserRole.PATIENT) roleName = "CLIENT"; // Adapt to existing schema
+            ps.setString(1, roleName);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
+    }
+
+    public boolean emailExists(String email) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+        }
+        return false;
     }
 }

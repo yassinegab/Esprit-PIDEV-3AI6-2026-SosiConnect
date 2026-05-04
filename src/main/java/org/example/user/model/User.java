@@ -69,4 +69,25 @@ public class User {
     public void setSpecialite(String specialite) { this.specialite = specialite; }
     public Timestamp getCreated_at() { return created_at; }
     public void setCreated_at(Timestamp created_at) { this.created_at = created_at; }
+
+    // Helper for Hospital Module
+    public String getNomComplet() {
+        return (nom != null ? nom : "") + " " + (prenom != null ? prenom : "");
+    }
+
+    public UserRole getRole() {
+        if (user_role == null) return UserRole.PATIENT;
+        try {
+            return UserRole.valueOf(user_role.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            if (user_role.equalsIgnoreCase("CLIENT")) return UserRole.PATIENT;
+            return UserRole.PATIENT;
+        }
+    }
+
+    public void setRole(UserRole role) {
+        if (role != null) {
+            this.user_role = role.name();
+        }
+    }
 }

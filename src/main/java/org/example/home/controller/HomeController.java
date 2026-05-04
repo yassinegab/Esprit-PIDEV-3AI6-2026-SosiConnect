@@ -17,39 +17,35 @@ import java.util.List;
 
 public class HomeController {
 
-    @FXML
-    private Label avatarLabel;
+    private static HomeController instance;
 
-    @FXML
-    private StackPane contentArea;
-
-    @FXML
-    private VBox dashboardView;
-
-    @FXML
-    private Button btnWellbeing;
-
-    @FXML
-    private Button btnServicesSociaux;
-
-    @FXML
-    private Button btnJournal;
-
-    @FXML
-    private Button btnAideEtdon;
-
-    @FXML
-    private Button btnCycle;
+    @FXML private Label avatarLabel;
+    @FXML private StackPane contentArea;
+    @FXML private VBox dashboardView;
+    @FXML private Button btnWellbeing;
+    @FXML private Button btnServicesSociaux;
+    @FXML private Button btnJournal;
+    @FXML private Button btnAideEtdon;
+    @FXML private Button btnCycle;
 
     private List<Button> navButtons;
 
-    public void setContent(Parent view) {
-        contentArea.getChildren().setAll(view);
-    }
-
     @FXML
     public void initialize() {
+        instance = this;
         navButtons = Arrays.asList(btnWellbeing, btnServicesSociaux, btnJournal, btnAideEtdon, btnCycle);
+    }
+
+    public static void navigateTo(Parent view) {
+        if (instance != null && instance.contentArea != null) {
+            instance.contentArea.getChildren().setAll(view);
+        } else {
+            System.err.println("HomeController instance non disponible.");
+        }
+    }
+
+    public void setContent(Parent view) {
+        contentArea.getChildren().setAll(view);
     }
 
     public void setUser(User user) {
@@ -85,7 +81,7 @@ public class HomeController {
 
     @FXML
     private void showServicesSociaux() {
-        loadView("/servicesociaux/frontoffice/ServicesSociauxClientView.fxml", btnServicesSociaux);
+        loadView("/servicesociaux/frontoffice/MainMenu.fxml", btnServicesSociaux);
     }
 
     @FXML
@@ -103,17 +99,14 @@ public class HomeController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent view = loader.load();
 
-            // 🔥 récupérer le controller de la page chargée
+            // Handle sub-controller injections if needed
             Object controller = loader.getController();
-
-            // 🔥 injecter HomeController dans les autres controllers
             if (controller instanceof org.example.cycle.frontoffice.controller.DisplayCycleController) {
                 ((org.example.cycle.frontoffice.controller.DisplayCycleController) controller).setHomeController(this);
             }
 
             contentArea.getChildren().setAll(view);
             updateActiveButton(activeBtn);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -121,7 +114,9 @@ public class HomeController {
 
     private void updateActiveButton(Button activeBtn) {
         for (Button btn : navButtons) {
-            btn.getStyleClass().remove("active-nav");
+            if (btn != null) {
+                btn.getStyleClass().remove("active-nav");
+            }
         }
         if (activeBtn != null) {
             activeBtn.getStyleClass().add("active-nav");

@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -13,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AdminBaseController {
+
+    private static AdminBaseController instance;
 
     @FXML private StackPane adminContentArea;
     @FXML private Button btnDashboard;
@@ -26,15 +29,28 @@ public class AdminBaseController {
 
     @FXML
     public void initialize() {
+        instance = this;
         navButtons = Arrays.asList(btnDashboard, btnUsers, btnWellbeing, btnMedical, btnAide, btnCycle);
         // Load default view
         showWellbeingAdmin(); 
     }
 
+    public StackPane getAdminContentArea() { return adminContentArea; }
+
+    public static void navigateTo(Parent view) {
+        if (instance != null && instance.adminContentArea != null) {
+            instance.adminContentArea.getChildren().setAll(view);
+        } else {
+            System.err.println("❌ AdminBaseController instance non disponible.");
+        }
+    }
+
     @FXML
     private void showDashboard() {
         updateActiveButton(btnDashboard);
-        // Placeholder for main admin dashboard
+        Label ph = new Label("Tableau de bord principal");
+        ph.setStyle("-fx-font-size:22;-fx-text-fill:#94a3b8;-fx-font-weight:bold;");
+        adminContentArea.getChildren().setAll(ph);
     }
 
     @FXML
@@ -49,7 +65,7 @@ public class AdminBaseController {
 
     @FXML
     private void showMedicalAdmin() {
-        loadView("/servicesociaux/backoffice/ServicesSociauxAdminView.fxml", btnMedical);
+        loadView("/servicesociaux/backoffice/MainMenu.fxml", btnMedical);
     }
 
     @FXML
@@ -62,24 +78,39 @@ public class AdminBaseController {
         loadView("/cycle/backoffice/CycleAdminView.fxml", btnCycle);
     }
 
-    private void loadView(String fxmlPath, Button activeBtn) {
+    public void loadView(String fxmlPath, Button activeBtn) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent view = loader.load();
+
+            // Inject this into the loaded controller if it's AdminAware
+            Object ctrl = loader.getController();
+            if (ctrl instanceof AdminAware aa) {
+                aa.setAdminController(this);
+            }
+
             adminContentArea.getChildren().setAll(view);
             updateActiveButton(activeBtn);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Label err = new Label(
+                    "Impossible de charger : " + fxmlPath + "\n"
+                            + (e.getCause() != null ? e.getCause().getMessage() : e.getMessage())
+            );
+            err.setStyle("-fx-font-size:13;-fx-text-fill:#ef4444;-fx-padding:20;");
+            err.setWrapText(true);
+            adminContentArea.getChildren().setAll(err);
+            updateActiveButton(activeBtn);
             e.printStackTrace();
-            System.err.println("Could not load FXML: " + fxmlPath);
         }
     }
 
     private void updateActiveButton(Button activeBtn) {
         for (Button btn : navButtons) {
-            btn.getStyleClass().remove("active");
-            btn.setStyle(""); // wipe inline messes
+            if (btn != null) {
+                btn.getStyleClass().remove("active");
+                btn.setStyle(""); // Clear any inline styles
+            }
         }
-        // Set new active natively via CSS class
         if (activeBtn != null) {
             if (!activeBtn.getStyleClass().contains("active")) {
                 activeBtn.getStyleClass().add("active");
@@ -97,5 +128,9 @@ public class AdminBaseController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public interface AdminAware {
+        void setAdminController(AdminBaseController admin);
     }
 }
