@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane prefHeight="800.0" prefWidth="1200.0"
+            style="-fx-background-color: #f1f5f9;"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.backoffice.controller.AdminBaseController">
+
+   <left>
+      <VBox prefWidth="260.0" spacing="10.0"
+            style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);">
+
+         <children>
+
+            <HBox alignment="CENTER_LEFT" spacing="12.0" style="-fx-padding: 30 20;">
+               <children>
+                  <StackPane style="-fx-background-color: #6366f1; -fx-background-radius: 8; -fx-padding: 8;">
+                     <children>
+                        <Label text="S" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14;"/>
+                     </children>
+                  </StackPane>
+
+                  <VBox>
+                     <children>
+                        <Label text="Sosi Admin" style="-fx-font-weight: bold; -fx-font-size: 18;"/>
+                        <Label text="Management Portal" style="-fx-font-size: 11;"/>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+
+            <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+               <children>
+
+                  <Label text="MAIN MENU" style="-fx-padding: 10 20;"/>
+
+                  <Button fx:id="btnDashboard" text="📊 Dashboard Overview"
+                          onAction="#showDashboard"
+                          maxWidth="Infinity"/>
+
+                  <Button fx:id="btnUsers" text="👥 User Management"
+                          onAction="#showUserAdmin"
+                          maxWidth="Infinity"/>
+
+                  <Label text="MODULES" style="-fx-padding: 20 20 10 20;"/>
+
+                  <Button fx:id="btnWellbeing" text="🧠 Mental Wellbeing"
+                          onAction="#showWellbeingAdmin"
+                          maxWidth="Infinity"/>
+
+                  <Button fx:id="btnMedical" text="⚕️ Medical Services"
+                          onAction="#showMedicalAdmin"
+                          maxWidth="Infinity"/>
+
+                  <Button fx:id="btnAide" text="🤝 Aide &amp; Donation"
+                          onAction="#showAideAdmin"
+                          maxWidth="Infinity"/>
+
+                  <Button fx:id="btnCycle" text="📅 Cycle Track"
+                          onAction="#showCycleAdmin"
+                          maxWidth="Infinity"/>
+
+               </children>
+            </VBox>
+
+            <VBox spacing="10.0" style="-fx-padding: 20;">
+               <children>
+
+                  <HBox spacing="10.0">
+                     <children>
+                        <Circle radius="4.0"/>
+                        <Label text="System Online"/>
+                     </children>
+                  </HBox>
+
+                  <Button text="Logout"
+                          onAction="#handleLogout"
+                          maxWidth="Infinity"/>
+
+               </children>
+            </VBox>
+
+         </children>
+      </VBox>
+   </left>
+
+   <center>
+      <VBox>
+         <children>
+
+            <HBox prefHeight="70.0" spacing="20.0">
+               <children>
+
+                  <HBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <TextField promptText="Search..."/>
+                     </children>
+                  </HBox>
+
+                  <HBox spacing="15.0">
+                     <children>
+                        <Button text="🔔"/>
+                        <Button text="⚙️"/>
+                        <Separator orientation="VERTICAL"/>
+                     </children>
+                  </HBox>
+
+               </children>
+            </HBox>
+
+            <StackPane fx:id="adminContentArea" VBox.vgrow="ALWAYS">
+               <padding>
+                  <Insets top="30" left="30" right="30" bottom="30"/>
+               </padding>
+            </StackPane>
+
+         </children>
+      </VBox>
+   </center>
+
+</BorderPane>

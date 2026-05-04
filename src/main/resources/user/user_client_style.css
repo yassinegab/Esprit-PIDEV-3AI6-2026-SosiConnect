@@ -1,0 +1,181 @@
+.page-scroll {
+    -fx-background-color: #f3f4f6;
+}
+
+.page-scroll > .viewport {
+    -fx-background-color: #f3f4f6;
+}
+
+.page-root {
+    -fx-background-color: #f3f4f6;
+}
+
+.profile-card,
+.data-card,
+.chart-card,
+.dialog-root {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 18;
+    -fx-padding: 18;
+}
+
+.profile-avatar {
+    -fx-font-size: 48px;
+    -fx-text-fill: #dc2626;
+    -fx-background-color: #fee2e2;
+    -fx-background-radius: 50;
+    -fx-padding: 18 22 18 22;
+}
+
+.profile-name {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.role-badge {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 14;
+    -fx-padding: 6 14 6 14;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.profile-info {
+    -fx-font-size: 16px;
+    -fx-text-fill: #334155;
+}
+
+.section-title,
+.big-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.big-title {
+    -fx-font-size: 22px;
+}
+
+.sub-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #64748b;
+}
+
+.metric-card {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 16;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 16;
+    -fx-padding: 18;
+    -fx-alignment: center;
+    -fx-pref-width: 170;
+    -fx-pref-height: 130;
+}
+
+.metric-icon {
+    -fx-font-size: 22px;
+    -fx-text-fill: #dc2626;
+}
+
+.metric-value {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.metric-unit {
+    -fx-font-size: 14px;
+    -fx-text-fill: #64748b;
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.card-title-red {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.card-content {
+    -fx-font-size: 15px;
+    -fx-text-fill: #111827;
+}
+
+.card-content-italic {
+    -fx-font-size: 15px;
+    -fx-text-fill: #111827;
+    -fx-font-style: italic;
+}
+
+.date-chip {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+    -fx-background-radius: 14;
+    -fx-padding: 7 14 7 14;
+    -fx-font-weight: bold;
+}
+
+.date-chip-blue {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #2563eb;
+    -fx-background-radius: 14;
+    -fx-padding: 7 14 7 14;
+    -fx-font-weight: bold;
+}
+
+.danger-button {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-padding: 10 18 10 18;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.danger-button:hover {
+    -fx-background-color: #b91c1c;
+}
+
+.secondary-button {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #0f172a;
+    -fx-background-radius: 12;
+    -fx-padding: 10 18 10 18;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #cbd5e1;
+}
+
+.chart-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.text-field,
+.text-area,
+.combo-box {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #cbd5e1;
+    -fx-background-color: white;
+}
+
+.text-field:focused,
+.text-area:focused,
+.combo-box:focused {
+    -fx-border-color: #dc2626;
+}

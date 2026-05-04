@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.user.frontoffice.controller.DossierMedicalFormController"
+            stylesheets="@../user_client_style.css">
+
+    <content>
+        <VBox spacing="14" styleClass="dialog-root">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Mon dossier médical" styleClass="big-title"/>
+
+            <TextArea fx:id="antecedentsArea"
+                      promptText="Antécédents médicaux"
+                      prefRowCount="3"
+                      wrapText="true"/>
+
+            <TextArea fx:id="maladiesArea"
+                      promptText="Maladies chroniques"
+                      prefRowCount="3"
+                      wrapText="true"/>
+
+            <TextArea fx:id="allergiesArea"
+                      promptText="Allergies"
+                      prefRowCount="3"
+                      wrapText="true"/>
+
+            <TextArea fx:id="traitementsArea"
+                      promptText="Traitements en cours"
+                      prefRowCount="3"
+                      wrapText="true"/>
+
+            <TextArea fx:id="diagnosticsArea"
+                      promptText="Diagnostics"
+                      prefRowCount="3"
+                      wrapText="true"/>
+
+            <TextArea fx:id="notesArea"
+                      promptText="Notes du médecin"
+                      prefRowCount="3"
+                      wrapText="true"/>
+
+            <TextArea fx:id="objectifArea"
+                      promptText="Objectif santé"
+                      prefRowCount="3"
+                      wrapText="true"/>
+
+            <ComboBox fx:id="activiteComboBox" prefWidth="500"/>
+
+            <HBox spacing="10">
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Annuler"
+                        onAction="#handleCancel"
+                        styleClass="secondary-button"/>
+                <Button text="Enregistrer"
+                        onAction="#handleSave"
+                        styleClass="danger-button"/>
+            </HBox>
+        </VBox>
+    </content>
+</ScrollPane>

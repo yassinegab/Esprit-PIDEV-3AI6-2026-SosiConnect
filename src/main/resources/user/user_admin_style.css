@@ -1,0 +1,219 @@
+.admin-root,
+.dialog-root {
+    -fx-background-color: #f3f4f6;
+}
+
+.page-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.page-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #64748b;
+}
+
+.stat-card,
+.panel-card,
+.table-panel,
+.detail-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 18;
+    -fx-padding: 18;
+}
+
+.stat-icon,
+.stat-icon-blue,
+.stat-icon-orange,
+.stat-icon-green {
+    -fx-font-size: 28px;
+    -fx-background-radius: 14;
+    -fx-padding: 12 14 12 14;
+}
+
+.stat-icon {
+    -fx-text-fill: #dc2626;
+    -fx-background-color: #fee2e2;
+}
+
+.stat-icon-blue {
+    -fx-text-fill: #0284c7;
+    -fx-background-color: #e0f2fe;
+}
+
+.stat-icon-orange {
+    -fx-text-fill: #d97706;
+    -fx-background-color: #fef3c7;
+}
+
+.stat-icon-green {
+    -fx-text-fill: #16a34a;
+    -fx-background-color: #dcfce7;
+}
+
+.stat-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #64748b;
+}
+
+.stat-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.search-field,
+.role-filter,
+.text-field,
+.password-field,
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #cbd5e1;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 10 14 10 14;
+    -fx-font-size: 15px;
+}
+
+.search-field:focused,
+.role-filter:focused,
+.text-field:focused,
+.password-field:focused,
+.combo-box:focused {
+    -fx-border-color: #dc2626;
+}
+
+.new-user-button {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-padding: 12 20 12 20;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.new-user-button:hover {
+    -fx-background-color: #b91c1c;
+}
+
+.danger-button {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-padding: 10 18 10 18;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.danger-button:hover {
+    -fx-background-color: #b91c1c;
+}
+
+.secondary-button {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #0f172a;
+    -fx-background-radius: 12;
+    -fx-padding: 10 18 10 18;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #cbd5e1;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: white;
+    -fx-background-radius: 14 14 0 0;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #e5e7eb transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #eef2f7 transparent;
+    -fx-cell-size: 90px;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #fff1f2;
+}
+
+.table-cell {
+    -fx-font-size: 14px;
+    -fx-text-fill: #0f172a;
+    -fx-border-color: transparent;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.action-toolbar {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-spacing: 8;
+}
+
+.action-view-btn,
+.action-edit-btn,
+.action-delete-btn {
+    -fx-background-color: transparent;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+.action-view-btn {
+    -fx-text-fill: #0891b2;
+}
+
+.action-edit-btn {
+    -fx-text-fill: #0ea5e9;
+}
+
+.action-delete-btn {
+    -fx-text-fill: #ef4444;
+}
+
+.helper-text {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+}
+
+.user-big-name {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.role-chip-admin {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+    -fx-background-radius: 14;
+    -fx-padding: 6 14 6 14;
+    -fx-font-weight: bold;
+}

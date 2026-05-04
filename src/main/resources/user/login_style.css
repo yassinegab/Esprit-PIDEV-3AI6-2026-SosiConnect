@@ -1,0 +1,116 @@
+.auth-root {
+    -fx-background-color: linear-gradient(to bottom right, #fff5f5, #ffffff);
+}
+
+.auth-scroll,
+.auth-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.auth-card {
+    -fx-background-color: rgba(255,255,255,0.98);
+    -fx-background-radius: 28;
+    -fx-border-color: #fecaca;
+    -fx-border-radius: 28;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,38,38,0.12), 18, 0, 0, 8);
+}
+
+.brand-box {
+    -fx-padding: 4 0 6 0;
+}
+
+.brand-icon {
+    -fx-font-size: 26px;
+    -fx-text-fill: #dc2626;
+    -fx-background-color: #fee2e2;
+    -fx-background-radius: 40;
+    -fx-padding: 10 14 10 14;
+}
+
+.brand-title {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #b91c1c;
+}
+
+.brand-subtitle {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.page-title-auth {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.page-subtitle-auth {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6b7280;
+}
+
+.field-label,
+.section-mini-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2937;
+}
+
+.auth-input {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #d1d5db;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-padding: 12 14 12 14;
+    -fx-font-size: 15px;
+}
+
+.auth-input:focused {
+    -fx-border-color: #dc2626;
+    -fx-background-color: white;
+}
+
+.primary-button-auth {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-padding: 13 20 13 20;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.primary-button-auth:hover {
+    -fx-background-color: #b91c1c;
+}
+
+.link-auth {
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.helper-line {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 15px;
+}
+
+.error-label {
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.patient-extra-box {
+    -fx-background-color: #fff5f5;
+    -fx-border-color: #fecaca;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-padding: 14;
+}
+
+.check-auth {
+    -fx-text-fill: #374151;
+    -fx-font-size: 14px;
+}

@@ -1,0 +1,338 @@
+.scroll-pane,
+.dialog-scroll {
+    -fx-background-color: #f3f4f6;
+}
+
+.scroll-pane > .viewport,
+.dialog-scroll > .viewport {
+    -fx-background-color: #f3f4f6;
+}
+
+.med-root,
+.patient-sheet-root {
+    -fx-background-color: #f3f4f6;
+}
+
+.page-title,
+.sheet-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.page-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #64748b;
+}
+
+.stat-card,
+.panel-card,
+.table-panel,
+.data-card,
+.patient-identity-card,
+.patient-handicap-box {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 18;
+    -fx-padding: 18;
+}
+
+.patient-identity-card {
+    -fx-background-color: #eef2f3;
+}
+
+.patient-avatar {
+    -fx-font-size: 42px;
+    -fx-text-fill: #dc2626;
+    -fx-background-color: #fde2e2;
+    -fx-background-radius: 50;
+    -fx-padding: 20 24 20 24;
+}
+
+.patient-name {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2937;
+}
+
+.patient-role-badge {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 14;
+    -fx-padding: 6 14 6 14;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.patient-info-line {
+    -fx-font-size: 15px;
+    -fx-text-fill: #374151;
+    -fx-font-weight: 500;
+}
+
+.patient-info-caption {
+    -fx-font-size: 14px;
+    -fx-text-fill: #9ca3af;
+}
+
+.patient-handicap-box {
+    -fx-background-color: #eef2f3;
+    -fx-padding: 14 18 14 18;
+}
+
+.patient-handicap-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #6b7280;
+    -fx-font-weight: bold;
+}
+
+.patient-handicap-value {
+    -fx-font-size: 15px;
+    -fx-text-fill: #1f2937;
+    -fx-font-weight: bold;
+}
+
+.sheet-separator {
+    -fx-pref-height: 1;
+    -fx-background-color: #d1d5db;
+}
+
+.section-title,
+.section-title-red {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.section-title-red {
+    -fx-text-fill: #dc2626;
+}
+
+.summary-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #6b7280;
+    -fx-font-weight: bold;
+}
+
+.summary-value {
+    -fx-font-size: 15px;
+    -fx-text-fill: #1f2937;
+}
+
+.summary-value-red {
+    -fx-font-size: 15px;
+    -fx-text-fill: #dc2626;
+    -fx-font-weight: bold;
+}
+
+.summary-value-italic {
+    -fx-font-size: 15px;
+    -fx-text-fill: #1f2937;
+    -fx-font-style: italic;
+}
+
+.stat-icon,
+.stat-icon-red,
+.stat-icon-orange {
+    -fx-font-size: 28px;
+    -fx-background-radius: 14;
+    -fx-padding: 12 14 12 14;
+}
+
+.stat-icon {
+    -fx-text-fill: #dc2626;
+    -fx-background-color: #fee2e2;
+}
+
+.stat-icon-red {
+    -fx-text-fill: #dc2626;
+    -fx-background-color: #fee2e2;
+}
+
+.stat-icon-orange {
+    -fx-text-fill: #ea580c;
+    -fx-background-color: #ffedd5;
+}
+
+.stat-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #64748b;
+}
+
+.stat-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.quick-stat-row {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 14;
+    -fx-padding: 16;
+}
+
+.quick-stat-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: #64748b;
+}
+
+.quick-stat-value {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.search-field {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #cbd5e1;
+    -fx-background-color: white;
+    -fx-padding: 10 14 10 14;
+    -fx-font-size: 15px;
+}
+
+.search-field:focused {
+    -fx-border-color: #dc2626;
+}
+
+.count-chip {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+    -fx-background-radius: 14;
+    -fx-padding: 7 14 7 14;
+    -fx-font-weight: bold;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: white;
+    -fx-background-radius: 14 14 0 0;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #e5e7eb transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #eef2f7 transparent;
+    -fx-cell-size: 72px;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #fff1f2;
+}
+
+.table-cell {
+    -fx-font-size: 14px;
+    -fx-text-fill: #0f172a;
+    -fx-border-color: transparent;
+}
+
+.voir-button {
+    -fx-background-color: #fff1f2;
+    -fx-text-fill: #dc2626;
+    -fx-border-color: #fecdd3;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 10 18 10 18;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.voir-button:hover {
+    -fx-background-color: #ffe4e6;
+}
+
+.danger-button {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-padding: 10 18 10 18;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.danger-button:hover {
+    -fx-background-color: #b91c1c;
+}
+
+.sheet-close-button {
+    -fx-background-color: white;
+    -fx-text-fill: #dc2626;
+    -fx-border-color: #fca5a5;
+    -fx-border-radius: 50;
+    -fx-background-radius: 50;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 38;
+    -fx-pref-height: 38;
+    -fx-cursor: hand;
+}
+
+.sheet-close-button:hover {
+    -fx-background-color: #fff1f2;
+}
+
+.info-chip {
+    -fx-background-color: #f8fafc;
+    -fx-text-fill: #334155;
+    -fx-background-radius: 14;
+    -fx-padding: 7 14 7 14;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.date-chip {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+    -fx-background-radius: 14;
+    -fx-padding: 7 14 7 14;
+    -fx-font-weight: bold;
+}
+
+.date-chip-blue {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #2563eb;
+    -fx-background-radius: 14;
+    -fx-padding: 7 14 7 14;
+    -fx-font-weight: bold;
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+
+.card-title-red {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.card-content {
+    -fx-font-size: 15px;
+    -fx-text-fill: #111827;
+}
+
+.card-content-italic {
+    -fx-font-size: 15px;
+    -fx-text-fill: #111827;
+    -fx-font-style: italic;
+}
