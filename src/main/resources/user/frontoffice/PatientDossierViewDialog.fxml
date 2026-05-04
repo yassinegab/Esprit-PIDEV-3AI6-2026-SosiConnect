@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.user.frontoffice.controller.PatientDossierViewController"
+            stylesheets="@../user_medecin_style.css"
+            styleClass="dialog-scroll">
+
+    <content>
+        <VBox spacing="18.0" styleClass="patient-sheet-root">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Fiche Patient" styleClass="sheet-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="✕"
+                        onAction="#handleClose"
+                        styleClass="sheet-close-button"/>
+            </HBox>
+
+            <!-- Carte identité -->
+            <HBox spacing="18.0" styleClass="patient-identity-card">
+                <Label text="◉" styleClass="patient-avatar"/>
+
+                <VBox spacing="8.0">
+                    <Label fx:id="patientNameLabel" text="Nom Patient" styleClass="patient-name"/>
+                    <Label text="Patient" styleClass="patient-role-badge"/>
+                </VBox>
+            </HBox>
+
+            <!-- Infos principales -->
+            <HBox spacing="40.0">
+                <VBox spacing="18.0" HBox.hgrow="ALWAYS">
+                    <Label fx:id="patientEmailLabel" text="email@email.com" styleClass="patient-info-line"/>
+                    <Label fx:id="createdDateLabel" text="34 ans" styleClass="patient-info-line"/>
+                    <Label text="Poids" styleClass="patient-info-caption"/>
+                    <Label fx:id="patientPoidsLabel" text="78 kg" styleClass="patient-info-line"/>
+                </VBox>
+
+                <VBox spacing="18.0" HBox.hgrow="ALWAYS">
+                    <Label fx:id="patientTelephoneLabel" text="+216 00 000 000" styleClass="patient-info-line"/>
+                    <Label fx:id="patientAgeSexeLabel" text="Homme" styleClass="patient-info-line"/>
+                    <Label text="Taille" styleClass="patient-info-caption"/>
+                    <Label fx:id="patientTailleLabel" text="175 cm" styleClass="patient-info-line"/>
+                </VBox>
+            </HBox>
+
+            <!-- Handicap -->
+            <HBox spacing="8.0" styleClass="patient-handicap-box">
+                <Label text="Handicap:" styleClass="patient-handicap-label"/>
+                <Label fx:id="patientHandicapLabel" text="Aucun" styleClass="patient-handicap-value"/>
+            </HBox>
+
+            <!-- Séparateur -->
+            <Region styleClass="sheet-separator"/>
+
+            <!-- Résumé dossier -->
+            <VBox spacing="14.0">
+                <Label text="Résumé du Dossier Médical" styleClass="section-title-red"/>
+
+                <HBox spacing="10.0">
+                    <Label text="Diagnostics:" styleClass="summary-label"/>
+                    <Label fx:id="diagnosticsLabel" text="Aucune donnée" wrapText="true" styleClass="summary-value"/>
+                </HBox>
+
+                <HBox spacing="10.0">
+                    <Label text="Allergies:" styleClass="summary-label"/>
+                    <Label fx:id="allergiesLabel" text="Aucune donnée" wrapText="true" styleClass="summary-value-red"/>
+                </HBox>
+
+                <HBox spacing="10.0">
+                    <Label text="Maladies chroniques:" styleClass="summary-label"/>
+                    <Label fx:id="maladiesLabel" text="Aucune donnée" wrapText="true" styleClass="summary-value"/>
+                </HBox>
+
+                <HBox spacing="10.0">
+                    <Label text="Traitements en cours:" styleClass="summary-label"/>
+                    <Label fx:id="traitementsLabel" text="Aucune donnée" wrapText="true" styleClass="summary-value"/>
+                </HBox>
+
+                <HBox spacing="10.0">
+                    <Label text="Antécédents médicaux:" styleClass="summary-label"/>
+                    <Label fx:id="antecedentsLabel" text="Aucune donnée" wrapText="true" styleClass="summary-value"/>
+                </HBox>
+
+                <HBox spacing="10.0">
+                    <Label text="Objectif santé:" styleClass="summary-label"/>
+                    <Label fx:id="objectifLabel" text="Aucune donnée" wrapText="true" styleClass="summary-value"/>
+                </HBox>
+
+                <HBox spacing="10.0">
+                    <Label text="Niveau d'activité:" styleClass="summary-label"/>
+                    <Label fx:id="activiteLabel" text="Aucune donnée" wrapText="true" styleClass="summary-value"/>
+                </HBox>
+
+                <HBox spacing="10.0">
+                    <Label text="Notes du médecin:" styleClass="summary-label"/>
+                    <Label fx:id="notesLabel" text="Aucune donnée" wrapText="true" styleClass="summary-value-italic"/>
+                </HBox>
+            </VBox>
+
+            <!-- Footer actions -->
+            <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                <Label fx:id="updatedDateLabel" text="Mis à jour le ----" styleClass="date-chip-blue"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="createDossierButton"
+                        text="Créer Dossier"
+                        onAction="#handleCreateDossier"
+                        styleClass="danger-button"/>
+
+                <Button fx:id="editDossierButton"
+                        text="Modifier"
+                        onAction="#handleEditDossier"
+                        styleClass="danger-button"/>
+            </HBox>
+            <VBox fx:id="inlineFormContainer" spacing="12.0"/>
+        </VBox>
+    </content>
+</ScrollPane>

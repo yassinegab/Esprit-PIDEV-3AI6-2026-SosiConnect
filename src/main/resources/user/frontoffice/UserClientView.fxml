@@ -1,14 +1,204 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.user.frontoffice.controller.UserControllerClientController"
-            prefHeight="400.0" prefWidth="600.0">
+<ScrollPane fitToWidth="true"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.user.frontoffice.controller.UserClientController"
+            stylesheets="@../user_client_style.css"
+            styleClass="page-scroll">
 
-</AnchorPane>
+    <content>
+        <VBox spacing="24.0" styleClass="page-root">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- PROFIL -->
+            <HBox spacing="20">
+                <VBox spacing="20" styleClass="profile-card" HBox.hgrow="ALWAYS">
+                    <HBox alignment="TOP_RIGHT" spacing="10">
+                        <Button fx:id="chatbotButton"
+                                text="Assistant IA"
+                                onAction="#handleOpenChatbot"
+                                styleClass="secondary-button"/>
+
+                        <Button fx:id="editProfileButton"
+                                text="Modifier"
+                                onAction="#handleEditProfile"
+                                styleClass="danger-button"/>
+                    </HBox>
+
+                    <VBox alignment="CENTER" spacing="14">
+                        <Label text="◉" styleClass="profile-avatar"/>
+                        <Label fx:id="fullNameLabel" text="Nom Prenom" styleClass="profile-name"/>
+                        <Label fx:id="roleLabel" text="Patient" styleClass="role-badge"/>
+                    </VBox>
+
+                    <VBox spacing="14">
+                        <Label fx:id="emailLabel" text="email@email.com" styleClass="profile-info"/>
+                        <Label fx:id="telephoneLabel" text="+216 00 000 000" styleClass="profile-info"/>
+                        <Label fx:id="ageLabel" text="25 ans" styleClass="profile-info"/>
+                    </VBox>
+                </VBox>
+
+                <VBox spacing="18" styleClass="profile-card" HBox.hgrow="ALWAYS">
+                    <Label text="Données Physiques" styleClass="section-title"/>
+
+                    <FlowPane hgap="18" vgap="18">
+                        <VBox spacing="8" styleClass="metric-card">
+                            <Label text="⚖" styleClass="metric-icon"/>
+                            <Label fx:id="poidsValueLabel" text="0" styleClass="metric-value"/>
+                            <Label text="kg" styleClass="metric-unit"/>
+                        </VBox>
+
+                        <VBox spacing="8" styleClass="metric-card">
+                            <Label text="📏" styleClass="metric-icon"/>
+                            <Label fx:id="tailleValueLabel" text="0" styleClass="metric-value"/>
+                            <Label text="cm" styleClass="metric-unit"/>
+                        </VBox>
+
+                        <VBox spacing="8" styleClass="metric-card">
+                            <Label text="◌" styleClass="metric-icon"/>
+                            <Label fx:id="sexeValueLabel" text="Homme" styleClass="metric-value"/>
+                            <Label text="Sexe" styleClass="metric-unit"/>
+                        </VBox>
+
+                        <VBox spacing="8" styleClass="metric-card">
+                            <Label text="✚" styleClass="metric-icon"/>
+                            <Label fx:id="handicapValueLabel" text="Aucun" styleClass="metric-value"/>
+                            <Label text="Handicap" styleClass="metric-unit"/>
+                        </VBox>
+                    </FlowPane>
+                </VBox>
+            </HBox>
+
+            <!-- DOSSIER MEDICAL -->
+            <VBox spacing="18">
+                <HBox alignment="CENTER_LEFT" spacing="16">
+                    <VBox spacing="6">
+                        <Label text="Mon Dossier Médical" styleClass="big-title"/>
+                        <Label text="Consultez et modifiez votre dossier médical" styleClass="sub-title"/>
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button fx:id="addDossierButton"
+                            text="Créer"
+                            onAction="#handleAddDossier"
+                            styleClass="danger-button"/>
+
+                    <Button fx:id="editDossierButton"
+                            text="Modifier"
+                            onAction="#handleEditDossier"
+                            styleClass="danger-button"/>
+
+                    <Button fx:id="deleteDossierButton"
+                            text="Supprimer"
+                            onAction="#handleDeleteDossier"
+                            styleClass="secondary-button"/>
+                </HBox>
+
+                <HBox spacing="16">
+                    <Label fx:id="createdDateLabel" text="Créé le ----" styleClass="date-chip"/>
+                    <Label fx:id="updatedDateLabel" text="Mis à jour le ----" styleClass="date-chip-blue"/>
+                </HBox>
+
+                <VBox fx:id="dossierContentBox" spacing="18">
+                    <HBox spacing="20">
+                        <VBox spacing="14" styleClass="data-card" HBox.hgrow="ALWAYS">
+                            <Label text="Antécédents Médicaux" styleClass="card-title"/>
+                            <Label fx:id="antecedentsLabel" text="Aucune donnée" wrapText="true" styleClass="card-content"/>
+                        </VBox>
+
+                        <VBox spacing="14" styleClass="data-card" HBox.hgrow="ALWAYS">
+                            <Label text="Maladies Chroniques" styleClass="card-title"/>
+                            <Label fx:id="maladiesLabel" text="Aucune donnée" wrapText="true" styleClass="card-content"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="20">
+                        <VBox spacing="14" styleClass="data-card" HBox.hgrow="ALWAYS">
+                            <Label text="Allergies" styleClass="card-title-red"/>
+                            <Label fx:id="allergiesLabel" text="Aucune donnée" wrapText="true" styleClass="card-content"/>
+                        </VBox>
+
+                        <VBox spacing="14" styleClass="data-card" HBox.hgrow="ALWAYS">
+                            <Label text="Traitements en Cours" styleClass="card-title"/>
+                            <Label fx:id="traitementsLabel" text="Aucune donnée" wrapText="true" styleClass="card-content"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="20">
+                        <VBox spacing="14" styleClass="data-card" HBox.hgrow="ALWAYS">
+                            <Label text="Diagnostics" styleClass="card-title"/>
+                            <Label fx:id="diagnosticsLabel" text="Aucune donnée" wrapText="true" styleClass="card-content"/>
+                        </VBox>
+
+                        <VBox spacing="14" styleClass="data-card" HBox.hgrow="ALWAYS">
+                            <Label text="Notes du Médecin" styleClass="card-title"/>
+                            <Label fx:id="notesLabel" text="Aucune donnée" wrapText="true" styleClass="card-content-italic"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="20">
+                        <VBox spacing="14" styleClass="data-card" HBox.hgrow="ALWAYS">
+                            <Label text="Objectif Santé" styleClass="card-title"/>
+                            <Label fx:id="objectifLabel" text="Aucune donnée" wrapText="true" styleClass="card-content"/>
+                        </VBox>
+
+                        <VBox spacing="14" styleClass="data-card" HBox.hgrow="ALWAYS">
+                            <Label text="Niveau d'Activité" styleClass="card-title"/>
+                            <Label fx:id="activiteLabel" text="Aucune donnée" wrapText="true" styleClass="card-content"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- VISUALISATIONS -->
+            <VBox spacing="18">
+                <Label text="Mes Visualisations" styleClass="big-title"/>
+
+                <FlowPane hgap="20" vgap="20">
+                    <VBox spacing="10" styleClass="chart-card">
+                        <Label text="Complétion du dossier" styleClass="chart-title"/>
+                        <PieChart fx:id="dossierPieChart" prefHeight="280" prefWidth="320"/>
+                    </VBox>
+
+                    <VBox spacing="10" styleClass="chart-card">
+                        <Label text="Résumé physique" styleClass="chart-title"/>
+
+                        <BarChart fx:id="physiqueBarChart"
+                                  prefHeight="280"
+                                  prefWidth="420"
+                                  legendVisible="false">
+                            <xAxis>
+                                <CategoryAxis/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis/>
+                            </yAxis>
+                        </BarChart>
+                    </VBox>
+
+                    <VBox spacing="10" styleClass="chart-card">
+                        <Label text="Activité" styleClass="chart-title"/>
+                        <PieChart fx:id="activitePieChart" prefHeight="280" prefWidth="320"/>
+                    </VBox>
+                </FlowPane>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

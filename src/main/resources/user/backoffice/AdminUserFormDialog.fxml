@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.user.backoffice.controller.AdminUserFormController"
+      stylesheets="@../user_admin_style.css"
+      spacing="14.0"
+      styleClass="dialog-root">
+
+    <padding>
+        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+    </padding>
+
+    <Label fx:id="formTitleLabel" text="Nouvel Utilisateur" styleClass="page-title"/>
+
+    <TextField fx:id="nomField" promptText="Nom"/>
+    <TextField fx:id="prenomField" promptText="Prénom"/>
+    <TextField fx:id="emailField" promptText="Email"/>
+    <PasswordField fx:id="passwordField" promptText="Mot de passe"/>
+    <Label fx:id="passwordHintLabel" text="Mot de passe obligatoire." styleClass="helper-text"/>
+    <TextField fx:id="telephoneField" promptText="Téléphone"/>
+    <ComboBox fx:id="roleCombo" prefWidth="500.0"/>
+    <TextField fx:id="ageField" promptText="Âge"/>
+    <ComboBox fx:id="sexeCombo" prefWidth="500.0"/>
+    <TextField fx:id="poidsField" promptText="Poids (kg)"/>
+    <TextField fx:id="tailleField" promptText="Taille (cm)"/>
+    <TextField fx:id="handicapField" promptText="Handicap"/>
+
+    <HBox spacing="10.0">
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Annuler" onAction="#handleCancel" styleClass="secondary-button"/>
+        <Button text="Enregistrer" onAction="#handleSave" styleClass="danger-button"/>
+    </HBox>
+
+</VBox>

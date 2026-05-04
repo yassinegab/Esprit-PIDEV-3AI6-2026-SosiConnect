@@ -1,100 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
-<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
+<StackPane prefHeight="740.0" prefWidth="1280.0"
+           xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.example.user.controller.LoginController"
-           styleClass="root-container">
+           stylesheets="@login_style.css"
+           styleClass="auth-root">
 
-    <stylesheets>
-        <URL value="@login_style.css" />
-    </stylesheets>
+    <VBox alignment="CENTER" spacing="22.0">
+        <VBox spacing="16.0"
+              alignment="CENTER"
+              styleClass="auth-card"
+              maxWidth="480.0"
+              prefWidth="480.0">
 
-    <!-- Background Image -->
-    <ImageView fx:id="backgroundImage" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../assets/images/login_background.png" />
-    </ImageView>
-
-    <!-- Overlay/Blur effect could be done via CSS or another pane -->
-    <AnchorPane styleClass="overlay">
-
-        <!-- Login Card -->
-        <VBox alignment="CENTER" spacing="20.0" styleClass="login-card" 
-              AnchorPane.topAnchor="50.0" AnchorPane.bottomAnchor="50.0" 
-              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-              maxWidth="450.0" maxHeight="700.0"
-              StackPane.alignment="CENTER">
-            
             <padding>
-                <Insets top="40" right="40" bottom="40" left="40"/>
+                <Insets top="28.0" right="32.0" bottom="28.0" left="32.0"/>
             </padding>
 
-            <!-- Logo -->
-            <ImageView fx:id="logoImage" fitWidth="120" preserveRatio="true">
-                <Image url="@../assets/images/sosi_logo.png" />
-            </ImageView>
+            <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="brand-box">
+                <Label text="❤" styleClass="brand-icon"/>
 
-            <VBox alignment="CENTER" spacing="5.0">
-                <Label text="Bon retour" styleClass="title-label"/>
-                <Label text="Gérez votre santé en toute simplicité" styleClass="subtitle-label"/>
+                <VBox spacing="2.0">
+                    <Label text="Sosi" styleClass="brand-title"/>
+                    <Label text="Espace Santé" styleClass="brand-subtitle"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="4.0" alignment="CENTER">
+                <Label text="Connexion" styleClass="page-title-auth"/>
+                <Label text="Connectez-vous à votre espace santé" styleClass="page-subtitle-auth"/>
             </VBox>
 
-            <VBox spacing="15.0" alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
-                <VBox spacing="5.0">
-                    <Label text="Email" styleClass="input-label"/>
-                    <HBox styleClass="input-container">
-                        <Label styleClass="icon-label" text="✉"/>
-                        <TextField fx:id="emailField" promptText="exemple@email.com" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                    </HBox>
-                </VBox>
-
-                <VBox spacing="5.0">
-                    <HBox alignment="CENTER_LEFT">
-                        <Label text="Mot de passe" styleClass="input-label"/>
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Hyperlink text="Oublié ?" styleClass="forgot-password"/>
-                    </HBox>
-                    <HBox styleClass="input-container">
-                        <Label styleClass="icon-label" text="🔒"/>
-                        <PasswordField fx:id="passwordField" promptText="••••••••" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                    </HBox>
-                </VBox>
-
-                <CheckBox text="Se souvenir de moi" styleClass="remember-me"/>
+            <VBox spacing="8.0">
+                <Label text="Email" styleClass="field-label"/>
+                <TextField fx:id="emailField"
+                           promptText="votre@email.com"
+                           styleClass="auth-input"/>
             </VBox>
 
-            <Button fx:id="loginButton" text="Se connecter" onAction="#handleLogin" maxWidth="Infinity" styleClass="login-button">
-                <graphic>
-                    <Label text="➜" style="-fx-text-fill: white; -fx-padding: 0 10 0 0;"/>
-                </graphic>
-            </Button>
+            <VBox spacing="8.0">
+                <Label text="Mot de passe" styleClass="field-label"/>
+                <PasswordField fx:id="passwordField"
+                               promptText="Votre mot de passe"
+                               styleClass="auth-input"/>
+            </VBox>
+
+            <CheckBox fx:id="rememberMeCheckBox"
+                      text="Se souvenir de moi"
+                      styleClass="check-auth"/>
+
+            <Label fx:id="errorLabel"
+                   text=""
+                   styleClass="error-label"/>
+
+            <Button text="Se connecter"
+                    onAction="#handleLogin"
+                    prefWidth="410.0"
+                    styleClass="primary-button-auth"/>
+
+            <Button text="Continuer avec Google"
+                    onAction="#handleGoogleLogin"
+                    prefWidth="410.0"
+                    styleClass="primary-button-auth"/>
 
             <HBox alignment="CENTER" spacing="5.0">
-                <Label text="Pas encore de compte ?" styleClass="no-account-label"/>
-                <Hyperlink text="Créer un compte" onAction="#navigateToRegister" styleClass="create-account-link"/>
+                <Label text="Pas encore de compte ?" styleClass="helper-line"/>
+
+                <Hyperlink text="S'inscrire"
+                           onAction="#goToRegister"
+                           styleClass="link-auth"/>
             </HBox>
-
-            <Separator maxWidth="200"/>
-
-            <HBox spacing="10.0" alignment="CENTER">
-                <Button text="Google" styleClass="social-button">
-                    <graphic>
-                        <Label text="G" style="-fx-text-fill: #DB4437; -fx-font-weight: bold;"/>
-                    </graphic>
-                </Button>
-                <Button text="Facebook" styleClass="social-button">
-                    <graphic>
-                        <Label text="F" style="-fx-text-fill: #4267B2; -fx-font-weight: bold;"/>
-                    </graphic>
-                </Button>
-            </HBox>
-
         </VBox>
-    </AnchorPane>
-
+    </VBox>
 </StackPane>

@@ -1,170 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
-<?import java.net.URL?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
+<StackPane prefHeight="820.0" prefWidth="1280.0"
+           xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="org.example.user.controller.RegisterController"
-           styleClass="root-container">
+           stylesheets="@login_style.css"
+           styleClass="auth-root">
 
-    <stylesheets>
-        <URL value="@login_style.css" />
-    </stylesheets>
+    <ScrollPane fitToWidth="true" styleClass="auth-scroll">
+        <content>
+            <VBox alignment="CENTER" spacing="22.0">
+                <padding>
+                    <Insets top="30.0" right="30.0" bottom="30.0" left="30.0"/>
+                </padding>
 
-    <!-- Background Image -->
-    <ImageView fx:id="backgroundImage" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../assets/images/login_background.png" />
-    </ImageView>
+                <VBox alignment="CENTER" spacing="16.0" styleClass="auth-card" maxWidth="620.0" prefWidth="620.0">
+                    <padding>
+                        <Insets top="28.0" right="32.0" bottom="28.0" left="32.0"/>
+                    </padding>
 
-    <!-- Overlay -->
-    <AnchorPane styleClass="overlay">
+                    <HBox alignment="CENTER_LEFT" spacing="14.0" styleClass="brand-box">
+                        <Label text="❤" styleClass="brand-icon"/>
+                        <VBox spacing="2.0">
+                            <Label text="Sosi" styleClass="brand-title"/>
+                            <Label text="Espace Santé" styleClass="brand-subtitle"/>
+                        </VBox>
+                    </HBox>
 
-        <!-- Register Card -->
-        <VBox alignment="CENTER" spacing="15.0" styleClass="login-card"
-              AnchorPane.topAnchor="20.0" AnchorPane.bottomAnchor="20.0" 
-              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-              maxWidth="600.0" maxHeight="850.0"
-              StackPane.alignment="CENTER">
-            
-            <padding>
-                <Insets top="30" right="40" bottom="30" left="40"/>
-            </padding>
+                    <VBox alignment="CENTER" spacing="4.0">
+                        <Label text="Inscription" styleClass="page-title-auth"/>
+                        <Label fx:id="stepSubtitleLabel" text="Informations personnelles" styleClass="page-subtitle-auth"/>
+                    </VBox>
 
-            <!-- Logo -->
-            <ImageView fx:id="logoImage" fitWidth="80" preserveRatio="true">
-                <Image url="@../assets/images/sosi_logo.png" />
-            </ImageView>
+                    <HBox alignment="CENTER" spacing="8.0">
+                        <Label fx:id="stepDot1" text="●"/>
+                        <Label fx:id="stepDot2" text="●"/>
+                        <Label fx:id="stepDot3" text="●"/>
+                        <Label fx:id="stepDot4" text="●"/>
+                    </HBox>
 
-            <VBox alignment="CENTER" spacing="2.0">
-                <Label text="Créer un compte" styleClass="title-label" style="-fx-font-size: 24px;"/>
-                <Label text="Rejoignez la communauté SOSI+" styleClass="subtitle-label"/>
+                    <!-- Étape 1 -->
+                    <VBox fx:id="stepPersonalBox" spacing="12.0" prefWidth="540.0">
+                        <Label text="Informations personnelles" styleClass="section-mini-title"/>
+
+                        <HBox spacing="12.0">
+                            <TextField fx:id="nomField" promptText="Nom" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                            <TextField fx:id="prenomField" promptText="Prénom" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+
+                        <TextField fx:id="emailField" promptText="Email" styleClass="auth-input"/>
+
+                        <HBox spacing="12.0">
+                            <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                            <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+
+                        <TextField fx:id="telephoneField" promptText="Téléphone" styleClass="auth-input"/>
+
+                        <ComboBox fx:id="roleComboBox" prefWidth="540.0" promptText="-- Choisir un rôle --"/>
+                    </VBox>
+
+                    <!-- Étape 2 -->
+                    <VBox fx:id="stepPhysicalBox" spacing="12.0" prefWidth="540.0" visible="false" managed="false">
+                        <Label text="Informations physiques" styleClass="section-mini-title"/>
+
+                        <HBox spacing="12.0">
+                            <TextField fx:id="ageField" promptText="Âge" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                            <ComboBox fx:id="sexeComboBox" prefWidth="260.0" promptText="Sexe"/>
+                        </HBox>
+
+                        <VBox fx:id="patientFieldsBox" spacing="12.0" styleClass="patient-extra-box">
+                            <Label text="Informations complémentaires patient" styleClass="section-mini-title"/>
+
+                            <HBox spacing="12.0">
+                                <TextField fx:id="poidsField" promptText="Poids (kg)" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                                <TextField fx:id="tailleField" promptText="Taille (cm)" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+
+                            <CheckBox fx:id="handicapCheckBox" text="Je suis en situation de handicap" styleClass="check-auth"/>
+                            <TextField fx:id="handicapDescriptionField" promptText="Précisez le handicap" styleClass="auth-input"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Étape 3 -->
+                    <VBox fx:id="stepConfirmBox" spacing="14.0" prefWidth="540.0" visible="false" managed="false">
+                        <Label text="Confirmation" styleClass="section-mini-title"/>
+                        <CheckBox fx:id="acceptTermsCheckBox" text="J'accepte les conditions d'utilisation" styleClass="check-auth"/>
+                        <Label text="Cliquez sur Envoyer le code pour recevoir un code de vérification par email." styleClass="helper-line" wrapText="true"/>
+                    </VBox>
+
+                    <!-- Étape 4 -->
+                    <VBox fx:id="stepCodeBox" spacing="14.0" prefWidth="540.0" visible="false" managed="false">
+                        <Label text="Vérification email" styleClass="section-mini-title"/>
+                        <Label text="Entrez le code reçu par email pour finaliser votre inscription." styleClass="helper-line" wrapText="true"/>
+                        <TextField fx:id="verificationCodeField" promptText="Code de vérification" styleClass="auth-input"/>
+                    </VBox>
+
+                    <Label fx:id="errorLabel" text="" styleClass="error-label" wrapText="true"/>
+
+                    <HBox spacing="12.0" alignment="CENTER">
+                        <Button fx:id="backButton" text="← Retour" onAction="#handlePreviousStep" styleClass="secondary-button" visible="false" managed="false"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="nextButton" text="Suivant →" onAction="#handleNextStep" styleClass="primary-button-auth"/>
+                        <Button fx:id="sendCodeButton" text="Envoyer le code" onAction="#handleSendCode" styleClass="primary-button-auth" visible="false" managed="false"/>
+                        <Button fx:id="registerButton" text="S'inscrire" onAction="#handleRegister" styleClass="primary-button-auth" visible="false" managed="false"/>
+                    </HBox>
+
+                    <HBox alignment="CENTER" spacing="5.0">
+                        <Label text="Vous avez déjà un compte ?" styleClass="helper-line"/>
+                        <Hyperlink text="Se connecter" onAction="#goToLogin" styleClass="link-auth"/>
+                    </HBox>
+                </VBox>
             </VBox>
-
-            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" focusTraversable="false">
-                <GridPane hgap="20.0" vgap="10.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-
-                    <!-- Row 0 -->
-                    <VBox spacing="5.0" GridPane.columnIndex="0">
-                        <Label text="Nom" styleClass="input-label"/>
-                        <HBox styleClass="input-container">
-                            <TextField fx:id="nomField" promptText="Votre nom" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="5.0" GridPane.columnIndex="1">
-                        <Label text="Prénom" styleClass="input-label"/>
-                        <HBox styleClass="input-container">
-                            <TextField fx:id="prenomField" promptText="Votre prénom" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Row 1 -->
-                    <VBox spacing="5.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
-                        <Label text="Email" styleClass="input-label"/>
-                        <HBox styleClass="input-container">
-                            <Label styleClass="icon-label" text="✉"/>
-                            <TextField fx:id="emailField" promptText="exemple@email.com" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Row 2 -->
-                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
-                        <Label text="Mot de passe" styleClass="input-label"/>
-                        <HBox styleClass="input-container">
-                            <Label styleClass="icon-label" text="🔒"/>
-                            <PasswordField fx:id="passwordField" promptText="••••••••" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                        <Label text="Téléphone" styleClass="input-label"/>
-                        <HBox styleClass="input-container">
-                            <Label styleClass="icon-label" text="📞"/>
-                            <TextField fx:id="telephoneField" promptText="+216 ..." HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Row 3 -->
-                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
-                        <Label text="Age" styleClass="input-label"/>
-                        <HBox styleClass="input-container">
-                            <TextField fx:id="ageField" promptText="Ex: 25" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                        <Label text="Sexe" styleClass="input-label"/>
-                        <ChoiceBox fx:id="sexeBox" maxWidth="Infinity" styleClass="input-container">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Homme" />
-                                    <String fx:value="Femme" />
-                                </FXCollections>
-                            </items>
-                        </ChoiceBox>
-                    </VBox>
-
-                    <!-- Row 4 -->
-                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="4">
-                        <Label text="Taille (cm)" styleClass="input-label"/>
-                        <HBox styleClass="input-container">
-                            <TextField fx:id="tailleField" promptText="175" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                        <Label text="Poids (kg)" styleClass="input-label"/>
-                        <HBox styleClass="input-container">
-                            <TextField fx:id="poidsField" promptText="70" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                        </HBox>
-                    </VBox>
-
-                    <!-- Row 5 -->
-                    <VBox spacing="5.0" GridPane.columnIndex="0" GridPane.rowIndex="5">
-                        <Label text="Rôle" styleClass="input-label"/>
-                        <ChoiceBox fx:id="roleBox" maxWidth="Infinity" styleClass="input-container">
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Client" />
-                                    <String fx:value="Professionnel" />
-                                </FXCollections>
-                            </items>
-                        </ChoiceBox>
-                    </VBox>
-                    <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                        <Label text="Handicap" styleClass="input-label"/>
-                        <CheckBox fx:id="handicapBox" text="Oui, j'ai un handicap" styleClass="remember-me" style="-fx-padding: 10 0 0 0;"/>
-                    </VBox>
-
-                    <!-- Specialité (Visible conditional) -->
-                    <VBox fx:id="specialiteContainer" spacing="5.0" GridPane.columnSpan="2" GridPane.rowIndex="6" visible="false" managed="false">
-                        <Label text="Spécialité" styleClass="input-label"/>
-                        <HBox styleClass="input-container">
-                            <TextField fx:id="specialiteField" promptText="Ex: Kinésithérapeute" HBox.hgrow="ALWAYS" styleClass="transparent-input"/>
-                        </HBox>
-                    </VBox>
-
-                </GridPane>
-            </ScrollPane>
-
-            <Button fx:id="registerButton" text="S'inscrire" onAction="#handleRegister" maxWidth="Infinity" styleClass="login-button">
-                <graphic>
-                    <Label text="✓" style="-fx-text-fill: white; -fx-padding: 0 10 0 0;"/>
-                </graphic>
-            </Button>
-
-            <HBox alignment="CENTER" spacing="5.0">
-                <Label text="Déjà un compte ?" styleClass="no-account-label"/>
-                <Hyperlink text="Se connecter" onAction="#navigateToLogin" styleClass="create-account-link"/>
-            </HBox>
-
-        </VBox>
-    </AnchorPane>
-
+        </content>
+    </ScrollPane>
 </StackPane>

@@ -10,6 +10,7 @@ import org.example.wellbeing.service.WellbeingService;
 
 import java.sql.SQLException;
 import java.util.List;
+import javafx.scene.layout.HBox;
 
 public class WellbeingAdminController {
 
