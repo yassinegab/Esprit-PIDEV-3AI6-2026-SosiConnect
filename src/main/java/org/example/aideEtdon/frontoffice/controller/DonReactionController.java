@@ -7,9 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.application.Platform;
 import org.example.aideEtdon.model.Demande;
 import org.example.aideEtdon.model.Don;
 import org.example.aideEtdon.service.DonService;
+import org.example.utils.AiService;
 import org.example.utils.SessionManager;
 
 import java.io.IOException;
@@ -37,9 +39,12 @@ public class DonReactionController {
     @FXML private ComboBox<String> donorBloodGroup;
     @FXML private CheckBox shareContactCheck;
     @FXML private CheckBox availableNowCheck;
+    @FXML private Button aiSuggestBtn;
+    @FXML private Label aiStatusLabel;
 
     private Demande demande;
     private DonService donService;
+    private AiService aiService;
     private String selectedQuickAction = null;
 
     // Blood compatibility matrix (receiver -> compatible donors)
@@ -58,6 +63,7 @@ public class DonReactionController {
     @FXML
     public void initialize() {
         donService = new DonService();
+        aiService = new AiService();
     }
 
     public void initData(Demande d) {
@@ -68,10 +74,10 @@ public class DonReactionController {
 
         // Urgency badge
         if ("Urgent".equalsIgnoreCase(d.getUrgence())) {
-            urgenceBadge.setText("URGENT");
+            urgenceBadge.setText("🚨 URGENT");
             urgenceBadge.setStyle(urgenceBadge.getStyle() + "-fx-background-color: #fef2f2; -fx-text-fill: #dc2626; -fx-border-color: #fecaca; -fx-border-width: 1; -fx-border-radius: 12;");
         } else {
-            urgenceBadge.setText("Normal");
+            urgenceBadge.setText("✅ Normal");
             urgenceBadge.setStyle(urgenceBadge.getStyle() + "-fx-background-color: #f0fdf4; -fx-text-fill: #16a34a; -fx-border-color: #bbf7d0; -fx-border-width: 1; -fx-border-radius: 12;");
         }
 
@@ -96,7 +102,7 @@ public class DonReactionController {
             if (!compatibles.isEmpty()) {
                 compatibilityBox.setVisible(true);
                 compatibilityBox.setManaged(true);
-                compatibilityLabel.setText("Groupes compatibles: " + String.join(", ", compatibles));
+                compatibilityLabel.setText("🩸 Groupes compatibles: " + String.join(", ", compatibles));
             }
         } else if ("Organe".equalsIgnoreCase(d.getType())) {
             organeRow.setVisible(true);
@@ -113,17 +119,17 @@ public class DonReactionController {
 
         List<String> actions = new ArrayList<>();
         if ("Sang".equalsIgnoreCase(d.getType())) {
-            actions.add("Je peux donner du sang");
-            actions.add("Je suis un donneur regulier");
-            actions.add("Je connais un donneur");
+            actions.add("🩸 Je peux donner du sang");
+            actions.add("🏅 Je suis un donneur regulier");
+            actions.add("🤝 Je connais un donneur");
         } else if ("Organe".equalsIgnoreCase(d.getType())) {
-            actions.add("Je suis volontaire");
-            actions.add("Je souhaite en savoir plus");
-            actions.add("Je connais un donneur");
+            actions.add("💚 Je suis volontaire");
+            actions.add("💬 Je souhaite en savoir plus");
+            actions.add("🤝 Je connais un donneur");
         } else {
-            actions.add("Je peux aider");
-            actions.add("Je suis disponible");
-            actions.add("Je connais quelqu'un");
+            actions.add("❤️ Je peux aider");
+            actions.add("⏰ Je suis disponible");
+            actions.add("👥 Je connais quelqu'un");
         }
 
         for (String action : actions) {
@@ -185,6 +191,47 @@ public class DonReactionController {
         }
     }
 
+    @FXML
+    public void handleAiSuggest() {
+        if (demande == null) return;
+
+        aiSuggestBtn.setDisable(true);
+        aiSuggestBtn.setText("✨ Generation...");
+        aiStatusLabel.setText("🤖 L'IA redige une reponse...");
+        aiStatusLabel.setVisible(true);
+
+        String bloodInfo = "";
+        if ("Sang".equalsIgnoreCase(demande.getType())) {
+            bloodInfo = " Le groupe sanguin demande est " + demande.getGroupeSanguin() + ".";
+            if (donorBloodGroup.getValue() != null) {
+                bloodInfo += " Le donneur a le groupe " + donorBloodGroup.getValue() + ".";
+            }
+        } else if ("Organe".equalsIgnoreCase(demande.getType())) {
+            bloodInfo = " L'organe demande est: " + demande.getOrgane() + ".";
+        }
+
+        String prompt = "Tu es un assistant pour une plateforme de don medical. "
+                + "Un donneur veut repondre a cette demande: \"" + demande.getTitre() + "\" - " + demande.getDescription()
+                + ". Type de don: " + demande.getType() + ". Urgence: " + demande.getUrgence() + "." + bloodInfo
+                + " Genere un message de reponse chaleureux et professionnel (3-4 phrases max) que le donneur peut envoyer. "
+                + "Le message doit exprimer la volonte d'aider et la disponibilite. "
+                + "Reponds UNIQUEMENT avec le message, sans guillemets ni prefixe.";
+
+        new Thread(() -> {
+            String result = aiService.analyzeText(prompt);
+            Platform.runLater(() -> {
+                messageArea.setText(result);
+                aiSuggestBtn.setDisable(false);
+                aiSuggestBtn.setText("🤖 Suggerer avec IA");
+                aiStatusLabel.setText("✅ Message suggere par IA");
+                new Thread(() -> {
+                    try { Thread.sleep(3000); } catch (InterruptedException ignored) {}
+                    Platform.runLater(() -> aiStatusLabel.setVisible(false));
+                }).start();
+            });
+        }).start();
+    }
+
     private void checkBloodCompatibility() {
         String donorGroup = donorBloodGroup.getValue();
         if (donorGroup == null || demande.getGroupeSanguin() == null) return;
@@ -193,16 +240,16 @@ public class DonReactionController {
                 demande.getGroupeSanguin().toUpperCase(), new ArrayList<>());
 
         if (compatibles.contains(donorGroup)) {
-            bloodMatchLabel.setText("Compatible ! Votre groupe " + donorGroup + " peut aider.");
+            bloodMatchLabel.setText("✅ Compatible ! Votre groupe " + donorGroup + " peut aider.");
             bloodMatchLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #16a34a;");
             compatibilityBox.setStyle("-fx-background-color: #f0fdf4; -fx-background-radius: 12; -fx-padding: 12; -fx-border-color: #bbf7d0; -fx-border-width: 1; -fx-border-radius: 12;");
-            compatibilityLabel.setText("Votre groupe " + donorGroup + " est compatible avec " + demande.getGroupeSanguin());
+            compatibilityLabel.setText("🎉 Votre groupe " + donorGroup + " est compatible avec " + demande.getGroupeSanguin());
             compatibilityLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #166534;");
         } else {
-            bloodMatchLabel.setText("Non compatible. Le receveur a besoin de: " + String.join(", ", compatibles));
+            bloodMatchLabel.setText("❌ Non compatible. Le receveur a besoin de: " + String.join(", ", compatibles));
             bloodMatchLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #dc2626;");
             compatibilityBox.setStyle("-fx-background-color: #fef2f2; -fx-background-radius: 12; -fx-padding: 12; -fx-border-color: #fecaca; -fx-border-width: 1; -fx-border-radius: 12;");
-            compatibilityLabel.setText("Votre groupe " + donorGroup + " n'est pas compatible avec " + demande.getGroupeSanguin());
+            compatibilityLabel.setText("⚠️ Votre groupe " + donorGroup + " n'est pas compatible avec " + demande.getGroupeSanguin());
             compatibilityLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #991b1b;");
         }
     }
@@ -214,14 +261,14 @@ public class DonReactionController {
         // Must select a quick action OR write a message
         String msg = messageArea.getText().trim();
         if (selectedQuickAction == null && msg.isEmpty()) {
-            errorLabel.setText("Veuillez selectionner une action rapide ou ecrire un message.");
+            errorLabel.setText("⚠️ Veuillez selectionner une action rapide ou ecrire un message.");
             errorLabel.setVisible(true);
             return;
         }
 
         // For blood donations, check if donor selected a blood group
         if ("Sang".equalsIgnoreCase(demande.getType()) && donorBloodGroup.getValue() == null) {
-            errorLabel.setText("Veuillez selectionner votre groupe sanguin.");
+            errorLabel.setText("🩸 Veuillez selectionner votre groupe sanguin.");
             errorLabel.setVisible(true);
             return;
         }
@@ -257,7 +304,7 @@ public class DonReactionController {
             List<Don> existingDons = donService.afficherParDemande(demande.getId());
             for (Don existing : existingDons) {
                 if (existing.getDonorId() == currentDonorId) {
-                    errorLabel.setText("Vous avez deja repondu a cette demande.");
+                    errorLabel.setText("🛑 Vous avez deja repondu a cette demande.");
                     errorLabel.setVisible(true);
                     return;
                 }
@@ -273,14 +320,14 @@ public class DonReactionController {
             donService.ajouter(reaction);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Reponse envoyee");
-            alert.setHeaderText(null);
-            String confirmMsg = "Votre proposition a ete enregistree avec succes !";
+            alert.setTitle("✅ Reponse envoyee");
+            alert.setHeaderText("🎉 Merci pour votre generosite !");
+            String confirmMsg = "💚 Votre proposition a ete enregistree avec succes !";
             if ("Sang".equalsIgnoreCase(demande.getType()) && donorBloodGroup.getValue() != null) {
                 List<String> compatibles = BLOOD_MATRIX.getOrDefault(
                         demande.getGroupeSanguin() != null ? demande.getGroupeSanguin().toUpperCase() : "", new ArrayList<>());
                 if (compatibles.contains(donorBloodGroup.getValue())) {
-                    confirmMsg += "\n\nVotre groupe sanguin " + donorBloodGroup.getValue() + " est compatible !";
+                    confirmMsg += "\n\n🩸 Votre groupe sanguin " + donorBloodGroup.getValue() + " est compatible !";
                 }
             }
             alert.setContentText(confirmMsg);
@@ -289,7 +336,7 @@ public class DonReactionController {
             handleRetour();
         } catch (Exception e) {
             e.printStackTrace();
-            errorLabel.setText("Erreur: " + e.getMessage());
+            errorLabel.setText("❌ Erreur: " + e.getMessage());
             errorLabel.setVisible(true);
         }
     }

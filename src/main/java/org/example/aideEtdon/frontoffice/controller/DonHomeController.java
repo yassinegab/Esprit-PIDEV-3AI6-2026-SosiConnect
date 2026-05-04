@@ -39,18 +39,26 @@ public class DonHomeController {
 
     private void animateCardEntrance(VBox card, double delayMs) {
         card.setOpacity(0);
-        card.setTranslateY(30);
+        card.setTranslateY(40);
+        card.setScaleX(0.92);
+        card.setScaleY(0.92);
 
-        FadeTransition ft = new FadeTransition(Duration.millis(500), card);
+        FadeTransition ft = new FadeTransition(Duration.millis(600), card);
         ft.setToValue(1);
         ft.setDelay(Duration.millis(delayMs));
 
-        TranslateTransition tt = new TranslateTransition(Duration.millis(500), card);
+        TranslateTransition tt = new TranslateTransition(Duration.millis(600), card);
         tt.setToY(0);
         tt.setDelay(Duration.millis(delayMs));
 
+        ScaleTransition st = new ScaleTransition(Duration.millis(600), card);
+        st.setToX(1.0);
+        st.setToY(1.0);
+        st.setDelay(Duration.millis(delayMs));
+
         ft.play();
         tt.play();
+        st.play();
     }
 
     private void setupCardHoverAnimation(VBox card) {

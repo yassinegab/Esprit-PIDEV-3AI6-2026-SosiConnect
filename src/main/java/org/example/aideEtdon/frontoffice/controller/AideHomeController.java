@@ -1,5 +1,7 @@
 package org.example.aideEtdon.frontoffice.controller;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.util.Duration;
 import org.example.aideEtdon.model.ContactUrgence;
 import org.example.aideEtdon.model.MapLocation;
 import org.example.aideEtdon.service.ContactUrgenceService;
@@ -65,6 +68,28 @@ public class AideHomeController {
         }
         
         initMap();
+
+        // Staggered entrance animations for panels
+        animateEntrance(btnEmergency.getParent(), 0);
+        animateEntrance(mapContainer, 150);
+        if (historyList != null) animateEntrance(historyList, 300);
+    }
+
+    private void animateEntrance(Node node, double delayMs) {
+        if (node == null) return;
+        node.setOpacity(0);
+        node.setTranslateY(25);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(500), node);
+        ft.setToValue(1);
+        ft.setDelay(Duration.millis(delayMs));
+
+        TranslateTransition tt = new TranslateTransition(Duration.millis(500), node);
+        tt.setToY(0);
+        tt.setDelay(Duration.millis(delayMs));
+
+        ft.play();
+        tt.play();
     }
 
     private void initMap() {
@@ -234,8 +259,8 @@ public class AideHomeController {
         List<ContactUrgence> contacts = contactService.afficherToutes();
         if (contacts.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText("Aucun contact configuré !");
-            alert.setContentText("Veuillez d'abord configurer des contacts de confiance.");
+            alert.setHeaderText("⚠️ Aucun contact configuré !");
+            alert.setContentText("📝 Veuillez d'abord configurer des contacts de confiance.");
             alert.showAndWait();
             return;
         }
@@ -249,10 +274,10 @@ public class AideHomeController {
         final String finalType = type;
         final String time = getCurrentTime();
 
-        String logEntry = "AIDE DEMANDÉE: " + finalType + " (" + time + ")";
+        String logEntry = "\uD83D\uDCCC AIDE DEMANDÉE: " + finalType + " \u23F0 " + time;
         history.add(0, logEntry);
 
-        statusIndicator.setText("RÉCUPÉRATION GPS...");
+        statusIndicator.setText("📡 RÉCUPÉRATION GPS...");
         statusIndicator.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #d97706;");
 
         javafx.concurrent.Task<Void> emergencyTask = new javafx.concurrent.Task<Void>() {
@@ -287,12 +312,12 @@ public class AideHomeController {
                 final int cSize = contacts.size();
                 javafx.application.Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Demande d'aide transmise");
-                    alert.setHeaderText("Alerte diffusée à " + cSize + " contact(s) !");
-                    alert.setContentText("Votre demande de type [" + finalType + "] a été sécurisée avec vos coordonnées GPS exactes.");
+                    alert.setTitle("✅ Demande d'aide transmise");
+                    alert.setHeaderText("📨 Alerte diffusée à " + cSize + " contact(s) !");
+                    alert.setContentText("📍 Votre demande de type [" + finalType + "] a été sécurisée avec vos coordonnées GPS exactes.");
                     alert.show();
 
-                    statusIndicator.setText("AIDE DEMANDÉE");
+                    statusIndicator.setText("🚨 AIDE DEMANDÉE");
                     statusIndicator.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #dc2626;");
                 });
                 return null;

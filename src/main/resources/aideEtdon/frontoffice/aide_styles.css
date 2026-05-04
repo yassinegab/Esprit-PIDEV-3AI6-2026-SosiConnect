@@ -16,6 +16,35 @@
 .transparent-scroll > .corner {
     -fx-background-color: transparent;
 }
+.transparent-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+.transparent-scroll .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 4px;
+}
+.transparent-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #cbd5e1;
+    -fx-background-radius: 4px;
+}
+.transparent-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #94a3b8;
+}
+.transparent-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
+.transparent-scroll .scroll-bar:vertical .increment-button,
+.transparent-scroll .scroll-bar:vertical .decrement-button {
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
+.transparent-scroll .scroll-bar:vertical .increment-arrow,
+.transparent-scroll .scroll-bar:vertical .decrement-arrow {
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
 
 /* --- Clinical Backgrounds --- */
 .main-bg {
@@ -135,8 +164,9 @@
     -fx-border-radius: 18px;
 }
 .aide-card:hover {
-    -fx-effect: dropshadow(three-pass-box, rgba(13, 148, 136, 0.10), 28, 0, 0, 10);
-    -fx-border-color: #ccfbf1;
+    -fx-effect: dropshadow(three-pass-box, rgba(13, 148, 136, 0.16), 32, 0, 0, 12);
+    -fx-border-color: #99f6e4;
+    -fx-translate-y: -3px;
 }
 
 /* --- Clinical Config Button --- */

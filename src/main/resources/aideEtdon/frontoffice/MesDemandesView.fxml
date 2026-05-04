@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.aideEtdon.frontoffice.controller.MesDemandesController"
+      alignment="TOP_CENTER" spacing="14"
+      stylesheets="@don_styles.css"
+      styleClass="main-bg">
+
+    <!-- Page Header -->
+    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="page-header-banner">
+        <VBox styleClass="page-header-icon, page-header-icon-blue" alignment="CENTER">
+            <Label text="📊" style="-fx-font-size: 24px;" />
+        </VBox>
+        <VBox spacing="4">
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Mes Demandes" styleClass="page-title" />
+                <Label text="📌" style="-fx-font-size: 20px;" />
+            </HBox>
+            <Label text="Suivez vos demandes et les reponses recues" styleClass="page-subtitle-muted" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="➕ Nouvelle Demande" onAction="#handleNewDemande"
+                style="-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: 700; -fx-padding: 8 18; -fx-background-radius: 12; -fx-cursor: hand;" />
+    </HBox>
+
+    <!-- Stats Row -->
+    <HBox fx:id="statsRow" spacing="12" alignment="CENTER_LEFT" style="-fx-padding: 0 20;" />
+
+    <!-- Demandes List -->
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-width: 0;" VBox.vgrow="ALWAYS">
+        <VBox fx:id="demandesContainer" spacing="12" style="-fx-padding: 4 20 20 20;" />
+    </ScrollPane>
+</VBox>

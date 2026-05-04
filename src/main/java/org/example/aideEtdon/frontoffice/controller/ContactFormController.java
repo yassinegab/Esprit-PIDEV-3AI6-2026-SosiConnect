@@ -49,7 +49,7 @@ public class ContactFormController {
         List<ContactUrgence> list = service.afficherToutes();
 
         if (list.isEmpty()) {
-            Label empty = new Label("Aucun contact enregistré.\nVeuillez en ajouter un à l'aide du formulaire.");
+            Label empty = new Label("💭 Aucun contact enregistré.\n➕ Veuillez en ajouter un à l'aide du formulaire.");
             empty.getStyleClass().add("empty-state-label");
             contactsContainer.getChildren().add(empty);
             return;
@@ -78,10 +78,10 @@ public class ContactFormController {
             Label nameLbl = new Label(contact.getNom());
             nameLbl.setStyle("-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #0f172a; -fx-font-family: 'Segoe UI', sans-serif;");
 
-            Label emailLbl = new Label(contact.getEmail());
+            Label emailLbl = new Label("📧 " + contact.getEmail());
             emailLbl.setStyle("-fx-font-size: 13px; -fx-text-fill: #64748b; -fx-font-family: 'Segoe UI', sans-serif;");
 
-            Label telLbl = new Label(contact.getTelephone() == null || contact.getTelephone().isEmpty() ? "Non renseigné" : contact.getTelephone());
+            Label telLbl = new Label(contact.getTelephone() == null || contact.getTelephone().isEmpty() ? "📱 Non renseigné" : "📱 " + contact.getTelephone());
             telLbl.setStyle("-fx-font-size: 13px; -fx-text-fill: #94a3b8; -fx-font-family: 'Segoe UI', sans-serif;");
 
             infoBox.getChildren().addAll(nameLbl, emailLbl, telLbl);
@@ -89,13 +89,13 @@ public class ContactFormController {
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
-            Button btnModif = new Button("Modifier");
+            Button btnModif = new Button("✏️ Modifier");
             btnModif.setStyle("-fx-background-color: linear-gradient(to right, #f59e0b, #d97706); -fx-text-fill: white; -fx-font-weight: 700; -fx-cursor: hand; -fx-background-radius: 10px; -fx-padding: 8 16; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(three-pass-box, rgba(245,158,11,0.20), 8, 0, 0, 2);");
             btnModif.setOnMouseEntered(e -> btnModif.setStyle("-fx-background-color: linear-gradient(to right, #d97706, #b45309); -fx-text-fill: white; -fx-font-weight: 700; -fx-cursor: hand; -fx-background-radius: 10px; -fx-padding: 8 16; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(three-pass-box, rgba(217,119,6,0.25), 10, 0, 0, 3); -fx-scale-x: 1.02; -fx-scale-y: 1.02;"));
             btnModif.setOnMouseExited(e -> btnModif.setStyle("-fx-background-color: linear-gradient(to right, #f59e0b, #d97706); -fx-text-fill: white; -fx-font-weight: 700; -fx-cursor: hand; -fx-background-radius: 10px; -fx-padding: 8 16; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(three-pass-box, rgba(245,158,11,0.20), 8, 0, 0, 2); -fx-scale-x: 1.0; -fx-scale-y: 1.0;"));
             btnModif.setOnAction(e -> triggerEdit(contact));
 
-            Button btnDel = new Button("Supprimer");
+            Button btnDel = new Button("🗑 Supprimer");
             btnDel.setStyle("-fx-background-color: linear-gradient(to right, #ef4444, #dc2626); -fx-text-fill: white; -fx-font-weight: 700; -fx-cursor: hand; -fx-background-radius: 10px; -fx-padding: 8 16; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(three-pass-box, rgba(239,68,68,0.20), 8, 0, 0, 2);");
             btnDel.setOnMouseEntered(e -> btnDel.setStyle("-fx-background-color: linear-gradient(to right, #dc2626, #b91c1c); -fx-text-fill: white; -fx-font-weight: 700; -fx-cursor: hand; -fx-background-radius: 10px; -fx-padding: 8 16; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(three-pass-box, rgba(220,38,38,0.30), 10, 0, 0, 3); -fx-scale-x: 1.02; -fx-scale-y: 1.02;"));
             btnDel.setOnMouseExited(e -> btnDel.setStyle("-fx-background-color: linear-gradient(to right, #ef4444, #dc2626); -fx-text-fill: white; -fx-font-weight: 700; -fx-cursor: hand; -fx-background-radius: 10px; -fx-padding: 8 16; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(three-pass-box, rgba(239,68,68,0.20), 8, 0, 0, 2); -fx-scale-x: 1.0; -fx-scale-y: 1.0;"));
@@ -129,7 +129,7 @@ public class ContactFormController {
 
     private void triggerEdit(ContactUrgence contact) {
         currentEditingContact = contact;
-        formTitleLabel.setText("Modifier le contact");
+        formTitleLabel.setText("✏️ Modifier le contact");
         btnSave.setText("💾 METTRE A JOUR");
         btnCancelEdit.setVisible(true);
 
@@ -141,7 +141,7 @@ public class ContactFormController {
     @FXML
     private void cancelEdit() {
         currentEditingContact = null;
-        formTitleLabel.setText("Ajouter un contact");
+        formTitleLabel.setText("➕ Ajouter un contact");
         btnSave.setText("💾 ENREGISTRER");
         btnCancelEdit.setVisible(false);
 
@@ -158,7 +158,7 @@ public class ContactFormController {
         String tel = fldTel.getText().trim();
 
         if (nom.isEmpty() || email.isEmpty()) {
-            lblError.setText("Veuillez remplir le Nom et l'Email.");
+            lblError.setText("⚠️ Veuillez remplir le Nom et l'Email.");
             lblError.setVisible(true);
             shakeNode(lblError);
             if (nom.isEmpty()) shakeNode(fldNom);
@@ -167,7 +167,7 @@ public class ContactFormController {
         }
 
         if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            lblError.setText("Format d'email invalide.");
+            lblError.setText("❌ Format d'email invalide.");
             lblError.setVisible(true);
             shakeNode(lblError);
             shakeNode(fldEmail);
@@ -175,7 +175,7 @@ public class ContactFormController {
         }
 
         if (!tel.isEmpty() && !tel.matches("\\d{8,15}")) {
-            lblError.setText("Le téléphone doit contenir entre 8 et 15 chiffres.");
+            lblError.setText("📱 Le téléphone doit contenir entre 8 et 15 chiffres.");
             lblError.setVisible(true);
             shakeNode(lblError);
             shakeNode(fldTel);

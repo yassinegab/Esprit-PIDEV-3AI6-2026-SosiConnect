@@ -13,14 +13,14 @@
         <!-- Page Header Banner -->
         <HBox alignment="CENTER_LEFT" spacing="16" styleClass="page-header-banner">
             <VBox styleClass="page-header-icon" alignment="CENTER">
-                <Label text="C" style="-fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: #0f766e;" />
+                <Label text="📇" style="-fx-font-size: 22px;" />
             </VBox>
             <VBox spacing="4">
-                <Label text="Gestion des Contacts de Confiance" styleClass="page-title" />
-                <Label text="Ces personnes seront alertees en cas de besoin absolu" styleClass="page-subtitle-muted" />
+                <Label text="Gestion des Contacts de Confiance 🛡️" styleClass="page-title" />
+                <Label text="🔔 Ces personnes seront alertees en cas de besoin absolu" styleClass="page-subtitle-muted" />
             </VBox>
             <Region HBox.hgrow="ALWAYS" />
-            <Button text="Retour" onAction="#goBack" styleClass="go-back-button" />
+            <Button text="⬅ Retour" onAction="#goBack" styleClass="go-back-button" />
         </HBox>
 
         <HBox spacing="28" alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
@@ -29,29 +29,29 @@
             <VBox spacing="20" prefWidth="450" styleClass="panel-surface">
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <VBox style="-fx-background-color: linear-gradient(to bottom right, #dbeafe, #bfdbfe); -fx-background-radius: 12; -fx-min-width: 36; -fx-min-height: 36; -fx-max-width: 36; -fx-max-height: 36; -fx-alignment: center;">
-                        <Label text="+" style="-fx-font-size: 15px; -fx-font-weight: 900; -fx-text-fill: #2563eb;" />
+                        <Label text="➕" style="-fx-font-size: 15px;" />
                     </VBox>
                     <Label fx:id="formTitleLabel" text="Ajouter un contact" styleClass="section-title" />
                 </HBox>
                 <Region styleClass="mini-divider" />
                 <VBox spacing="8">
-                    <Label text="Nom complet *" styleClass="form-label" />
+                    <Label text="👤 Nom complet *" styleClass="form-label" />
                     <TextField fx:id="fldNom" promptText="Ex: Jean" styleClass="modern-input" />
                 </VBox>
                 <VBox spacing="8">
-                    <Label text="Email *" styleClass="form-label" />
+                    <Label text="📧 Email *" styleClass="form-label" />
                     <TextField fx:id="fldEmail" promptText="Ex: jean@email.com" styleClass="modern-input" />
                 </VBox>
                 <VBox spacing="8">
-                    <Label text="Telephone" styleClass="form-label" />
+                    <Label text="📱 Telephone" styleClass="form-label" />
                     <TextField fx:id="fldTel" promptText="06..." styleClass="modern-input" />
                 </VBox>
                 
                 <Label fx:id="lblError" text="Veuillez remplir le Nom et l'Email." style="-fx-font-size: 13px; -fx-font-weight: 700;" textFill="red" visible="false" />
                 
                 <HBox spacing="10">
-                    <Button fx:id="btnSave" text="ENREGISTRER" onAction="#handleSave" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="primary-action-button" />
-                    <Button fx:id="btnCancelEdit" text="X" visible="false" onAction="#cancelEdit" styleClass="secondary-action-button" />
+                    <Button fx:id="btnSave" text="💾 ENREGISTRER" onAction="#handleSave" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="primary-action-button" />
+                    <Button fx:id="btnCancelEdit" text="✖" visible="false" onAction="#cancelEdit" styleClass="secondary-action-button" />
                 </HBox>
             </VBox>
 
@@ -59,11 +59,11 @@
             <VBox spacing="16" HBox.hgrow="ALWAYS" styleClass="panel-surface">
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <VBox style="-fx-background-color: linear-gradient(to bottom right, #d1fae5, #a7f3d0); -fx-background-radius: 12; -fx-min-width: 36; -fx-min-height: 36; -fx-max-width: 36; -fx-max-height: 36; -fx-alignment: center;">
-                        <Label text="L" style="-fx-font-size: 15px; -fx-font-weight: 900; -fx-text-fill: #059669;" />
+                        <Label text="📋" style="-fx-font-size: 15px;" />
                     </VBox>
                     <VBox spacing="2">
-                        <Label text="Contacts Enregistres" styleClass="success-title" />
-                        <Label text="Liste de vos contacts de confiance" styleClass="page-subtitle-muted" />
+                        <Label text="Contacts Enregistres ✅" styleClass="success-title" />
+                        <Label text="🤝 Liste de vos contacts de confiance" styleClass="page-subtitle-muted" />
                     </VBox>
                 </HBox>
                 <Region styleClass="mini-divider" />

@@ -16,17 +16,20 @@
     <!-- Compact Page Header -->
     <HBox alignment="CENTER_LEFT" spacing="12" styleClass="page-header-banner" style="-fx-padding: 10 18;">
         <VBox styleClass="page-header-icon, page-header-icon-blue" alignment="CENTER" style="-fx-min-width: 32; -fx-min-height: 32; -fx-max-width: 32; -fx-max-height: 32;">
-            <Label text="+" style="-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #2563eb;" />
+            <Label text="📝" style="-fx-font-size: 18px;" />
         </VBox>
         <VBox spacing="1">
-            <Label text="Nouvelle Demande" styleClass="page-title" style="-fx-font-size: 18px;" />
+            <HBox spacing="6" alignment="CENTER_LEFT">
+                <Label text="Nouvelle Demande" styleClass="page-title" style="-fx-font-size: 18px;" />
+                <Label text="✨" style="-fx-font-size: 16px;" />
+            </HBox>
             <Label text="Remplissez le formulaire pour soumettre votre demande" styleClass="page-subtitle-muted" style="-fx-font-size: 11px;" />
         </VBox>
         <Region HBox.hgrow="ALWAYS" />
-        <Button text="Retour" onAction="#handleRetour" styleClass="back-button" />
+        <Button text="⬅ Retour" onAction="#handleRetour" styleClass="back-button" />
     </HBox>
 
-    <Label fx:id="errorLabel" visible="false" text="Veuillez remplir tous les champs obligatoires!" style="-fx-text-fill: #ef4444; -fx-font-weight: bold; -fx-font-size: 12px; -fx-padding: 4 0 0 0;" />
+    <Label fx:id="errorLabel" visible="false" text="⚠️ Veuillez remplir tous les champs obligatoires!" style="-fx-text-fill: #ef4444; -fx-font-weight: bold; -fx-font-size: 12px; -fx-padding: 4 0 0 0;" />
 
     <!-- Full-width form, no ScrollPane needed -->
     <VBox spacing="12" VBox.vgrow="ALWAYS" alignment="TOP_CENTER" style="-fx-padding: 10 0 0 0;">
@@ -37,7 +40,7 @@
                 <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 24; -fx-min-height: 24; -fx-max-width: 24; -fx-max-height: 24;">
                     <Label text="1" styleClass="form-step-number" style="-fx-font-size: 11px;" />
                 </VBox>
-                <Label text="Informations generales" styleClass="form-step-title" style="-fx-font-size: 13px;" />
+                <Label text="📝 Informations generales" styleClass="form-step-title" style="-fx-font-size: 13px;" />
             </HBox>
 
             <HBox spacing="16">
@@ -46,8 +49,14 @@
                     <TextField fx:id="titreField" promptText="Ex: Besoin urgent de sang O-" styleClass="modern-input" />
                 </VBox>
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label text="Description *" styleClass="label-title" />
-                    <TextArea fx:id="descriptionArea" promptText="Decrivez votre besoin..." prefRowCount="2" styleClass="modern-input" wrapText="true" />
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label text="Description *" styleClass="label-title" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="aiGenerateBtn" text="🤖 Generer avec IA" onAction="#handleAiGenerate"
+                                style="-fx-background-color: linear-gradient(to right, #8b5cf6, #6366f1); -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: 700; -fx-padding: 3 10; -fx-background-radius: 14; -fx-cursor: hand;" />
+                    </HBox>
+                    <TextArea fx:id="descriptionArea" promptText="Decrivez votre besoin ou cliquez sur 'Generer avec IA'..." prefRowCount="2" styleClass="modern-input" wrapText="true" />
+                    <Label fx:id="aiStatusLabel" visible="false" style="-fx-font-size: 10px; -fx-text-fill: #8b5cf6; -fx-font-weight: 600;" />
                 </VBox>
             </HBox>
 
@@ -59,7 +68,7 @@
                 <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 24; -fx-min-height: 24; -fx-max-width: 24; -fx-max-height: 24;">
                     <Label text="2" styleClass="form-step-number" style="-fx-font-size: 11px;" />
                 </VBox>
-                <Label text="Type et details" styleClass="form-step-title" style="-fx-font-size: 13px;" />
+                <Label text="🏥 Type et details" styleClass="form-step-title" style="-fx-font-size: 13px;" />
             </HBox>
 
             <HBox spacing="16">
@@ -95,7 +104,7 @@
                 <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 24; -fx-min-height: 24; -fx-max-width: 24; -fx-max-height: 24;">
                     <Label text="3" styleClass="form-step-number" style="-fx-font-size: 11px;" />
                 </VBox>
-                <Label text="Niveau d'urgence" styleClass="form-step-title" style="-fx-font-size: 13px;" />
+                <Label text="⏱ Niveau d'urgence" styleClass="form-step-title" style="-fx-font-size: 13px;" />
             </HBox>
 
             <VBox spacing="4">
@@ -111,7 +120,7 @@
             </VBox>
 
             <Region VBox.vgrow="ALWAYS" />
-            <Button text="Valider la demande" onAction="#handleValider" maxWidth="Infinity" styleClass="primary-button" />
+            <Button text="✅ Valider la demande" onAction="#handleValider" maxWidth="Infinity" styleClass="primary-button" />
 
         </VBox>
     </VBox>

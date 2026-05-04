@@ -23,26 +23,31 @@ public class AideEtdonControllerClientController {
     @FXML
     private Button btnDons;
 
+    @FXML
+    private Button btnMesDemandes;
+
     private boolean isAideActive = false;
     private boolean isDonActive = false;
 
     private static AideEtdonControllerClientController instance;
 
-    private void setNavActive(Button active, Button inactive) {
-        active.getStyleClass().removeAll("nav-pill-active");
-        inactive.getStyleClass().removeAll("nav-pill-active");
+    private void setNavActive(Button active) {
+        btnAides.getStyleClass().removeAll("nav-pill-active");
+        btnDons.getStyleClass().removeAll("nav-pill-active");
+        btnMesDemandes.getStyleClass().removeAll("nav-pill-active");
         active.getStyleClass().add("nav-pill-active");
-        active.setStyle("");
-        inactive.setStyle("");
     }
 
     @FXML
     public void initialize() {
         instance = this;
+        btnMesDemandes.setVisible(false);
+        btnMesDemandes.setManaged(false);
         showAides();
 
         setupButtonHoverAnimation(btnAides);
         setupButtonHoverAnimation(btnDons);
+        setupButtonHoverAnimation(btnMesDemandes);
     }
 
     public static AideEtdonControllerClientController getInstance() {
@@ -88,7 +93,9 @@ public class AideEtdonControllerClientController {
             Node aideView = loader.load();
             setView(aideView);
             
-            setNavActive(btnAides, btnDons);
+            setNavActive(btnAides);
+            btnMesDemandes.setVisible(false);
+            btnMesDemandes.setManaged(false);
             
             isAideActive = true;
             isDonActive = false;
@@ -104,9 +111,26 @@ public class AideEtdonControllerClientController {
             Node donView = loader.load();
             setView(donView);
             
-            setNavActive(btnDons, btnAides);
+            setNavActive(btnDons);
+            btnMesDemandes.setVisible(true);
+            btnMesDemandes.setManaged(true);
             isDonActive = true;
             isAideActive = false;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void showMesDemandes() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/aideEtdon/frontoffice/MesDemandesView.fxml"));
+            Node mesDemandesView = loader.load();
+            setView(mesDemandesView);
+
+            setNavActive(btnMesDemandes);
+            isAideActive = false;
+            isDonActive = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
