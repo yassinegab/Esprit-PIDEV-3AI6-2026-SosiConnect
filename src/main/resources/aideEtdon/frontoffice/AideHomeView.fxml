@@ -8,47 +8,73 @@
             stylesheets="@aide_styles.css"
             styleClass="transparent-scroll">
 
-    <VBox spacing="20" style="-fx-padding: 30; -fx-background-color: transparent;">
+    <VBox spacing="20" style="-fx-padding: 28; -fx-background-color: transparent;">
 
-        <HBox alignment="CENTER_LEFT" spacing="20">
-            <VBox>
-                <Label text="Statut Actuel" styleClass="page-subtitle"/>
-                <Label fx:id="statusIndicator" text="NORMAL" styleClass="status-indicator" />
+        <!-- Page Header Banner -->
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="page-header-banner">
+            <VBox styleClass="page-header-icon" alignment="CENTER">
+                <Label text="+" style="-fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: #0f766e;" />
+            </VBox>
+            <VBox spacing="4">
+                <Label text="Service d'Aide d'Urgence" styleClass="page-title-accent" />
+                <Label text="Plateforme de gestion des urgences et interventions rapides" styleClass="page-subtitle-muted" />
             </VBox>
             <Region HBox.hgrow="ALWAYS" />
-            <Button text="Configurer Contact(s)" onAction="#goToContactForm" styleClass="config-button" />
+            <VBox spacing="6" alignment="CENTER_RIGHT">
+                <Label fx:id="statusIndicator" text="NORMAL" styleClass="status-indicator" />
+            </VBox>
+            <Button text="Configurer Contacts" onAction="#goToContactForm" styleClass="config-button" />
         </HBox>
 
-        <HBox spacing="30" VBox.vgrow="ALWAYS">
-            <VBox spacing="30" HBox.hgrow="ALWAYS" alignment="CENTER" styleClass="aide-card">
-                
-                <Label text="De quoi avez-vous besoin ?" styleClass="page-title" />
-                
-                <HBox spacing="15" alignment="CENTER">
-                    <ToggleButton fx:id="btnMed" text="💊 Médicaments" styleClass="peril-toggle" />
-                    <ToggleButton fx:id="btnDanger" text="🛒 Courses / Quotidien" styleClass="peril-toggle" />
-                    <ToggleButton fx:id="btnOther" text="🩺 Assistance Médicale" styleClass="peril-toggle" />
+        <!-- Main Content Grid -->
+        <HBox spacing="20" VBox.vgrow="ALWAYS">
+            <!-- Left: Emergency Panel -->
+            <VBox spacing="20" HBox.hgrow="ALWAYS" alignment="TOP_CENTER" styleClass="panel-surface">
+
+                <!-- Emergency Info Bar -->
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="emergency-info-bar">
+                    <Label text="!" style="-fx-font-size: 16px; -fx-font-weight: 900; -fx-text-fill: #dc2626;" />
+                    <Label text="Selectionnez le type d'assistance et activez l'alerte" styleClass="emergency-info-text" />
                 </HBox>
                 
-                <CheckBox fx:id="chkLocation" text="Inclure ma position (GPS / Domicile)" styleClass="location-checkbox" />
-
-                <Region prefHeight="20" />
+                <HBox spacing="12" alignment="CENTER">
+                    <ToggleButton fx:id="btnMed" text="Medicaments" styleClass="peril-toggle" />
+                    <ToggleButton fx:id="btnDanger" text="Courses" styleClass="peril-toggle" />
+                    <ToggleButton fx:id="btnOther" text="Assistance" styleClass="peril-toggle" />
+                </HBox>
+                
+                <CheckBox fx:id="chkLocation" text="Inclure ma position actuelle" styleClass="location-checkbox" />
 
                 <StackPane>
-                    <Button fx:id="btnEmergency" text="🚨 DEMANDER L'AIDE MAINTENANT" onAction="#handleEmergencyAction" styleClass="emergency-button" />
+                    <Button fx:id="btnEmergency" text="DEMANDER L'AIDE" onAction="#handleEmergencyAction" styleClass="emergency-button" />
                 </StackPane>
 
-                <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10 0 0 0;">
-                    <Label text="Rechercher à proximité :" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
-                    <ComboBox fx:id="mapFilterCombo" prefWidth="250" style="-fx-background-color: #f8fafc; -fx-border-color: #cbd5e1; -fx-border-radius: 6; -fx-background-radius: 6;" />
+                <!-- Mini Divider -->
+                <Region styleClass="mini-divider" />
+
+                <!-- Map Section -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Carte de proximite" styleClass="map-section-header" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <ComboBox fx:id="mapFilterCombo" prefWidth="250" styleClass="modern-input" />
                 </HBox>
 
-                <VBox fx:id="mapContainer" prefHeight="300.0" VBox.vgrow="ALWAYS" />
+                <VBox fx:id="mapContainer" prefHeight="280.0" VBox.vgrow="ALWAYS" styleClass="map-container" />
 
             </VBox>
 
-            <VBox spacing="15" prefWidth="350" styleClass="aide-card">
-                <Label text="Historique des Alertes" styleClass="section-title" />
+            <!-- Right: History Panel -->
+            <VBox spacing="16" prefWidth="340" styleClass="panel-surface">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <VBox style="-fx-background-color: linear-gradient(to bottom right, #ccfbf1, #99f6e4); -fx-background-radius: 12; -fx-min-width: 36; -fx-min-height: 36; -fx-max-width: 36; -fx-max-height: 36; -fx-alignment: center;">
+                        <Label text="H" style="-fx-font-size: 15px; -fx-font-weight: 900; -fx-text-fill: #0f766e;" />
+                    </VBox>
+                    <VBox spacing="2">
+                        <Label text="Historique des Alertes" styleClass="section-title" />
+                        <Label text="Dernieres interventions" styleClass="page-subtitle-muted" />
+                    </VBox>
+                </HBox>
+                <Region styleClass="mini-divider" />
                 <ListView fx:id="historyList" VBox.vgrow="ALWAYS" styleClass="history-list" />
             </VBox>
         </HBox>

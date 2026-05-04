@@ -11,14 +11,20 @@
       stylesheets="@don_styles.css"
       styleClass="main-bg">
 
-    <StackPane>
-        <HBox alignment="CENTER_LEFT">
-            <Button text="← Retour" onAction="#handleRetour" styleClass="back-button" />
-        </HBox>
-        <Label text="Demandes d'Aide" styleClass="page-title" StackPane.alignment="CENTER" />
-    </StackPane>
+    <!-- Page Header Banner -->
+    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="page-header-banner">
+        <VBox styleClass="page-header-icon, page-header-icon-green" alignment="CENTER">
+            <Label text="=" style="-fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: #059669;" />
+        </VBox>
+        <VBox spacing="4">
+            <Label text="Demandes d'Aide" styleClass="page-title" />
+            <Label text="Parcourez les demandes actives et proposez votre aide" styleClass="page-subtitle-muted" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="Retour" onAction="#handleRetour" styleClass="back-button" />
+    </HBox>
 
-    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 10;">
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 10;" VBox.vgrow="ALWAYS">
         <FlowPane fx:id="cardsContainer" hgap="30.0" vgap="30.0" alignment="CENTER" style="-fx-padding: 20;" />
     </ScrollPane>
 </VBox>

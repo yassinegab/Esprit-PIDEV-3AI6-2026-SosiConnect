@@ -8,74 +8,111 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.aideEtdon.frontoffice.controller.DemandeFormController"
-      alignment="TOP_CENTER" spacing="30.0"
+      alignment="TOP_CENTER" spacing="0"
       stylesheets="@don_styles.css"
-      styleClass="main-bg">
+      styleClass="main-bg"
+      style="-fx-padding: 14 24 14 24;">
 
-    <StackPane>
-        <HBox alignment="CENTER_LEFT">
-            <Button text="← Retour" onAction="#handleRetour" styleClass="back-button" />
-        </HBox>
-        <Label text="Nouvelle Demande" styleClass="page-title" StackPane.alignment="CENTER" />
-    </StackPane>
-    
-    <Label fx:id="errorLabel" visible="false" text="Veuillez remplir tous les champs obligatoires!" style="-fx-text-fill: #ef4444; -fx-font-weight: bold;" />
-
-    <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
-        <VBox alignment="TOP_CENTER" style="-fx-padding: 5;">
-            <VBox spacing="20.0" maxWidth="550" styleClass="form-card">
-        
-        <VBox spacing="8.0">
-            <Label text="Titre *" styleClass="label-title" />
-            <TextField fx:id="titreField" promptText="Ex: Besoin urgent de sang O-" styleClass="modern-input" />
+    <!-- Compact Page Header -->
+    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="page-header-banner" style="-fx-padding: 10 18;">
+        <VBox styleClass="page-header-icon, page-header-icon-blue" alignment="CENTER" style="-fx-min-width: 32; -fx-min-height: 32; -fx-max-width: 32; -fx-max-height: 32;">
+            <Label text="+" style="-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #2563eb;" />
         </VBox>
-
-        <VBox spacing="8.0">
-            <Label text="Description *" styleClass="label-title" />
-            <TextArea fx:id="descriptionArea" promptText="Décrivez votre besoin..." prefRowCount="4" styleClass="modern-input" wrapText="true" />
+        <VBox spacing="1">
+            <Label text="Nouvelle Demande" styleClass="page-title" style="-fx-font-size: 18px;" />
+            <Label text="Remplissez le formulaire pour soumettre votre demande" styleClass="page-subtitle-muted" style="-fx-font-size: 11px;" />
         </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="Retour" onAction="#handleRetour" styleClass="back-button" />
+    </HBox>
 
-        <HBox spacing="20.0">
-            <VBox spacing="8.0" HBox.hgrow="ALWAYS">
-                <Label text="Type de Don *" styleClass="label-title" />
-                <ComboBox fx:id="typeBox" maxWidth="Infinity" styleClass="modern-input">
+    <Label fx:id="errorLabel" visible="false" text="Veuillez remplir tous les champs obligatoires!" style="-fx-text-fill: #ef4444; -fx-font-weight: bold; -fx-font-size: 12px; -fx-padding: 4 0 0 0;" />
+
+    <!-- Full-width form, no ScrollPane needed -->
+    <VBox spacing="12" VBox.vgrow="ALWAYS" alignment="TOP_CENTER" style="-fx-padding: 10 0 0 0;">
+        <VBox spacing="12" styleClass="form-card-v2" style="-fx-padding: 18 24; -fx-max-width: Infinity;">
+
+            <!-- Row 1: Titre + Description side by side -->
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 24; -fx-min-height: 24; -fx-max-width: 24; -fx-max-height: 24;">
+                    <Label text="1" styleClass="form-step-number" style="-fx-font-size: 11px;" />
+                </VBox>
+                <Label text="Informations generales" styleClass="form-step-title" style="-fx-font-size: 13px;" />
+            </HBox>
+
+            <HBox spacing="16">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Titre *" styleClass="label-title" />
+                    <TextField fx:id="titreField" promptText="Ex: Besoin urgent de sang O-" styleClass="modern-input" />
+                </VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Description *" styleClass="label-title" />
+                    <TextArea fx:id="descriptionArea" promptText="Decrivez votre besoin..." prefRowCount="2" styleClass="modern-input" wrapText="true" />
+                </VBox>
+            </HBox>
+
+            <!-- Thin divider -->
+            <Region style="-fx-background-color: #e2e8f0; -fx-min-height: 1; -fx-max-height: 1; -fx-pref-height: 1;" />
+
+            <!-- Row 2: Type + conditional fields -->
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 24; -fx-min-height: 24; -fx-max-width: 24; -fx-max-height: 24;">
+                    <Label text="2" styleClass="form-step-number" style="-fx-font-size: 11px;" />
+                </VBox>
+                <Label text="Type et details" styleClass="form-step-title" style="-fx-font-size: 13px;" />
+            </HBox>
+
+            <HBox spacing="16">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Type de Don *" styleClass="label-title" />
+                    <ComboBox fx:id="typeBox" maxWidth="Infinity" styleClass="modern-input">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Sang" />
+                                <String fx:value="Organe" />
+                                <String fx:value="Autre" />
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+
+                <VBox fx:id="groupeSanguinContainer" spacing="4" HBox.hgrow="ALWAYS" visible="false" managed="false">
+                    <Label text="Groupe Sanguin *" styleClass="label-title" />
+                    <TextField fx:id="groupeSanguinField" promptText="Ex: AB+" styleClass="modern-input" />
+                </VBox>
+
+                <VBox fx:id="organeContainer" spacing="4" HBox.hgrow="ALWAYS" visible="false" managed="false">
+                    <Label text="Organe *" styleClass="label-title" />
+                    <TextField fx:id="organeField" promptText="Ex: Rein" styleClass="modern-input" />
+                </VBox>
+            </HBox>
+
+            <!-- Thin divider -->
+            <Region style="-fx-background-color: #e2e8f0; -fx-min-height: 1; -fx-max-height: 1; -fx-pref-height: 1;" />
+
+            <!-- Row 3: Urgence -->
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 24; -fx-min-height: 24; -fx-max-width: 24; -fx-max-height: 24;">
+                    <Label text="3" styleClass="form-step-number" style="-fx-font-size: 11px;" />
+                </VBox>
+                <Label text="Niveau d'urgence" styleClass="form-step-title" style="-fx-font-size: 13px;" />
+            </HBox>
+
+            <VBox spacing="4">
+                <Label text="Urgence *" styleClass="label-title" />
+                <ComboBox fx:id="urgenceBox" maxWidth="Infinity" styleClass="modern-input">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Sang" />
-                            <String fx:value="Organe" />
-                            <String fx:value="Autre" />
+                            <String fx:value="Normal" />
+                            <String fx:value="Urgent" />
                         </FXCollections>
                     </items>
                 </ComboBox>
             </VBox>
 
-            <VBox fx:id="groupeSanguinContainer" spacing="8.0" HBox.hgrow="ALWAYS" visible="false" managed="false">
-                <Label text="Groupe Sanguin *" styleClass="label-title" />
-                <TextField fx:id="groupeSanguinField" promptText="Ex: AB+" styleClass="modern-input" />
-            </VBox>
+            <Region VBox.vgrow="ALWAYS" />
+            <Button text="Valider la demande" onAction="#handleValider" maxWidth="Infinity" styleClass="primary-button" />
 
-            <VBox fx:id="organeContainer" spacing="8.0" HBox.hgrow="ALWAYS" visible="false" managed="false">
-                <Label text="Organe *" styleClass="label-title" />
-                <TextField fx:id="organeField" promptText="Ex: Rein" styleClass="modern-input" />
-            </VBox>
-        </HBox>
-
-        <VBox spacing="8.0">
-            <Label text="Niveau d'urgence *" styleClass="label-title" />
-            <ComboBox fx:id="urgenceBox" maxWidth="Infinity" styleClass="modern-input">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Normal" />
-                        <String fx:value="Urgent" />
-                    </FXCollections>
-                </items>
-            </ComboBox>
         </VBox>
-
-        <Region prefHeight="10.0" />
-        <Button text="Valider la demande" onAction="#handleValider" maxWidth="Infinity" styleClass="primary-button" />
-
-            </VBox>
-        </VBox>
-    </ScrollPane>
+    </VBox>
 </VBox>

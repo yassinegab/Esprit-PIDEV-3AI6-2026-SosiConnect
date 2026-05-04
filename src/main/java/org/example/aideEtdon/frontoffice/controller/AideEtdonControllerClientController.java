@@ -28,8 +28,13 @@ public class AideEtdonControllerClientController {
 
     private static AideEtdonControllerClientController instance;
 
-    private final String ACTIVE_STYLE = "-fx-background-color: transparent; -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #3b82f6; -fx-border-color: #3b82f6; -fx-border-width: 0 0 3 0; -fx-cursor: hand; -fx-padding: 5 10;";
-    private final String INACTIVE_STYLE = "-fx-background-color: transparent; -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #64748b; -fx-border-color: transparent; -fx-border-width: 0 0 3 0; -fx-cursor: hand; -fx-padding: 5 10;";
+    private void setNavActive(Button active, Button inactive) {
+        active.getStyleClass().removeAll("nav-pill-active");
+        inactive.getStyleClass().removeAll("nav-pill-active");
+        active.getStyleClass().add("nav-pill-active");
+        active.setStyle("");
+        inactive.setStyle("");
+    }
 
     @FXML
     public void initialize() {
@@ -83,8 +88,7 @@ public class AideEtdonControllerClientController {
             Node aideView = loader.load();
             setView(aideView);
             
-            btnAides.setStyle(ACTIVE_STYLE);
-            btnDons.setStyle(INACTIVE_STYLE);
+            setNavActive(btnAides, btnDons);
             
             isAideActive = true;
             isDonActive = false;
@@ -100,8 +104,7 @@ public class AideEtdonControllerClientController {
             Node donView = loader.load();
             setView(donView);
             
-            btnAides.setStyle(INACTIVE_STYLE);
-            btnDons.setStyle(ACTIVE_STYLE);
+            setNavActive(btnDons, btnAides);
             isDonActive = true;
             isAideActive = false;
         } catch (IOException e) {

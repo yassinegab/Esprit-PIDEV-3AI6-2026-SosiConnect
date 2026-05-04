@@ -1,6 +1,8 @@
 package org.example.aideEtdon.frontoffice.controller;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -28,21 +30,56 @@ public class DonHomeController {
         setupCardHoverAnimation(cardCreate);
         setupCardHoverAnimation(cardView);
         setupCardHoverAnimation(cardVideo);
+
+        // Staggered entrance animation for premium feel
+        animateCardEntrance(cardCreate, 0);
+        animateCardEntrance(cardView, 100);
+        animateCardEntrance(cardVideo, 200);
+    }
+
+    private void animateCardEntrance(VBox card, double delayMs) {
+        card.setOpacity(0);
+        card.setTranslateY(30);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(500), card);
+        ft.setToValue(1);
+        ft.setDelay(Duration.millis(delayMs));
+
+        TranslateTransition tt = new TranslateTransition(Duration.millis(500), card);
+        tt.setToY(0);
+        tt.setDelay(Duration.millis(delayMs));
+
+        ft.play();
+        tt.play();
     }
 
     private void setupCardHoverAnimation(VBox card) {
         card.setOnMouseEntered(e -> {
-            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), card);
-            scaleTransition.setToX(1.05);
-            scaleTransition.setToY(1.05);
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(250), card);
+            scaleTransition.setToX(1.03);
+            scaleTransition.setToY(1.03);
             scaleTransition.play();
         });
 
         card.setOnMouseExited(e -> {
-            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), card);
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(250), card);
             scaleTransition.setToX(1.0);
             scaleTransition.setToY(1.0);
             scaleTransition.play();
+        });
+
+        // Tactile press feedback
+        card.setOnMousePressed(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(100), card);
+            st.setToX(0.98);
+            st.setToY(0.98);
+            st.play();
+        });
+        card.setOnMouseReleased(e -> {
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), card);
+            st.setToX(1.03);
+            st.setToY(1.03);
+            st.play();
         });
     }
 

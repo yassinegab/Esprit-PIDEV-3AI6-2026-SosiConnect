@@ -180,16 +180,53 @@ public class AideHomeController {
     private void setupToggleStyle(ToggleButton btn) {
         btn.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
-                btn.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 20 25; -fx-background-radius: 12; -fx-cursor: hand; -fx-text-fill: white; -fx-background-color: #3b82f6;");
+                btn.setStyle("-fx-font-size: 15px; -fx-font-weight: 700; -fx-padding: 18 24; -fx-background-radius: 14; -fx-cursor: hand; -fx-text-fill: white; -fx-background-color: linear-gradient(to bottom right, #0d9488, #14b8a6); -fx-border-color: transparent; -fx-border-width: 1px; -fx-border-radius: 14; -fx-effect: dropshadow(three-pass-box, rgba(13, 148, 136, 0.30), 14, 0, 0, 5); -fx-scale-x: 1.03; -fx-scale-y: 1.03;");
             } else {
-                btn.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 20 25; -fx-background-radius: 12; -fx-cursor: hand; -fx-text-fill: #334155; -fx-background-color: #f1f5f9;");
+                btn.setStyle("-fx-font-size: 15px; -fx-font-weight: 700; -fx-padding: 18 24; -fx-background-radius: 14; -fx-cursor: hand; -fx-text-fill: #475569; -fx-background-color: #f8fafc; -fx-border-color: #e2e8f0; -fx-border-width: 1px; -fx-border-radius: 14; -fx-effect: null; -fx-scale-x: 1.0; -fx-scale-y: 1.0;");
+            }
+        });
+
+        // Tactile press micro-interaction
+        btn.setOnMousePressed(e -> {
+            if (!btn.isSelected()) {
+                btn.setScaleX(0.97);
+                btn.setScaleY(0.97);
+            }
+        });
+        btn.setOnMouseReleased(e -> {
+            if (!btn.isSelected()) {
+                btn.setScaleX(1.0);
+                btn.setScaleY(1.0);
             }
         });
     }
 
     private void setupButtonAnimation(Button btn) {
-        btn.setOnMouseEntered(e -> { btn.setScaleX(1.05); btn.setScaleY(1.05); });
-        btn.setOnMouseExited(e -> { btn.setScaleX(1.0); btn.setScaleY(1.0); });
+        javafx.animation.Timeline pulse = new javafx.animation.Timeline(
+            new javafx.animation.KeyFrame(javafx.util.Duration.ZERO,
+                new javafx.animation.KeyValue(btn.scaleXProperty(), 1.0),
+                new javafx.animation.KeyValue(btn.scaleYProperty(), 1.0)),
+            new javafx.animation.KeyFrame(javafx.util.Duration.seconds(1.2),
+                new javafx.animation.KeyValue(btn.scaleXProperty(), 1.03),
+                new javafx.animation.KeyValue(btn.scaleYProperty(), 1.03)),
+            new javafx.animation.KeyFrame(javafx.util.Duration.seconds(2.4),
+                new javafx.animation.KeyValue(btn.scaleXProperty(), 1.0),
+                new javafx.animation.KeyValue(btn.scaleYProperty(), 1.0))
+        );
+        pulse.setCycleCount(javafx.animation.Animation.INDEFINITE);
+        pulse.setAutoReverse(true);
+        pulse.play();
+
+        btn.setOnMouseEntered(e -> {
+            pulse.pause();
+            btn.setScaleX(1.05);
+            btn.setScaleY(1.05);
+        });
+        btn.setOnMouseExited(e -> {
+            btn.setScaleX(1.0);
+            btn.setScaleY(1.0);
+            pulse.play();
+        });
     }
 
     @FXML
@@ -216,7 +253,7 @@ public class AideHomeController {
         history.add(0, logEntry);
 
         statusIndicator.setText("RÉCUPÉRATION GPS...");
-        statusIndicator.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #eab308;");
+        statusIndicator.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #d97706;");
 
         javafx.concurrent.Task<Void> emergencyTask = new javafx.concurrent.Task<Void>() {
             @Override
@@ -256,7 +293,7 @@ public class AideHomeController {
                     alert.show();
 
                     statusIndicator.setText("AIDE DEMANDÉE");
-                    statusIndicator.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #ef4444;");
+                    statusIndicator.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #dc2626;");
                 });
                 return null;
             }

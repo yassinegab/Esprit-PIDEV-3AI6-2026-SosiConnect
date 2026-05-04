@@ -7,14 +7,16 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.example.aideEtdon.frontoffice.controller.AideEtdonControllerClientController"
             prefHeight="600.0" prefWidth="800.0"
-            stylesheets="@aide_styles.css"
-            style="-fx-background-color: #f8fafc;">
+            styleClass="main-bg"
+            stylesheets="@aide_styles.css">
 
     <!-- Top Navigation Bar -->
     <top>
-        <HBox alignment="CENTER" spacing="40" styleClass="top-nav-container">
-            <Button fx:id="btnAides" text="Aides" onAction="#showAides" styleClass="top-nav-button-active" />
-            <Button fx:id="btnDons" text="Dons" onAction="#showDons" styleClass="top-nav-button" />
+        <HBox alignment="CENTER" spacing="8" styleClass="brand-nav-bar">
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnAides" text="Aides" onAction="#showAides" styleClass="nav-pill, nav-pill-active" />
+            <Button fx:id="btnDons" text="Dons" onAction="#showDons" styleClass="nav-pill" />
+            <Region HBox.hgrow="ALWAYS" />
         </HBox>
     </top>
 

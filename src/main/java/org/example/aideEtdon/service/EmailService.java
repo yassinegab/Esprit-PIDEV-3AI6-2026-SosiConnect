@@ -8,8 +8,8 @@ import java.util.Properties;
 public class EmailService {
 
     // PLACEHOLDERS FOR USER CONFIGURATION
-    private static final String SMTP_EMAIL = "votre.email@gmail.com";
-    private static final String SMTP_PASSWORD = "votre_mot_de_passe"; 
+    private static final String SMTP_EMAIL = "dhiamejdi@gmail.com";
+    private static final String SMTP_PASSWORD = "atky ctwj jhcz yoag"; 
 
     public static void sendEmergencyAlert(String targetEmail, String typeBesoin, String timeSent, double lat, double lng) {
         
@@ -52,7 +52,48 @@ public class EmailService {
 
         } catch (MessagingException e) {
             System.err.println("Email dispatch failed exactly at: " + e.getMessage());
-            // Intentionally swallowed so standard UI continues normally
+        }
+    }
+
+    public static void sendMatchingAlert(String targetEmail, org.example.aideEtdon.model.Demande d) {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(SMTP_EMAIL, SMTP_PASSWORD);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(SMTP_EMAIL));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(targetEmail));
+            message.setSubject("🎯 Alerte Médicale Ciblée: Votre Profil Sanguin est Requis");
+
+            String htmlContent = "<div style='font-family: Arial, sans-serif; padding: 25px; border: 3px solid #6366f1; border-radius: 12px; max-width: 600px; margin: auto;'>"
+                    + "<h2 style='color: #6366f1; text-align: center;'>🎯 MATCHING MÉDICAL TROUVÉ</h2>"
+                    + "<p style='font-size: 16px; color: #334155;'>Notre intelligence artificielle a scanné votre historique de dons sur SosiConnect. Votre profil correspond exactement à un patient actuellement en urgence.</p>"
+                    + "<div style='background-color: #f8fafc; padding: 15px; border-radius: 8px; border-left: 5px solid #ef4444; margin: 20px 0;'>"
+                    + "<h3 style='margin-top: 0; color: #1e293b;'>" + d.getTitre() + "</h3>"
+                    + "<p style='margin: 5px 0;'><strong>Soin : </strong>Don de " + d.getType() + " (" + d.getGroupeSanguin() + ")</p>"
+                    + "<p style='margin: 5px 0;'><strong>Niveau : </strong>" + d.getUrgence() + "</p>"
+                    + "<p style='margin: 15px 0 0 0; color: #475569;'><i>\"" + d.getDescription() + "\"</i></p>"
+                    + "</div>"
+                    + "<p style='font-size: 15px;'>Votre sang peut sauver une vie. Si vous êtes disponible, veuillez vous connecter pour accepter la demande.</p>"
+                    + "<p style='margin-top: 30px; font-size: 11px; color: #94a3b8; text-align: center;'>Calcul de compatibilité généré automatiquement par l'Algorithme SosiConnect.</p>"
+                    + "</div>";
+
+            message.setContent(htmlContent, "text/html; charset=utf-8");
+
+            Transport.send(message);
+            System.out.println("Matching Email successfully sent to: " + targetEmail);
+
+        } catch (MessagingException e) {
+            System.err.println("Matching Email dispatch failed: " + e.getMessage());
         }
     }
 }
