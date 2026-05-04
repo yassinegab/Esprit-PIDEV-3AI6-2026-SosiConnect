@@ -152,6 +152,15 @@ public class ServiceUser implements IService<User> {
         return null;
     }
 
+    public User getUserById(int id) {
+        try {
+            return findById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public int countAllUsers() throws SQLException {
         String sql = "SELECT COUNT(*) FROM user";
         try (Statement st = connection.createStatement()) {
