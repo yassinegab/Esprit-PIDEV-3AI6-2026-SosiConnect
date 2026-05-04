@@ -1,18 +1,15 @@
 package org.example.user.backoffice.controller;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 import org.example.user.model.User;
 import org.example.user.model.UserRole;
 import org.example.user.service.ServiceDossierMedical;
@@ -24,41 +21,22 @@ import java.util.Optional;
 
 public class UserControllerAdmin {
 
-    @FXML
-    private Label totalUsersLabel;
-    @FXML
-    private Label totalPatientsLabel;
-    @FXML
-    private Label totalMedecinsLabel;
-    @FXML
-    private Label totalDossiersLabel;
-
-    @FXML
-    private BarChart<String, Number> ageBarChart;
-    @FXML
-    private PieChart rolePieChart;
-
-    @FXML
-    private TextField searchField;
-    @FXML
-    private ComboBox<String> roleFilterCombo;
-    @FXML
-    private TableView<User> usersTable;
-
-    @FXML
-    private TableColumn<User, Number> idColumn;
-    @FXML
-    private TableColumn<User, String> nomColumn;
-    @FXML
-    private TableColumn<User, String> emailColumn;
-    @FXML
-    private TableColumn<User, String> telephoneColumn;
-    @FXML
-    private TableColumn<User, String> roleColumn;
-    @FXML
-    private TableColumn<User, String> ageColumn;
-    @FXML
-    private TableColumn<User, Void> actionsColumn;
+    @FXML private Label totalUsersLabel;
+    @FXML private Label totalPatientsLabel;
+    @FXML private Label totalMedecinsLabel;
+    @FXML private Label totalDossiersLabel;
+    @FXML private BarChart<String, Number> ageBarChart;
+    @FXML private PieChart rolePieChart;
+    @FXML private TextField searchField;
+    @FXML private ComboBox<String> roleFilterCombo;
+    @FXML private TableView<User> usersTable;
+    @FXML private TableColumn<User, String> nomColumn;
+    @FXML private TableColumn<User, String> emailColumn;
+    @FXML private TableColumn<User, String> telephoneColumn;
+    @FXML private TableColumn<User, String> roleColumn;
+    @FXML private TableColumn<User, String> ageColumn;
+    @FXML private TableColumn<User, Void> actionsColumn;
+    @FXML private VBox sidePanelContainer;
 
     private final ServiceUser serviceUser = new ServiceUser();
     private final ServiceDossierMedical serviceDossierMedical = new ServiceDossierMedical();
@@ -71,12 +49,10 @@ public class UserControllerAdmin {
         initTable();
         loadDashboard();
         loadUsers();
+        hideSidePanel();
     }
 
     private void initTable() {
-        idColumn.setCellValueFactory(data ->
-                new SimpleIntegerProperty(data.getValue().getId()));
-
         nomColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getNom() + "\n" + data.getValue().getPrenom()));
 
@@ -104,20 +80,9 @@ public class UserControllerAdmin {
                 editBtn.getStyleClass().add("action-edit-btn");
                 deleteBtn.getStyleClass().add("action-delete-btn");
 
-                viewBtn.setOnAction(e -> {
-                    User user = getTableView().getItems().get(getIndex());
-                    openViewDialog(user);
-                });
-
-                editBtn.setOnAction(e -> {
-                    User user = getTableView().getItems().get(getIndex());
-                    openEditDialog(user);
-                });
-
-                deleteBtn.setOnAction(e -> {
-                    User user = getTableView().getItems().get(getIndex());
-                    deleteUser(user);
-                });
+                viewBtn.setOnAction(e -> openViewPanel(getTableView().getItems().get(getIndex())));
+                editBtn.setOnAction(e -> openEditPanel(getTableView().getItems().get(getIndex())));
+                deleteBtn.setOnAction(e -> deleteUser(getTableView().getItems().get(getIndex())));
             }
 
             @Override
@@ -130,15 +95,10 @@ public class UserControllerAdmin {
 
     private void loadDashboard() {
         try {
-            int totalUsers = serviceUser.countAllUsers();
-            int totalPatients = serviceUser.countByRole(UserRole.PATIENT);
-            int totalMedecins = serviceUser.countByRole(UserRole.MEDECIN);
-            int totalDossiers = serviceDossierMedical.countDossiers();
-
-            totalUsersLabel.setText(String.valueOf(totalUsers));
-            totalPatientsLabel.setText(String.valueOf(totalPatients));
-            totalMedecinsLabel.setText(String.valueOf(totalMedecins));
-            totalDossiersLabel.setText(String.valueOf(totalDossiers));
+            totalUsersLabel.setText(String.valueOf(serviceUser.countAllUsers()));
+            totalPatientsLabel.setText(String.valueOf(serviceUser.countByRole(UserRole.PATIENT)));
+            totalMedecinsLabel.setText(String.valueOf(serviceUser.countByRole(UserRole.MEDECIN)));
+            totalDossiersLabel.setText(String.valueOf(serviceDossierMedical.countDossiers()));
 
             loadAgeChart();
             loadRoleChart();
@@ -171,8 +131,7 @@ public class UserControllerAdmin {
 
     private void loadUsers() {
         try {
-            List<User> users = serviceUser.getAll();
-            usersTable.setItems(FXCollections.observableArrayList(users));
+            usersTable.setItems(FXCollections.observableArrayList(serviceUser.getAll()));
         } catch (Exception e) {
             e.printStackTrace();
             AlertUtil.showError("Utilisateurs", "Erreur lors du chargement des utilisateurs : " + e.getMessage());
@@ -184,8 +143,7 @@ public class UserControllerAdmin {
         try {
             String keyword = searchField.getText() == null ? "" : searchField.getText().trim();
             String role = roleFilterCombo.getValue() == null ? "TOUS" : roleFilterCombo.getValue();
-            List<User> users = serviceUser.searchUsers(keyword, role);
-            usersTable.setItems(FXCollections.observableArrayList(users));
+            usersTable.setItems(FXCollections.observableArrayList(serviceUser.searchUsers(keyword, role)));
         } catch (Exception e) {
             e.printStackTrace();
             AlertUtil.showError("Recherche", "Erreur lors de la recherche : " + e.getMessage());
@@ -194,28 +152,23 @@ public class UserControllerAdmin {
 
     @FXML
     private void handleNewUser() {
-        openCreateDialog();
+        openCreatePanel();
     }
 
-    private void openCreateDialog() {
+    private void openCreatePanel() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/backoffice/AdminUserFormDialog.fxml"));
             Parent root = loader.load();
 
             AdminUserFormController controller = loader.getController();
             controller.setCreateMode();
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Nouvel Utilisateur");
-            stage.setScene(new Scene(root));
-            stage.setWidth(700);
-            stage.setHeight(760);
-            stage.showAndWait();
-
-            if (controller.isSaved()) {
+            controller.setOnCancel(this::hideSidePanel);
+            controller.setOnSaved(() -> {
                 refreshAll();
-            }
+                hideSidePanel();
+            });
+
+            showSidePanel(root);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -223,25 +176,20 @@ public class UserControllerAdmin {
         }
     }
 
-    private void openEditDialog(User user) {
+    private void openEditPanel(User user) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/backoffice/AdminUserFormDialog.fxml"));
             Parent root = loader.load();
 
             AdminUserFormController controller = loader.getController();
             controller.setEditMode(user);
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Modifier Utilisateur");
-            stage.setScene(new Scene(root));
-            stage.setWidth(700);
-            stage.setHeight(760);
-            stage.showAndWait();
-
-            if (controller.isSaved()) {
+            controller.setOnCancel(this::hideSidePanel);
+            controller.setOnSaved(() -> {
                 refreshAll();
-            }
+                hideSidePanel();
+            });
+
+            showSidePanel(root);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -249,25 +197,34 @@ public class UserControllerAdmin {
         }
     }
 
-    private void openViewDialog(User user) {
+    private void openViewPanel(User user) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/backoffice/AdminUserViewDialog.fxml"));
             Parent root = loader.load();
 
             AdminUserViewController controller = loader.getController();
             controller.setUser(user);
+            controller.setOnClose(this::hideSidePanel);
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Détail Utilisateur");
-            stage.setScene(new Scene(root));
-            stage.setWidth(700);
-            stage.setHeight(620);
-            stage.showAndWait();
+            showSidePanel(root);
 
         } catch (Exception e) {
             e.printStackTrace();
             AlertUtil.showError("Détail", "Impossible d'ouvrir le détail utilisateur : " + e.getMessage());
+        }
+    }
+
+    private void showSidePanel(Parent root) {
+        sidePanelContainer.getChildren().setAll(root);
+        sidePanelContainer.setVisible(true);
+        sidePanelContainer.setManaged(true);
+    }
+
+    private void hideSidePanel() {
+        if (sidePanelContainer != null) {
+            sidePanelContainer.getChildren().clear();
+            sidePanelContainer.setVisible(false);
+            sidePanelContainer.setManaged(false);
         }
     }
 
@@ -283,6 +240,7 @@ public class UserControllerAdmin {
                 serviceUser.delete(user.getId());
                 AlertUtil.showInfo("Suppression", "Utilisateur supprimé avec succès.");
                 refreshAll();
+                hideSidePanel();
             } catch (Exception e) {
                 e.printStackTrace();
                 AlertUtil.showError("Suppression", "Erreur lors de la suppression : " + e.getMessage());
@@ -296,13 +254,8 @@ public class UserControllerAdmin {
     }
 
     private String formatRole(UserRole role) {
-        switch (role) {
-            case PATIENT:
-                return "Patient";
-            case MEDECIN:
-                return "Médecin";
-            default:
-                return "Admin";
-        }
+        if (role == UserRole.PATIENT) return "Patient";
+        if (role == UserRole.MEDECIN) return "Médecin";
+        return "Admin";
     }
 }

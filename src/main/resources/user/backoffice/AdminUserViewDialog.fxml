@@ -11,14 +11,14 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.example.user.backoffice.controller.AdminUserViewController"
       stylesheets="@../user_admin_style.css"
-      spacing="18.0"
+      spacing="16.0"
       styleClass="dialog-root">
 
     <padding>
-        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <HBox alignment="CENTER_LEFT">
+    <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="Détail Utilisateur" styleClass="page-title"/>
         <Region HBox.hgrow="ALWAYS"/>
         <Button text="Fermer" onAction="#handleClose" styleClass="secondary-button"/>
@@ -27,14 +27,14 @@
     <Label fx:id="fullNameLabel" text="Nom Prénom" styleClass="user-big-name"/>
     <Label fx:id="roleLabel" text="Rôle" styleClass="role-chip-admin"/>
 
-    <VBox spacing="14.0" styleClass="detail-card">
-        <Label fx:id="emailLabel" text="Email"/>
-        <Label fx:id="telephoneLabel" text="Téléphone"/>
-        <Label fx:id="ageLabel" text="Âge"/>
-        <Label fx:id="sexeLabel" text="Sexe"/>
-        <Label fx:id="poidsLabel" text="Poids"/>
-        <Label fx:id="tailleLabel" text="Taille"/>
-        <Label fx:id="handicapLabel" text="Handicap"/>
+    <VBox spacing="12.0" styleClass="detail-card">
+        <Label fx:id="emailLabel" text="Email : -" style="-fx-text-fill: #0f172a; -fx-font-size: 14px;"/>
+        <Label fx:id="telephoneLabel" text="Téléphone : -" style="-fx-text-fill: #0f172a; -fx-font-size: 14px;"/>
+        <Label fx:id="ageLabel" text="Âge : -" style="-fx-text-fill: #0f172a; -fx-font-size: 14px;"/>
+        <Label fx:id="sexeLabel" text="Sexe : -" style="-fx-text-fill: #0f172a; -fx-font-size: 14px;"/>
+        <Label fx:id="poidsLabel" text="Poids : -" style="-fx-text-fill: #0f172a; -fx-font-size: 14px;"/>
+        <Label fx:id="tailleLabel" text="Taille : -" style="-fx-text-fill: #0f172a; -fx-font-size: 14px;"/>
+        <Label fx:id="handicapLabel" text="Handicap : -" style="-fx-text-fill: #0f172a; -fx-font-size: 14px;"/>
     </VBox>
 
 </VBox>

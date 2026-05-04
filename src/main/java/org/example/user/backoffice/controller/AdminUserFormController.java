@@ -3,7 +3,6 @@ package org.example.user.backoffice.controller;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import org.example.user.model.User;
 import org.example.user.model.UserRole;
 import org.example.user.service.ServiceUser;
@@ -12,37 +11,27 @@ import org.example.utils.ValidationUtil;
 
 public class AdminUserFormController {
 
-    @FXML
-    private Label formTitleLabel;
-    @FXML
-    private TextField nomField;
-    @FXML
-    private TextField prenomField;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private TextField telephoneField;
-    @FXML
-    private ComboBox<UserRole> roleCombo;
-    @FXML
-    private TextField ageField;
-    @FXML
-    private ComboBox<String> sexeCombo;
-    @FXML
-    private TextField poidsField;
-    @FXML
-    private TextField tailleField;
-    @FXML
-    private TextField handicapField;
-    @FXML
-    private Label passwordHintLabel;
+    @FXML private Label formTitleLabel;
+    @FXML private TextField nomField;
+    @FXML private TextField prenomField;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private TextField telephoneField;
+    @FXML private ComboBox<UserRole> roleCombo;
+    @FXML private TextField ageField;
+    @FXML private ComboBox<String> sexeCombo;
+    @FXML private TextField poidsField;
+    @FXML private TextField tailleField;
+    @FXML private TextField handicapField;
+    @FXML private Label passwordHintLabel;
 
     private final ServiceUser serviceUser = new ServiceUser();
     private User editingUser;
     private boolean createMode = true;
     private boolean saved = false;
+
+    private Runnable onSaved;
+    private Runnable onCancel;
 
     @FXML
     public void initialize() {
@@ -50,14 +39,28 @@ public class AdminUserFormController {
         sexeCombo.setItems(FXCollections.observableArrayList("Homme", "Femme", "Autre"));
         roleCombo.setValue(UserRole.PATIENT);
         sexeCombo.setValue("Homme");
+
+        roleCombo.setOnAction(e -> updatePatientFields());
+        updatePatientFields();
+    }
+
+    public void setOnSaved(Runnable onSaved) {
+        this.onSaved = onSaved;
+    }
+
+    public void setOnCancel(Runnable onCancel) {
+        this.onCancel = onCancel;
     }
 
     public void setCreateMode() {
         createMode = true;
+        editingUser = null;
         formTitleLabel.setText("Nouvel Utilisateur");
         passwordHintLabel.setText("Mot de passe obligatoire.");
         passwordField.setVisible(true);
         passwordField.setManaged(true);
+        roleCombo.setValue(UserRole.PATIENT);
+        updatePatientFields();
     }
 
     public void setEditMode(User user) {
@@ -78,6 +81,27 @@ public class AdminUserFormController {
         poidsField.setText(String.valueOf(user.getPoids()));
         tailleField.setText(String.valueOf(user.getTaille()));
         handicapField.setText(user.getHandicap());
+
+        updatePatientFields();
+    }
+
+    private void updatePatientFields() {
+        boolean isPatient = roleCombo.getValue() == UserRole.PATIENT;
+
+        poidsField.setVisible(isPatient);
+        poidsField.setManaged(isPatient);
+
+        tailleField.setVisible(isPatient);
+        tailleField.setManaged(isPatient);
+
+        handicapField.setVisible(isPatient);
+        handicapField.setManaged(isPatient);
+
+        if (!isPatient) {
+            poidsField.setText("0");
+            tailleField.setText("0");
+            handicapField.clear();
+        }
     }
 
     @FXML
@@ -106,16 +130,26 @@ public class AdminUserFormController {
                 editingUser.setRole(roleCombo.getValue());
                 editingUser.setAge(Integer.parseInt(ageField.getText().trim()));
                 editingUser.setSexe(sexeCombo.getValue());
-                editingUser.setPoids(Double.parseDouble(poidsField.getText().trim()));
-                editingUser.setTaille(Double.parseDouble(tailleField.getText().trim()));
-                editingUser.setHandicap(handicapField.getText().trim());
+
+                if (roleCombo.getValue() == UserRole.PATIENT) {
+                    editingUser.setPoids(Double.parseDouble(poidsField.getText().trim()));
+                    editingUser.setTaille(Double.parseDouble(tailleField.getText().trim()));
+                    editingUser.setHandicap(handicapField.getText().trim());
+                } else {
+                    editingUser.setPoids(0);
+                    editingUser.setTaille(0);
+                    editingUser.setHandicap("");
+                }
 
                 serviceUser.updateAdminUser(editingUser);
             }
 
             saved = true;
             AlertUtil.showInfo("Succès", createMode ? "Utilisateur ajouté avec succès." : "Utilisateur modifié avec succès.");
-            close();
+
+            if (onSaved != null) {
+                onSaved.run();
+            }
 
         } catch (Exception e) {
             AlertUtil.showError("Validation", e.getMessage());
@@ -124,7 +158,9 @@ public class AdminUserFormController {
 
     @FXML
     private void handleCancel() {
-        close();
+        if (onCancel != null) {
+            onCancel.run();
+        }
     }
 
     public boolean isSaved() {
@@ -140,9 +176,17 @@ public class AdminUserFormController {
         user.setRole(roleCombo.getValue());
         user.setAge(Integer.parseInt(ageField.getText().trim()));
         user.setSexe(sexeCombo.getValue());
-        user.setPoids(Double.parseDouble(poidsField.getText().trim()));
-        user.setTaille(Double.parseDouble(tailleField.getText().trim()));
-        user.setHandicap(handicapField.getText().trim());
+
+        if (roleCombo.getValue() == UserRole.PATIENT) {
+            user.setPoids(Double.parseDouble(poidsField.getText().trim()));
+            user.setTaille(Double.parseDouble(tailleField.getText().trim()));
+            user.setHandicap(handicapField.getText().trim());
+        } else {
+            user.setPoids(0);
+            user.setTaille(0);
+            user.setHandicap("");
+        }
+
         return user;
     }
 
@@ -152,16 +196,16 @@ public class AdminUserFormController {
         if (!ValidationUtil.isEmailValid(emailField.getText())) throw new IllegalArgumentException("Email invalide.");
         if (!ValidationUtil.isPhoneValid(telephoneField.getText())) throw new IllegalArgumentException("Téléphone invalide.");
         if (!ValidationUtil.isPositiveInt(ageField.getText())) throw new IllegalArgumentException("Âge invalide.");
-        if (!ValidationUtil.isPositiveDouble(poidsField.getText())) throw new IllegalArgumentException("Poids invalide.");
-        if (!ValidationUtil.isPositiveDouble(tailleField.getText())) throw new IllegalArgumentException("Taille invalide.");
         if (roleCombo.getValue() == null) throw new IllegalArgumentException("Rôle obligatoire.");
         if (sexeCombo.getValue() == null) throw new IllegalArgumentException("Sexe obligatoire.");
+
+        if (roleCombo.getValue() == UserRole.PATIENT) {
+            if (!ValidationUtil.isPositiveDouble(poidsField.getText())) throw new IllegalArgumentException("Poids invalide.");
+            if (!ValidationUtil.isPositiveDouble(tailleField.getText())) throw new IllegalArgumentException("Taille invalide.");
+        }
+
         if (createMode && !ValidationUtil.isPasswordStrong(passwordField.getText())) {
             throw new IllegalArgumentException("Mot de passe faible. Minimum 8 caractères avec majuscule, minuscule et chiffre.");
         }
-    }
-
-    private void close() {
-        ((Stage) nomField.getScene().getWindow()).close();
     }
 }

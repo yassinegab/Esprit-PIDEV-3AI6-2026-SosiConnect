@@ -10,6 +10,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -23,7 +24,11 @@
     <ScrollPane fitToWidth="true" styleClass="auth-scroll">
         <content>
             <VBox alignment="CENTER" spacing="22.0">
-                <VBox spacing="16.0" alignment="CENTER" styleClass="auth-card" maxWidth="560.0" prefWidth="560.0">
+                <padding>
+                    <Insets top="30.0" right="30.0" bottom="30.0" left="30.0"/>
+                </padding>
+
+                <VBox alignment="CENTER" spacing="16.0" styleClass="auth-card" maxWidth="620.0" prefWidth="620.0">
                     <padding>
                         <Insets top="28.0" right="32.0" bottom="28.0" left="32.0"/>
                     </padding>
@@ -36,43 +41,88 @@
                         </VBox>
                     </HBox>
 
-                    <VBox spacing="4.0" alignment="CENTER">
+                    <VBox alignment="CENTER" spacing="4.0">
                         <Label text="Inscription" styleClass="page-title-auth"/>
-                        <Label text="Créez votre compte utilisateur" styleClass="page-subtitle-auth"/>
+                        <Label fx:id="stepSubtitleLabel" text="Informations personnelles" styleClass="page-subtitle-auth"/>
                     </VBox>
 
-                    <TextField fx:id="nomField" promptText="Nom" styleClass="auth-input"/>
-                    <TextField fx:id="prenomField" promptText="Prénom" styleClass="auth-input"/>
-                    <TextField fx:id="emailField" promptText="Email" styleClass="auth-input"/>
-                    <TextField fx:id="telephoneField" promptText="Téléphone" styleClass="auth-input"/>
-                    <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="auth-input"/>
-                    <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe" styleClass="auth-input"/>
+                    <HBox alignment="CENTER" spacing="8.0">
+                        <Label fx:id="stepDot1" text="●"/>
+                        <Label fx:id="stepDot2" text="●"/>
+                        <Label fx:id="stepDot3" text="●"/>
+                        <Label fx:id="stepDot4" text="●"/>
+                    </HBox>
 
-                    <ComboBox fx:id="roleComboBox" prefWidth="500.0"/>
-                    <TextField fx:id="ageField" promptText="Âge" styleClass="auth-input"/>
-                    <ComboBox fx:id="sexeComboBox" prefWidth="500.0"/>
+                    <!-- Étape 1 -->
+                    <VBox fx:id="stepPersonalBox" spacing="12.0" prefWidth="540.0">
+                        <Label text="Informations personnelles" styleClass="section-mini-title"/>
 
-                    <VBox fx:id="patientFieldsBox" spacing="12.0" styleClass="patient-extra-box">
-                        <Label text="Informations complémentaires patient" styleClass="section-mini-title"/>
-                        <TextField fx:id="poidsField" promptText="Poids (kg)" styleClass="auth-input"/>
-                        <TextField fx:id="tailleField" promptText="Taille (cm)" styleClass="auth-input"/>
-                        <CheckBox fx:id="handicapCheckBox" text="Je suis en situation de handicap" styleClass="check-auth"/>
-                        <TextField fx:id="handicapDescriptionField" promptText="Précisez le handicap" styleClass="auth-input"/>
+                        <HBox spacing="12.0">
+                            <TextField fx:id="nomField" promptText="Nom" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                            <TextField fx:id="prenomField" promptText="Prénom" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+
+                        <TextField fx:id="emailField" promptText="Email" styleClass="auth-input"/>
+
+                        <HBox spacing="12.0">
+                            <PasswordField fx:id="passwordField" promptText="Mot de passe" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                            <PasswordField fx:id="confirmPasswordField" promptText="Confirmer le mot de passe" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                        </HBox>
+
+                        <TextField fx:id="telephoneField" promptText="Téléphone" styleClass="auth-input"/>
+
+                        <ComboBox fx:id="roleComboBox" prefWidth="540.0" promptText="-- Choisir un rôle --"/>
+                    </VBox>
+
+                    <!-- Étape 2 -->
+                    <VBox fx:id="stepPhysicalBox" spacing="12.0" prefWidth="540.0" visible="false" managed="false">
+                        <Label text="Informations physiques" styleClass="section-mini-title"/>
+
+                        <HBox spacing="12.0">
+                            <TextField fx:id="ageField" promptText="Âge" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                            <ComboBox fx:id="sexeComboBox" prefWidth="260.0" promptText="Sexe"/>
+                        </HBox>
+
+                        <VBox fx:id="patientFieldsBox" spacing="12.0" styleClass="patient-extra-box">
+                            <Label text="Informations complémentaires patient" styleClass="section-mini-title"/>
+
+                            <HBox spacing="12.0">
+                                <TextField fx:id="poidsField" promptText="Poids (kg)" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                                <TextField fx:id="tailleField" promptText="Taille (cm)" styleClass="auth-input" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+
+                            <CheckBox fx:id="handicapCheckBox" text="Je suis en situation de handicap" styleClass="check-auth"/>
+                            <TextField fx:id="handicapDescriptionField" promptText="Précisez le handicap" styleClass="auth-input"/>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Étape 3 -->
+                    <VBox fx:id="stepConfirmBox" spacing="14.0" prefWidth="540.0" visible="false" managed="false">
+                        <Label text="Confirmation" styleClass="section-mini-title"/>
                         <CheckBox fx:id="acceptTermsCheckBox" text="J'accepte les conditions d'utilisation" styleClass="check-auth"/>
+                        <Label text="Cliquez sur Envoyer le code pour recevoir un code de vérification par email." styleClass="helper-line" wrapText="true"/>
                     </VBox>
 
-                    <Label fx:id="errorLabel" text="" styleClass="error-label"/>
+                    <!-- Étape 4 -->
+                    <VBox fx:id="stepCodeBox" spacing="14.0" prefWidth="540.0" visible="false" managed="false">
+                        <Label text="Vérification email" styleClass="section-mini-title"/>
+                        <Label text="Entrez le code reçu par email pour finaliser votre inscription." styleClass="helper-line" wrapText="true"/>
+                        <TextField fx:id="verificationCodeField" promptText="Code de vérification" styleClass="auth-input"/>
+                    </VBox>
 
-                    <Button text="S'inscrire"
-                            onAction="#handleRegister"
-                            prefWidth="410.0"
-                            styleClass="primary-button-auth"/>
+                    <Label fx:id="errorLabel" text="" styleClass="error-label" wrapText="true"/>
+
+                    <HBox spacing="12.0" alignment="CENTER">
+                        <Button fx:id="backButton" text="← Retour" onAction="#handlePreviousStep" styleClass="secondary-button" visible="false" managed="false"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="nextButton" text="Suivant →" onAction="#handleNextStep" styleClass="primary-button-auth"/>
+                        <Button fx:id="sendCodeButton" text="Envoyer le code" onAction="#handleSendCode" styleClass="primary-button-auth" visible="false" managed="false"/>
+                        <Button fx:id="registerButton" text="S'inscrire" onAction="#handleRegister" styleClass="primary-button-auth" visible="false" managed="false"/>
+                    </HBox>
 
                     <HBox alignment="CENTER" spacing="5.0">
                         <Label text="Vous avez déjà un compte ?" styleClass="helper-line"/>
-                        <Hyperlink text="Se connecter"
-                                   onAction="#goToLogin"
-                                   styleClass="link-auth"/>
+                        <Hyperlink text="Se connecter" onAction="#goToLogin" styleClass="link-auth"/>
                     </HBox>
                 </VBox>
             </VBox>

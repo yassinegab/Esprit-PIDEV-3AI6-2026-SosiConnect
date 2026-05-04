@@ -3,11 +3,9 @@ package org.example.user.frontoffice.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 import org.example.user.model.DossierMedical;
 import org.example.user.model.User;
 import org.example.user.service.ServiceDossierMedical;
@@ -18,52 +16,33 @@ import java.time.format.DateTimeFormatter;
 
 public class PatientDossierViewController {
 
-    @FXML
-    private Label patientNameLabel;
-    @FXML
-    private Label patientEmailLabel;
-    @FXML
-    private Label patientTelephoneLabel;
-    @FXML
-    private Label patientAgeSexeLabel;
-    @FXML
-    private Label patientPoidsLabel;
-    @FXML
-    private Label patientTailleLabel;
-    @FXML
-    private Label patientHandicapLabel;
-
-    @FXML
-    private Label createdDateLabel;
-    @FXML
-    private Label updatedDateLabel;
-
-    @FXML
-    private Label antecedentsLabel;
-    @FXML
-    private Label maladiesLabel;
-    @FXML
-    private Label allergiesLabel;
-    @FXML
-    private Label traitementsLabel;
-    @FXML
-    private Label diagnosticsLabel;
-    @FXML
-    private Label notesLabel;
-    @FXML
-    private Label objectifLabel;
-    @FXML
-    private Label activiteLabel;
-
-    @FXML
-    private Button editDossierButton;
-    @FXML
-    private Button createDossierButton;
+    @FXML private Label patientNameLabel;
+    @FXML private Label patientEmailLabel;
+    @FXML private Label patientTelephoneLabel;
+    @FXML private Label patientAgeSexeLabel;
+    @FXML private Label patientPoidsLabel;
+    @FXML private Label patientTailleLabel;
+    @FXML private Label patientHandicapLabel;
+    @FXML private Label createdDateLabel;
+    @FXML private Label updatedDateLabel;
+    @FXML private Label antecedentsLabel;
+    @FXML private Label maladiesLabel;
+    @FXML private Label allergiesLabel;
+    @FXML private Label traitementsLabel;
+    @FXML private Label diagnosticsLabel;
+    @FXML private Label notesLabel;
+    @FXML private Label objectifLabel;
+    @FXML private Label activiteLabel;
+    @FXML private Button editDossierButton;
+    @FXML private Button createDossierButton;
+    @FXML private VBox inlineFormContainer;
 
     private final ServiceDossierMedical serviceDossierMedical = new ServiceDossierMedical();
 
     private User patient;
     private DossierMedical dossier;
+    private Runnable onClose;
+    private Runnable onRefresh;
 
     public void setPatient(User patient) {
         this.patient = patient;
@@ -131,44 +110,51 @@ public class PatientDossierViewController {
 
     @FXML
     private void handleCreateDossier() {
-        openForm(null);
+        openFormInline(null);
     }
 
     @FXML
     private void handleEditDossier() {
-        openForm(dossier);
+        openFormInline(dossier);
     }
 
     @FXML
     private void handleClose() {
-        Stage stage = (Stage) patientNameLabel.getScene().getWindow();
-        stage.close();
+        if (onClose != null) {
+            onClose.run();
+        }
     }
 
-    private void openForm(DossierMedical dossierToEdit) {
+    private void openFormInline(DossierMedical dossierToEdit) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/frontoffice/DossierMedicalFormDialog.fxml"));
             Parent root = loader.load();
 
             DossierMedicalFormController controller = loader.getController();
             controller.setData(patient.getId(), dossierToEdit);
-
-            Stage stage = new Stage();
-            stage.setTitle(dossierToEdit == null ? "Créer dossier médical" : "Modifier dossier médical");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.setWidth(850);
-            stage.setHeight(700);
-            stage.showAndWait();
-
-            if (controller.isSaved()) {
+            controller.setOnCancel(() -> inlineFormContainer.getChildren().clear());
+            controller.setOnSaved(() -> {
+                inlineFormContainer.getChildren().clear();
                 loadData();
-            }
+                if (onRefresh != null) {
+                    onRefresh.run();
+                }
+            });
+
+            inlineFormContainer.getChildren().setAll(root);
 
         } catch (Exception e) {
             e.printStackTrace();
             AlertUtil.showError("Interface", "Impossible d'ouvrir le formulaire : " + e.getMessage());
         }
+    }
+
+    public void setOnClose(Runnable onClose) {
+        this.onClose = onClose;
+    }
+
+    public void setOnRefresh(Runnable onRefresh) {
+        this.onRefresh = onRefresh;
     }
 
     private String safe(String value) {
@@ -180,9 +166,7 @@ public class PatientDossierViewController {
     }
 
     private String formatDouble(double value) {
-        if (value == (long) value) {
-            return String.valueOf((long) value);
-        }
+        if (value == (long) value) return String.valueOf((long) value);
         return String.format("%.2f", value);
     }
 }

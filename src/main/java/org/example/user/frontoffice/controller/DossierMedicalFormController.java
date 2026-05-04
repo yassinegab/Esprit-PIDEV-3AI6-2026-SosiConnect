@@ -3,7 +3,6 @@ package org.example.user.frontoffice.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
-import javafx.stage.Stage;
 import org.example.user.model.DossierMedical;
 import org.example.user.service.ServiceDossierMedical;
 import org.example.utils.AlertUtil;
@@ -12,28 +11,23 @@ import java.sql.SQLException;
 
 public class DossierMedicalFormController {
 
-    @FXML
-    private TextArea antecedentsArea;
-    @FXML
-    private TextArea maladiesArea;
-    @FXML
-    private TextArea allergiesArea;
-    @FXML
-    private TextArea traitementsArea;
-    @FXML
-    private TextArea diagnosticsArea;
-    @FXML
-    private TextArea notesArea;
-    @FXML
-    private TextArea objectifArea;
-    @FXML
-    private ComboBox<String> activiteComboBox;
+    @FXML private TextArea antecedentsArea;
+    @FXML private TextArea maladiesArea;
+    @FXML private TextArea allergiesArea;
+    @FXML private TextArea traitementsArea;
+    @FXML private TextArea diagnosticsArea;
+    @FXML private TextArea notesArea;
+    @FXML private TextArea objectifArea;
+    @FXML private ComboBox<String> activiteComboBox;
 
     private final ServiceDossierMedical serviceDossierMedical = new ServiceDossierMedical();
 
     private DossierMedical dossier;
     private int userId;
     private boolean saved = false;
+
+    private Runnable onSaved;
+    private Runnable onCancel;
 
     @FXML
     public void initialize() {
@@ -85,7 +79,10 @@ public class DossierMedicalFormController {
             }
 
             saved = true;
-            closeWindow();
+
+            if (onSaved != null) {
+                onSaved.run();
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -95,15 +92,20 @@ public class DossierMedicalFormController {
 
     @FXML
     private void handleCancel() {
-        closeWindow();
+        if (onCancel != null) {
+            onCancel.run();
+        }
     }
 
     public boolean isSaved() {
         return saved;
     }
 
-    private void closeWindow() {
-        Stage stage = (Stage) antecedentsArea.getScene().getWindow();
-        stage.close();
+    public void setOnSaved(Runnable onSaved) {
+        this.onSaved = onSaved;
+    }
+
+    public void setOnCancel(Runnable onCancel) {
+        this.onCancel = onCancel;
     }
 }

@@ -31,7 +31,6 @@
     <HBox spacing="20.0">
         <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
             <Label text="👥" styleClass="stat-icon"/>
-
             <VBox spacing="4.0">
                 <Label text="Total Patients" styleClass="stat-label"/>
                 <Label fx:id="totalPatientsLabel" text="0" styleClass="stat-value"/>
@@ -40,7 +39,6 @@
 
         <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
             <Label text="📄" styleClass="stat-icon"/>
-
             <VBox spacing="4.0">
                 <Label text="Dossiers Médicaux" styleClass="stat-label"/>
                 <Label fx:id="totalDossiersLabel" text="0" styleClass="stat-value"/>
@@ -49,7 +47,6 @@
 
         <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
             <Label text="⚠" styleClass="stat-icon-red"/>
-
             <VBox spacing="4.0">
                 <Label text="Maladies Chroniques" styleClass="stat-label"/>
                 <Label fx:id="totalMaladiesLabel" text="0" styleClass="stat-value"/>
@@ -58,7 +55,6 @@
 
         <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
             <Label text="◌" styleClass="stat-icon-orange"/>
-
             <VBox spacing="4.0">
                 <Label text="Allergies Signalées" styleClass="stat-label"/>
                 <Label fx:id="totalAllergiesLabel" text="0" styleClass="stat-value"/>
@@ -69,14 +65,9 @@
     <HBox spacing="20.0">
         <VBox spacing="16.0" styleClass="panel-card" HBox.hgrow="ALWAYS">
             <Label text="Niveaux d'Activité des Patients" styleClass="section-title"/>
-
-            <BarChart fx:id="activiteBarChart" legendVisible="false" prefHeight="360.0">
-                <xAxis>
-                    <CategoryAxis/>
-                </xAxis>
-                <yAxis>
-                    <NumberAxis/>
-                </yAxis>
+            <BarChart fx:id="activiteBarChart" legendVisible="false" prefHeight="330.0">
+                <xAxis><CategoryAxis/></xAxis>
+                <yAxis><NumberAxis/></yAxis>
             </BarChart>
         </VBox>
 
@@ -115,22 +106,30 @@
                    onKeyReleased="#handleSearch"
                    styleClass="search-field"
                    prefWidth="560.0"/>
-
         <Label fx:id="countPatientsLabel" text="0 patient(s)" styleClass="count-chip"/>
     </HBox>
 
-    <VBox spacing="12.0" styleClass="table-panel">
-        <TableView fx:id="patientsTable" prefHeight="480.0">
-            <columns>
-                <TableColumn fx:id="idColumn" text="ID" prefWidth="70.0"/>
-                <TableColumn fx:id="nomColumn" text="Nom Complet" prefWidth="210.0"/>
-                <TableColumn fx:id="emailColumn" text="Email" prefWidth="260.0"/>
-                <TableColumn fx:id="telephoneColumn" text="Téléphone" prefWidth="180.0"/>
-                <TableColumn fx:id="ageColumn" text="Age" prefWidth="100.0"/>
-                <TableColumn fx:id="sexeColumn" text="Sexe" prefWidth="100.0"/>
-                <TableColumn fx:id="dossierColumn" text="Dossier Médical" prefWidth="150.0"/>
-            </columns>
-        </TableView>
-    </VBox>
+    <HBox spacing="18.0">
+        <VBox spacing="12.0" styleClass="table-panel" HBox.hgrow="ALWAYS">
+            <TableView fx:id="patientsTable" prefHeight="480.0">
+                <columns>
+                    <TableColumn fx:id="nomColumn" text="Nom Complet" prefWidth="210.0"/>
+                    <TableColumn fx:id="emailColumn" text="Email" prefWidth="260.0"/>
+                    <TableColumn fx:id="telephoneColumn" text="Téléphone" prefWidth="180.0"/>
+                    <TableColumn fx:id="ageColumn" text="Age" prefWidth="100.0"/>
+                    <TableColumn fx:id="sexeColumn" text="Sexe" prefWidth="100.0"/>
+                    <TableColumn fx:id="dossierColumn" text="Dossier Médical" prefWidth="150.0"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <VBox fx:id="dossierPanelContainer"
+              spacing="12.0"
+              prefWidth="470.0"
+              maxWidth="470.0"
+              visible="false"
+              managed="false"
+              styleClass="panel-card"/>
+    </HBox>
 
 </VBox>

@@ -1,17 +1,14 @@
 package org.example.user.frontoffice.controller;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 import org.example.user.model.User;
 import org.example.user.service.ServiceDossierMedical;
 import org.example.user.service.ServiceUser;
@@ -23,48 +20,25 @@ import java.util.Map;
 
 public class UserMedecinController {
 
-    @FXML
-    private Label totalPatientsLabel;
-    @FXML
-    private Label totalDossiersLabel;
-    @FXML
-    private Label totalMaladiesLabel;
-    @FXML
-    private Label totalAllergiesLabel;
-
-    @FXML
-    private Label ageMoyenLabel;
-    @FXML
-    private Label poidsMoyenLabel;
-    @FXML
-    private Label hommesFemmesLabel;
-    @FXML
-    private Label handicapLabel;
-
-    @FXML
-    private BarChart<String, Number> activiteBarChart;
-
-    @FXML
-    private TextField searchField;
-    @FXML
-    private Label countPatientsLabel;
-
-    @FXML
-    private TableView<User> patientsTable;
-    @FXML
-    private TableColumn<User, Number> idColumn;
-    @FXML
-    private TableColumn<User, String> nomColumn;
-    @FXML
-    private TableColumn<User, String> emailColumn;
-    @FXML
-    private TableColumn<User, String> telephoneColumn;
-    @FXML
-    private TableColumn<User, String> ageColumn;
-    @FXML
-    private TableColumn<User, String> sexeColumn;
-    @FXML
-    private TableColumn<User, Void> dossierColumn;
+    @FXML private Label totalPatientsLabel;
+    @FXML private Label totalDossiersLabel;
+    @FXML private Label totalMaladiesLabel;
+    @FXML private Label totalAllergiesLabel;
+    @FXML private Label ageMoyenLabel;
+    @FXML private Label poidsMoyenLabel;
+    @FXML private Label hommesFemmesLabel;
+    @FXML private Label handicapLabel;
+    @FXML private BarChart<String, Number> activiteBarChart;
+    @FXML private TextField searchField;
+    @FXML private Label countPatientsLabel;
+    @FXML private TableView<User> patientsTable;
+    @FXML private TableColumn<User, String> nomColumn;
+    @FXML private TableColumn<User, String> emailColumn;
+    @FXML private TableColumn<User, String> telephoneColumn;
+    @FXML private TableColumn<User, String> ageColumn;
+    @FXML private TableColumn<User, String> sexeColumn;
+    @FXML private TableColumn<User, Void> dossierColumn;
+    @FXML private VBox dossierPanelContainer;
 
     private final ServiceUser serviceUser = new ServiceUser();
     private final ServiceDossierMedical serviceDossierMedical = new ServiceDossierMedical();
@@ -74,12 +48,10 @@ public class UserMedecinController {
         initTable();
         loadDashboard();
         loadPatients();
+        hideDossierPanel();
     }
 
     private void initTable() {
-        idColumn.setCellValueFactory(data ->
-                new SimpleIntegerProperty(data.getValue().getId()));
-
         nomColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getNom() + " " + data.getValue().getPrenom()));
 
@@ -102,7 +74,7 @@ public class UserMedecinController {
                 btn.getStyleClass().add("voir-button");
                 btn.setOnAction(event -> {
                     User patient = getTableView().getItems().get(getIndex());
-                    openPatientDossier(patient);
+                    openPatientDossierPanel(patient);
                 });
             }
 
@@ -118,15 +90,10 @@ public class UserMedecinController {
         try {
             List<User> patients = serviceUser.getPatients();
 
-            int totalPatients = patients.size();
-            int totalDossiers = serviceDossierMedical.countDossiers();
-            int totalMaladies = serviceDossierMedical.countPatientsWithChronicDiseases();
-            int totalAllergies = serviceDossierMedical.countPatientsWithAllergies();
-
-            totalPatientsLabel.setText(String.valueOf(totalPatients));
-            totalDossiersLabel.setText(String.valueOf(totalDossiers));
-            totalMaladiesLabel.setText(String.valueOf(totalMaladies));
-            totalAllergiesLabel.setText(String.valueOf(totalAllergies));
+            totalPatientsLabel.setText(String.valueOf(patients.size()));
+            totalDossiersLabel.setText(String.valueOf(serviceDossierMedical.countDossiers()));
+            totalMaladiesLabel.setText(String.valueOf(serviceDossierMedical.countPatientsWithChronicDiseases()));
+            totalAllergiesLabel.setText(String.valueOf(serviceDossierMedical.countPatientsWithAllergies()));
 
             double ageMoyen = patients.stream().mapToInt(User::getAge).average().orElse(0);
             double poidsMoyen = patients.stream().mapToDouble(User::getPoids).average().orElse(0);
@@ -188,12 +155,9 @@ public class UserMedecinController {
         String keyword = searchField.getText() == null ? "" : searchField.getText().trim();
 
         try {
-            List<User> patients;
-            if (keyword.isEmpty()) {
-                patients = serviceUser.getPatients();
-            } else {
-                patients = serviceUser.searchPatientsByName(keyword);
-            }
+            List<User> patients = keyword.isEmpty()
+                    ? serviceUser.getPatients()
+                    : serviceUser.searchPatientsByName(keyword);
 
             patientsTable.setItems(FXCollections.observableArrayList(patients));
             countPatientsLabel.setText(patients.size() + " patient(s)");
@@ -204,7 +168,7 @@ public class UserMedecinController {
         }
     }
 
-    private void openPatientDossier(User patient) {
+    private void openPatientDossierPanel(User patient) {
         if (patient == null) {
             AlertUtil.showWarning("Patient", "Aucun patient sélectionné.");
             return;
@@ -216,28 +180,27 @@ public class UserMedecinController {
 
             PatientDossierViewController controller = loader.getController();
             controller.setPatient(patient);
+            controller.setOnClose(this::hideDossierPanel);
+            controller.setOnRefresh(() -> {
+                loadDashboard();
+                loadPatients();
+            });
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Dossier médical - " + patient.getNom() + " " + patient.getPrenom());
-            stage.setScene(new Scene(root));
-            stage.setWidth(1000);
-            stage.setHeight(700);
-            stage.showAndWait();
-
-            loadDashboard();
-            loadPatients();
+            dossierPanelContainer.getChildren().setAll(root);
+            dossierPanelContainer.setVisible(true);
+            dossierPanelContainer.setManaged(true);
 
         } catch (Exception e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur ouverture dossier");
-            alert.setHeaderText("Le bouton Voir a échoué");
-            alert.setContentText(
-                    "Message : " + e.getClass().getSimpleName() + "\n" +
-                            (e.getMessage() == null ? "Aucun détail" : e.getMessage())
-            );
-            alert.showAndWait();
+            AlertUtil.showError("Erreur ouverture dossier", e.getMessage());
+        }
+    }
+
+    private void hideDossierPanel() {
+        if (dossierPanelContainer != null) {
+            dossierPanelContainer.getChildren().clear();
+            dossierPanelContainer.setVisible(false);
+            dossierPanelContainer.setManaged(false);
         }
     }
 

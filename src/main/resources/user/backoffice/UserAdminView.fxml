@@ -8,114 +8,126 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.user.backoffice.controller.UserControllerAdmin"
-      stylesheets="@../user_admin_style.css"
-      spacing="24.0"
-      styleClass="admin-root">
+<ScrollPane fitToWidth="true"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.user.backoffice.controller.UserControllerAdmin"
+            styleClass="admin-root"
+            stylesheets="@../user_admin_style.css">
 
-   <padding>
-      <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
-   </padding>
+   <content>
+      <VBox spacing="24.0" styleClass="admin-root">
+         <padding>
+            <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+         </padding>
 
-   <VBox spacing="6.0">
-      <Label text="Tableau de Bord Administration" styleClass="page-title"/>
-      <Label text="Vue d'ensemble de la plateforme" styleClass="page-subtitle"/>
-   </VBox>
-
-   <HBox spacing="20.0">
-      <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-         <Label text="👥" styleClass="stat-icon"/>
-         <VBox spacing="4.0">
-            <Label text="Total Utilisateurs" styleClass="stat-label"/>
-            <Label fx:id="totalUsersLabel" text="0" styleClass="stat-value"/>
+         <VBox spacing="6.0">
+            <Label text="Tableau de Bord Administration" styleClass="page-title"/>
+            <Label text="Vue d'ensemble de la plateforme" styleClass="page-subtitle"/>
          </VBox>
-      </HBox>
 
-      <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-         <Label text="🧑" styleClass="stat-icon-blue"/>
-         <VBox spacing="4.0">
-            <Label text="Patients" styleClass="stat-label"/>
-            <Label fx:id="totalPatientsLabel" text="0" styleClass="stat-value"/>
-         </VBox>
-      </HBox>
+         <HBox spacing="20.0">
+            <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+               <Label text="👥" styleClass="stat-icon"/>
+               <VBox spacing="4.0">
+                  <Label text="Total Utilisateurs" styleClass="stat-label"/>
+                  <Label fx:id="totalUsersLabel" text="0" styleClass="stat-value"/>
+               </VBox>
+            </HBox>
 
-      <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-         <Label text="🩺" styleClass="stat-icon-orange"/>
-         <VBox spacing="4.0">
-            <Label text="Médecins" styleClass="stat-label"/>
-            <Label fx:id="totalMedecinsLabel" text="0" styleClass="stat-value"/>
-         </VBox>
-      </HBox>
+            <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+               <Label text="🧑" styleClass="stat-icon-blue"/>
+               <VBox spacing="4.0">
+                  <Label text="Patients" styleClass="stat-label"/>
+                  <Label fx:id="totalPatientsLabel" text="0" styleClass="stat-value"/>
+               </VBox>
+            </HBox>
 
-      <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
-         <Label text="📄" styleClass="stat-icon-green"/>
-         <VBox spacing="4.0">
-            <Label text="Dossiers Médicaux" styleClass="stat-label"/>
-            <Label fx:id="totalDossiersLabel" text="0" styleClass="stat-value"/>
-         </VBox>
-      </HBox>
-   </HBox>
+            <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+               <Label text="🩺" styleClass="stat-icon-orange"/>
+               <VBox spacing="4.0">
+                  <Label text="Médecins" styleClass="stat-label"/>
+                  <Label fx:id="totalMedecinsLabel" text="0" styleClass="stat-value"/>
+               </VBox>
+            </HBox>
 
-   <HBox spacing="20.0">
-      <VBox spacing="16.0" styleClass="panel-card" HBox.hgrow="ALWAYS">
-         <Label text="Distribution par Age" styleClass="section-title"/>
-         <BarChart fx:id="ageBarChart" legendVisible="false" prefHeight="330.0">
-            <xAxis>
-               <CategoryAxis/>
-            </xAxis>
-            <yAxis>
-               <NumberAxis/>
-            </yAxis>
-         </BarChart>
+            <HBox spacing="18.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+               <Label text="📄" styleClass="stat-icon-green"/>
+               <VBox spacing="4.0">
+                  <Label text="Dossiers Médicaux" styleClass="stat-label"/>
+                  <Label fx:id="totalDossiersLabel" text="0" styleClass="stat-value"/>
+               </VBox>
+            </HBox>
+         </HBox>
+
+         <HBox spacing="20.0">
+            <VBox spacing="16.0" styleClass="panel-card" HBox.hgrow="ALWAYS">
+               <Label text="Distribution par Age" styleClass="section-title"/>
+               <BarChart fx:id="ageBarChart" legendVisible="false" prefHeight="330.0">
+                  <xAxis>
+                     <CategoryAxis/>
+                  </xAxis>
+                  <yAxis>
+                     <NumberAxis/>
+                  </yAxis>
+               </BarChart>
+            </VBox>
+
+            <VBox spacing="16.0" styleClass="panel-card" prefWidth="380.0">
+               <Label text="Répartition par Rôle" styleClass="section-title"/>
+               <PieChart fx:id="rolePieChart" prefHeight="330.0"/>
+            </VBox>
+         </HBox>
+
+         <HBox spacing="18.0" alignment="CENTER_LEFT">
+            <TextField fx:id="searchField"
+                       promptText="Rechercher un utilisateur..."
+                       onKeyReleased="#handleSearchAndFilter"
+                       styleClass="search-field"
+                       prefWidth="560.0"/>
+
+            <ComboBox fx:id="roleFilterCombo"
+                      onAction="#handleSearchAndFilter"
+                      prefWidth="200.0"
+                      styleClass="role-filter"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="+   Nouvel Utilisateur"
+                    onAction="#handleNewUser"
+                    styleClass="new-user-button"/>
+         </HBox>
+
+         <HBox spacing="18.0">
+            <VBox spacing="12.0" styleClass="table-panel" HBox.hgrow="ALWAYS">
+               <TableView fx:id="usersTable" prefHeight="520.0">
+                  <columns>
+                     <TableColumn fx:id="nomColumn" text="Nom&#10;Complet" prefWidth="160.0"/>
+                     <TableColumn fx:id="emailColumn" text="Email" prefWidth="290.0"/>
+                     <TableColumn fx:id="telephoneColumn" text="Téléphone" prefWidth="150.0"/>
+                     <TableColumn fx:id="roleColumn" text="Rôle" prefWidth="120.0"/>
+                     <TableColumn fx:id="ageColumn" text="Age" prefWidth="90.0"/>
+                     <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="170.0"/>
+                  </columns>
+               </TableView>
+            </VBox>
+
+            <VBox fx:id="sidePanelContainer"
+                  spacing="12.0"
+                  prefWidth="430.0"
+                  maxWidth="430.0"
+                  visible="false"
+                  managed="false"
+                  styleClass="panel-card"/>
+         </HBox>
       </VBox>
-
-      <VBox spacing="16.0" styleClass="panel-card" prefWidth="380.0">
-         <Label text="Répartition par Rôle" styleClass="section-title"/>
-         <PieChart fx:id="rolePieChart" prefHeight="330.0"/>
-      </VBox>
-   </HBox>
-
-   <HBox spacing="18.0" alignment="CENTER_LEFT">
-      <TextField fx:id="searchField"
-                 promptText="Rechercher un utilisateur..."
-                 onKeyReleased="#handleSearchAndFilter"
-                 styleClass="search-field"
-                 prefWidth="560.0"/>
-
-      <ComboBox fx:id="roleFilterCombo"
-                onAction="#handleSearchAndFilter"
-                prefWidth="200.0"
-                styleClass="role-filter"/>
-
-      <Region HBox.hgrow="ALWAYS"/>
-
-      <Button text="+   Nouvel Utilisateur"
-              onAction="#handleNewUser"
-              styleClass="new-user-button"/>
-   </HBox>
-
-   <VBox spacing="12.0" styleClass="table-panel">
-      <TableView fx:id="usersTable" prefHeight="520.0">
-         <columns>
-            <TableColumn fx:id="idColumn" text="ID" prefWidth="70.0"/>
-            <TableColumn fx:id="nomColumn" text="Nom&#10;Complet" prefWidth="160.0"/>
-            <TableColumn fx:id="emailColumn" text="Email" prefWidth="290.0"/>
-            <TableColumn fx:id="telephoneColumn" text="Téléphone" prefWidth="150.0"/>
-            <TableColumn fx:id="roleColumn" text="Rôle" prefWidth="120.0"/>
-            <TableColumn fx:id="ageColumn" text="Age" prefWidth="90.0"/>
-            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="170.0"/>
-         </columns>
-      </TableView>
-   </VBox>
-
-</VBox>
+   </content>
+</ScrollPane>

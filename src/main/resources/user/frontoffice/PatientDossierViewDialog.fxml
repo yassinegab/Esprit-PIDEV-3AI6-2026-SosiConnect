@@ -125,6 +125,7 @@
                         onAction="#handleEditDossier"
                         styleClass="danger-button"/>
             </HBox>
+            <VBox fx:id="inlineFormContainer" spacing="12.0"/>
         </VBox>
     </content>
 </ScrollPane>
