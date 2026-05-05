@@ -13,6 +13,8 @@ import org.example.aideEtdon.model.Don;
 import org.example.aideEtdon.service.DonService;
 import org.example.utils.AiService;
 import org.example.utils.SessionManager;
+import org.example.utils.ToastNotification;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.util.*;
@@ -319,21 +321,17 @@ public class DonReactionController {
         try {
             donService.ajouter(reaction);
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("✅ Reponse envoyee");
-            alert.setHeaderText("🎉 Merci pour votre generosite !");
-            String confirmMsg = "💚 Votre proposition a ete enregistree avec succes !";
+            String confirmMsg = "🎉 Merci pour votre generosite ! Proposition enregistree.";
             if ("Sang".equalsIgnoreCase(demande.getType()) && donorBloodGroup.getValue() != null) {
                 List<String> compatibles = BLOOD_MATRIX.getOrDefault(
                         demande.getGroupeSanguin() != null ? demande.getGroupeSanguin().toUpperCase() : "", new ArrayList<>());
                 if (compatibles.contains(donorBloodGroup.getValue())) {
-                    confirmMsg += "\n\n🩸 Votre groupe sanguin " + donorBloodGroup.getValue() + " est compatible !";
+                    confirmMsg += " 🩸 Groupe " + donorBloodGroup.getValue() + " compatible !";
                 }
             }
-            alert.setContentText(confirmMsg);
-            alert.showAndWait();
-
+            // Navigate back first, then show toast (so it isn't cleared by view transition)
             handleRetour();
+            AideEtdonControllerClientController.getInstance().showToast(confirmMsg, ToastNotification.ToastType.SUCCESS, 4.0);
         } catch (Exception e) {
             e.printStackTrace();
             errorLabel.setText("❌ Erreur: " + e.getMessage());

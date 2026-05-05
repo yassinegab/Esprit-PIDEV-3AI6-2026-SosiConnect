@@ -1,14 +1,16 @@
 package org.example.aideEtdon.frontoffice.controller;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+
+import org.example.utils.ToastNotification;
 
 import java.io.IOException;
 
@@ -48,16 +50,46 @@ public class AideEtdonControllerClientController {
         setupButtonHoverAnimation(btnAides);
         setupButtonHoverAnimation(btnDons);
         setupButtonHoverAnimation(btnMesDemandes);
+
+        btnAides.setTooltip(new Tooltip("Accéder au service d'aide d'urgence"));
+        btnDons.setTooltip(new Tooltip("Parcourir et répondre aux demandes de dons"));
+        btnMesDemandes.setTooltip(new Tooltip("Voir mes demandes et statistiques"));
     }
 
     public static AideEtdonControllerClientController getInstance() {
         return instance;
     }
 
+    public StackPane getContentArea() {
+        return contentArea;
+    }
+
+    /**
+     * Shows a toast notification after a delay, so it survives view transitions.
+     * Call this AFTER handleRetour/navigation — the toast appears once the new view is loaded.
+     */
+    public void showToast(String message, ToastNotification.ToastType type, double durationSeconds) {
+        PauseTransition delay = new PauseTransition(Duration.millis(600));
+        delay.setOnFinished(e -> ToastNotification.show(contentArea, message, type, durationSeconds));
+        delay.play();
+    }
+
     public void setView(Node node) {
-        contentArea.getChildren().clear();
-        contentArea.getChildren().add(node);
-        applyAnimation(node);
+        // Crossfade: fade out old content, then swap and fade in new
+        if (!contentArea.getChildren().isEmpty()) {
+            Node oldNode = contentArea.getChildren().get(0);
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(150), oldNode);
+            fadeOut.setToValue(0);
+            fadeOut.setOnFinished(e -> {
+                contentArea.getChildren().clear();
+                contentArea.getChildren().add(node);
+                applyEntranceAnimation(node);
+            });
+            fadeOut.play();
+        } else {
+            contentArea.getChildren().add(node);
+            applyEntranceAnimation(node);
+        }
     }
 
     private void setupButtonHoverAnimation(Button btn) {
@@ -71,19 +103,30 @@ public class AideEtdonControllerClientController {
         });
     }
 
-    private void applyAnimation(Node pane) {
+    private void applyEntranceAnimation(Node pane) {
         pane.setOpacity(0);
+        pane.setTranslateY(18);
+        pane.setScaleX(0.97);
+        pane.setScaleY(0.97);
 
-        FadeTransition fade = new FadeTransition(Duration.millis(400), pane);
+        FadeTransition fade = new FadeTransition(Duration.millis(350), pane);
         fade.setFromValue(0);
         fade.setToValue(1);
+        fade.setInterpolator(Interpolator.EASE_OUT);
 
-        TranslateTransition translate = new TranslateTransition(Duration.millis(400), pane);
-        translate.setFromY(20);
-        translate.setToY(0);
+        TranslateTransition slide = new TranslateTransition(Duration.millis(350), pane);
+        slide.setFromY(18);
+        slide.setToY(0);
+        slide.setInterpolator(Interpolator.EASE_OUT);
 
-        fade.play();
-        translate.play();
+        ScaleTransition scale = new ScaleTransition(Duration.millis(350), pane);
+        scale.setFromX(0.97);
+        scale.setFromY(0.97);
+        scale.setToX(1.0);
+        scale.setToY(1.0);
+        scale.setInterpolator(Interpolator.EASE_OUT);
+
+        new ParallelTransition(fade, slide, scale).play();
     }
 
     @FXML

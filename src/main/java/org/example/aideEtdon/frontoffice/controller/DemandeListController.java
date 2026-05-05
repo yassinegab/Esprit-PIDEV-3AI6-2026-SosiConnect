@@ -17,6 +17,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import javafx.scene.control.Tooltip;
 import org.example.aideEtdon.model.Demande;
 import org.example.aideEtdon.model.Don;
 import org.example.aideEtdon.service.DemandeService;
@@ -55,6 +56,12 @@ public class DemandeListController {
 
         // Live search listener
         searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+
+        filterAll.setTooltip(new Tooltip("Afficher toutes les demandes"));
+        filterSang.setTooltip(new Tooltip("Filtrer par dons de sang"));
+        filterOrgane.setTooltip(new Tooltip("Filtrer par dons d'organes"));
+        filterAutre.setTooltip(new Tooltip("Filtrer par autres types de dons"));
+        filterUrgent.setTooltip(new Tooltip("Afficher uniquement les demandes urgentes"));
 
         javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(Duration.millis(400));
         pause.setOnFinished(e -> loadDemandes());

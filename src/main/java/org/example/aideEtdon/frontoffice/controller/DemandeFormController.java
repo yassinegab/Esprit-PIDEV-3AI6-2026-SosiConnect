@@ -10,6 +10,8 @@ import org.example.aideEtdon.model.Demande;
 import org.example.aideEtdon.service.DemandeService;
 import org.example.utils.AiService;
 import org.example.utils.SessionManager;
+import org.example.utils.ToastNotification;
+import javafx.scene.layout.StackPane;
 
 public class DemandeFormController {
 
@@ -149,14 +151,9 @@ public class DemandeFormController {
         try {
             demandeService.ajouter(d);
             
-            // Success, navigate back to home
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("✅ Succès");
-            alert.setHeaderText("🎉 Demande créée !");
-            alert.setContentText("📝 Votre demande a été créée avec succès ! Les donneurs pourront la voir et y répondre.");
-            alert.showAndWait();
-            
+            // Navigate back first, then show toast (so it isn't cleared by view transition)
             handleRetour();
+            AideEtdonControllerClientController.getInstance().showToast("🎉 Demande créée avec succès ! Les donneurs pourront la voir.", ToastNotification.ToastType.SUCCESS, 3.5);
         } catch (Exception e) {
             e.printStackTrace();
             showError("❌ Erreur base de données: " + e.getMessage());

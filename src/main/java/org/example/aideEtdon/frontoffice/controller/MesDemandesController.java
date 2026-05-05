@@ -1,8 +1,6 @@
 package org.example.aideEtdon.frontoffice.controller;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -14,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Tooltip;
 import javafx.util.Duration;
 import org.example.aideEtdon.model.Demande;
 import org.example.aideEtdon.model.Don;
@@ -105,14 +104,39 @@ public class MesDemandesController {
         card.setStyle("-fx-background-color: " + bg + "; -fx-background-radius: 12; -fx-border-color: " + color + "22; -fx-border-width: 1; -fx-border-radius: 12;");
         HBox.setHgrow(card, Priority.ALWAYS);
 
-        Label valueLabel = new Label(value);
+        Label valueLabel = new Label("0");
         valueLabel.setStyle("-fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: " + color + ";");
+
+        // Animated count-up
+        int targetValue = 0;
+        try { targetValue = Integer.parseInt(value); } catch (NumberFormatException ignored) {}
+        if (targetValue > 0) {
+            animateCounter(valueLabel, targetValue);
+        }
 
         Label nameLabel = new Label(label);
         nameLabel.setStyle("-fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: #64748b;");
 
+        Tooltip.install(card, new Tooltip(label + ": " + value));
+
         card.getChildren().addAll(valueLabel, nameLabel);
         return card;
+    }
+
+    private void animateCounter(Label label, int target) {
+        final int frames = 30;
+        final int durationMs = 600;
+        Timeline timeline = new Timeline();
+        for (int i = 0; i <= frames; i++) {
+            final int step = i;
+            KeyFrame kf = new KeyFrame(Duration.millis((double) durationMs / frames * step), e -> {
+                int current = (int) Math.round((double) target * step / frames);
+                label.setText(String.valueOf(current));
+            });
+            timeline.getKeyFrames().add(kf);
+        }
+        timeline.setDelay(Duration.millis(200));
+        timeline.play();
     }
 
     private void displayDemandes(List<Demande> demandes) {

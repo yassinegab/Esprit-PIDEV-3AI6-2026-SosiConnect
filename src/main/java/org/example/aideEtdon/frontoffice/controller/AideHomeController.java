@@ -16,6 +16,8 @@ import org.example.aideEtdon.model.ContactUrgence;
 import org.example.aideEtdon.model.MapLocation;
 import org.example.aideEtdon.service.ContactUrgenceService;
 import org.example.aideEtdon.service.MapLocationService;
+import org.example.utils.ToastNotification;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -56,6 +58,11 @@ public class AideHomeController {
         
         btnMed.setSelected(true); // Default selection
         setupButtonAnimation(btnEmergency);
+
+        btnMed.setTooltip(new javafx.scene.control.Tooltip("Demander des médicaments"));
+        btnDanger.setTooltip(new javafx.scene.control.Tooltip("Demander de l'aide pour les courses"));
+        btnOther.setTooltip(new javafx.scene.control.Tooltip("Demander une assistance générale"));
+        btnEmergency.setTooltip(new javafx.scene.control.Tooltip("Envoyer une alerte d'urgence à vos contacts"));
         
         if (mapFilterCombo != null) {
             mapFilterCombo.setItems(FXCollections.observableArrayList("Tous les services", "Pharmacies Uniquement", "Urgences & Hôpitaux"));
@@ -97,7 +104,7 @@ public class AideHomeController {
             mapContainer.getChildren().clear();
             mapContainer.setMinHeight(600);
             
-            WebView mapWebView = new WebView();
+            mapWebView = new WebView();
             mapWebView.setMinHeight(600);
             mapWebView.setPrefHeight(700);
             mapWebView.setMaxWidth(Double.MAX_VALUE);
@@ -136,6 +143,7 @@ public class AideHomeController {
                         <style>
                             body, html { margin: 0; padding: 0; width: 100%%; height: 100%%; overflow: hidden; background-color: #f1f5f9; }
                             #map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; border-radius: 12px; }
+                            
                         </style>
                     </head>
                     <body>
@@ -258,10 +266,7 @@ public class AideHomeController {
     private void handleEmergencyAction() {
         List<ContactUrgence> contacts = contactService.afficherToutes();
         if (contacts.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText("⚠️ Aucun contact configuré !");
-            alert.setContentText("📝 Veuillez d'abord configurer des contacts de confiance.");
-            alert.showAndWait();
+            AideEtdonControllerClientController.getInstance().showToast("⚠️ Aucun contact configuré ! Veuillez d'abord en ajouter.", ToastNotification.ToastType.WARNING, 4.0);
             return;
         }
 
@@ -280,53 +285,48 @@ public class AideHomeController {
         statusIndicator.setText("📡 RÉCUPÉRATION GPS...");
         statusIndicator.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #d97706;");
 
-        javafx.concurrent.Task<Void> emergencyTask = new javafx.concurrent.Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                // 1. Resolve geographic location
-                double lat = 36.8065;
-                double lng = 10.1815;
-                if (chkLocation.isSelected()) {
-                    System.out.println("Triangulating true geographical coordinates via IP...");
-                    org.example.aideEtdon.service.GeoLocationService.Coordinate coords = org.example.aideEtdon.service.GeoLocationService.fetchUserLocation();
-                    lat = coords.lat;
-                    lng = coords.lng;
-                }
+        // Automatic location detection in background thread (Windows Location API + IP fallback)
+        new Thread(() -> {
+            System.out.println("Resolving location automatically...");
+            org.example.aideEtdon.service.GeoLocationService.Coordinate coords =
+                    org.example.aideEtdon.service.GeoLocationService.fetchUserLocation();
+            System.out.println("Location resolved: " + coords.lat + ", " + coords.lng);
 
-                // 2. Persist Emergency safely
-                try {
-                    org.example.aideEtdon.service.AlerteService alertSvc = new org.example.aideEtdon.service.AlerteService();
-                    alertSvc.ajouter(new org.example.aideEtdon.model.Alerte(finalType, lat, lng));
-                    System.out.println("Alerte DB " + finalType + " enregistrée avec les coordonnées réelles.");
-                } catch (Exception ex) {
-                    System.err.println("Erreur sauvegarde alerte: " + ex.getMessage());
-                }
+            javafx.application.Platform.runLater(() ->
+                    dispatchEmergency(contacts, finalType, time, coords.lat, coords.lng));
+        }).start();
+    }
 
-                // 3. Automated SMTP Firing
-                System.out.println("====== DÉBUT DE LA DIFFUSION E-MAIL ======");
-                for (org.example.aideEtdon.model.ContactUrgence contact : contacts) {
-                    System.out.println("[Dispatch] Émission vers: " + contact.getEmail());
-                    org.example.aideEtdon.service.EmailService.sendEmergencyAlert(contact.getEmail(), finalType, time, lat, lng);
-                }
-                
-                final int cSize = contacts.size();
-                javafx.application.Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("✅ Demande d'aide transmise");
-                    alert.setHeaderText("📨 Alerte diffusée à " + cSize + " contact(s) !");
-                    alert.setContentText("📍 Votre demande de type [" + finalType + "] a été sécurisée avec vos coordonnées GPS exactes.");
-                    alert.show();
+    private void dispatchEmergency(List<ContactUrgence> contacts, String type, String time, double lat, double lng) {
+        statusIndicator.setText("📡 ENVOI EN COURS...");
 
-                    statusIndicator.setText("🚨 AIDE DEMANDÉE");
-                    statusIndicator.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #dc2626;");
-                });
-                return null;
+        new Thread(() -> {
+            // 1. Persist Emergency
+            try {
+                org.example.aideEtdon.service.AlerteService alertSvc = new org.example.aideEtdon.service.AlerteService();
+                alertSvc.ajouter(new org.example.aideEtdon.model.Alerte(type, lat, lng));
+                System.out.println("Alerte DB " + type + " enregistrée: " + lat + ", " + lng);
+            } catch (Exception ex) {
+                System.err.println("Erreur sauvegarde alerte: " + ex.getMessage());
             }
-        };
 
-        Thread asyncThread = new Thread(emergencyTask);
-        asyncThread.setDaemon(true);
-        asyncThread.start();
+            // 2. Send emails
+            System.out.println("====== DÉBUT DE LA DIFFUSION E-MAIL ======");
+            for (org.example.aideEtdon.model.ContactUrgence contact : contacts) {
+                System.out.println("[Dispatch] Émission vers: " + contact.getEmail());
+                org.example.aideEtdon.service.EmailService.sendEmergencyAlert(contact.getEmail(), type, time, lat, lng);
+            }
+
+            final int cSize = contacts.size();
+            javafx.application.Platform.runLater(() -> {
+                AideEtdonControllerClientController.getInstance().showToast(
+                    "📨 Alerte diffusée à " + cSize + " contact(s) ! Position GPS: " + String.format("%.4f, %.4f", lat, lng),
+                    ToastNotification.ToastType.SUCCESS, 5.0);
+
+                statusIndicator.setText("🚨 AIDE DEMANDÉE");
+                statusIndicator.setStyle("-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #dc2626;");
+            });
+        }).start();
     }
 
     private String getCurrentTime() {
