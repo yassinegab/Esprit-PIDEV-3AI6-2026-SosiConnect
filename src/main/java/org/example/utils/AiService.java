@@ -14,7 +14,7 @@ import java.time.Duration;
 
 public class AiService {
 
-    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().ignoreIfMalformed().load();
     private static final String API_KEY = dotenv.get("OPENROUTER_API_KEY");
     private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
 

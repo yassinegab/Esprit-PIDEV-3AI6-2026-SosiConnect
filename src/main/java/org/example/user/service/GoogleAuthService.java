@@ -23,9 +23,20 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class GoogleAuthService {
 
-    private static final Dotenv dotenv = Dotenv.load();
-    private static final String CLIENT_ID = dotenv.get("GOOGLE_CLIENT_ID");
-    private static final String CLIENT_SECRET = dotenv.get("GOOGLE_CLIENT_SECRET");
+    private static String CLIENT_ID;
+    private static String CLIENT_SECRET;
+
+    static {
+        try {
+            Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+            CLIENT_ID = dotenv.get("GOOGLE_CLIENT_ID") != null ? dotenv.get("GOOGLE_CLIENT_ID") : System.getenv("GOOGLE_CLIENT_ID");
+            CLIENT_SECRET = dotenv.get("GOOGLE_CLIENT_SECRET") != null ? dotenv.get("GOOGLE_CLIENT_SECRET") : System.getenv("GOOGLE_CLIENT_SECRET");
+        } catch (Exception e) {
+            System.err.println("Warning: Could not load .env file safely. " + e.getMessage());
+            CLIENT_ID = System.getenv("GOOGLE_CLIENT_ID");
+            CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET");
+        }
+    }
     
     private static final List<String> SCOPES = Arrays.asList(
             "https://www.googleapis.com/auth/userinfo.email",
