@@ -102,31 +102,32 @@ public class DossierMedicalController {
         HBox top = new HBox(8);
         top.setAlignment(Pos.CENTER_LEFT);
         Label idLbl = new Label("Dossier #" + d.getId());
-        idLbl.setStyle("-fx-font-size:13;-fx-font-weight:bold;-fx-text-fill:#6a1b9a;");
+        idLbl.setStyle("-fx-font-size:14px;-fx-font-weight:800;-fx-text-fill:#1e293b;");
         Region sp = new Region(); HBox.setHgrow(sp, Priority.ALWAYS);
         Label dateLbl = new Label(d.getDateCreationFormatee());
-        dateLbl.setStyle("-fx-font-size:10;-fx-text-fill:#aaa;");
+        dateLbl.setStyle("-fx-font-size:11px;-fx-text-fill:#94a3b8;");
         top.getChildren().addAll(idLbl, sp, dateLbl);
 
         // Ligne 2 : maladies (apercu)
         String maladie = d.getMaladiesChroniques() != null ? d.getMaladiesChroniques() : "Aucune maladie renseignee";
         Label malLbl = new Label(maladie.length() > 55 ? maladie.substring(0, 55) + "..." : maladie);
-        malLbl.setStyle("-fx-font-size:11;-fx-text-fill:#555;");
+        malLbl.setStyle("-fx-font-size:12px;-fx-text-fill:#475569;");
         malLbl.setWrapText(true);
 
         // Ligne 3 : badge activite + boutons
         HBox bot = new HBox(8);
         bot.setAlignment(Pos.CENTER_LEFT);
         Label actBadge = new Label(nvl(d.getNiveauActivite(), "—"));
-        actBadge.setStyle("-fx-background-color:#ede7f6;-fx-text-fill:#6a1b9a;" +
-                "-fx-padding:2 10;-fx-background-radius:12;-fx-font-size:10;");
+        actBadge.getStyleClass().add("badge-activite");
         Region sp2 = new Region(); HBox.setHgrow(sp2, Priority.ALWAYS);
 
-        Button edit = smallBtn("Modifier", "#ede7f6", "#6a1b9a");
+        Button edit = smallBtn("Modifier", "#f1f5f9", "#1e293b");
         edit.setOnAction(e -> ouvrirFormulaire(d));
+        edit.setStyle(edit.getStyle() + "-fx-font-weight:bold;");
 
-        Button del = smallBtn("Supprimer", "#fce4ec", "#c62828");
+        Button del = smallBtn("Supprimer", "#fef2f2", "#dc3545");
         del.setOnAction(e -> supprimerDossier(d));
+        del.setStyle(del.getStyle() + "-fx-font-weight:bold;");
 
         bot.getChildren().addAll(actBadge, sp2, edit, del);
         card.getChildren().addAll(top, malLbl, bot);
@@ -141,10 +142,10 @@ public class DossierMedicalController {
 
     private String styleCard(boolean hover) {
         return "-fx-background-color:white;" +
-                "-fx-border-color:" + (hover ? "#9c27b0" : "#e0d6f5") + ";" +
-                "-fx-border-radius:10;-fx-background-radius:10;" +
-                "-fx-padding:12;-fx-effect:dropshadow(gaussian," +
-                (hover ? "rgba(0,0,0,0.10)" : "rgba(0,0,0,0.04)") + ",6,0,0,2);";
+                "-fx-border-color:" + (hover ? "#dc3545" : "#e2e8f0") + ";" +
+                "-fx-border-radius:12;-fx-background-radius:12;" +
+                "-fx-padding:15;-fx-effect:dropshadow(three-pass-box," +
+                (hover ? "rgba(220,53,69,0.15)" : "rgba(0,0,0,0.02)") + ",10,0,0,4);";
     }
 
     private Button smallBtn(String txt, String bg, String fg) {
@@ -166,41 +167,35 @@ public class DossierMedicalController {
 
         // Carte score/dates
         HBox metaBox = new HBox(16);
-        metaBox.setStyle("-fx-background-color:white;-fx-border-color:#e0d6f5;" +
-                "-fx-border-radius:10;-fx-background-radius:10;-fx-padding:14;");
+        metaBox.getStyleClass().add("detail-header-card");
 
-        VBox dateCreBox = metaVBox("Date de creation", d.getDateCreationFormatee(), "#6a1b9a");
-        VBox dateMajBox = metaVBox("Derniere modification", d.getDerniereMiseAJourFormatee(), "#888");
-        VBox actBox     = metaVBox("Niveau d'activite", nvl(d.getNiveauActivite(), "Non renseigne"), "#388e3c");
+        VBox dateCreBox = metaVBox("Date de création", d.getDateCreationFormatee(), "#dc3545");
+        VBox dateMajBox = metaVBox("Dernière modification", d.getDerniereMiseAJourFormatee(), "#64748b");
+        VBox actBox     = metaVBox("Niveau d'activité", nvl(d.getNiveauActivite(), "Non renseigné"), "#10b981");
 
         metaBox.getChildren().addAll(dateCreBox, dateMajBox, actBox);
         detailPanel.getChildren().add(metaBox);
 
         // Sections medicales
-        addSection(detailPanel, "Maladies chroniques",    d.getMaladiesChroniques(),    "#c62828", "#ffebee");
-        addSection(detailPanel, "Antecedents medicaux",   d.getAntecedentsMedicaux(),   "#6a1b9a", "#f3e5f5");
-        addSection(detailPanel, "Allergies",               d.getAllergies(),              "#e65100", "#fff3e0");
-        addSection(detailPanel, "Traitements en cours",   d.getTraitementsEnCours(),    "#1565c0", "#e3f2fd");
-        addSection(detailPanel, "Diagnostics",             d.getDiagnostics(),           "#2e7d32", "#e8f5e9");
-        addSection(detailPanel, "Notes du medecin",        d.getNotesMedecin(),          "#37474f", "#eceff1");
-        addSection(detailPanel, "Objectif sante",          d.getObjectifSante(),         "#6a1b9a", "#f3e5f5");
+        addSection(detailPanel, "Maladies chroniques",    d.getMaladiesChroniques(),    "#dc3545", "#fef2f2");
+        addSection(detailPanel, "Antécédents médicaux",   d.getAntecedentsMedicaux(),   "#64748b", "#f8f9fb");
+        addSection(detailPanel, "Allergies",               d.getAllergies(),              "#ea580c", "#fff7ed");
+        addSection(detailPanel, "Traitements en cours",   d.getTraitementsEnCours(),    "#3b82f6", "#eff6ff");
+        addSection(detailPanel, "Diagnostics",             d.getDiagnostics(),           "#10b981", "#f0fdf4");
+        addSection(detailPanel, "Notes du médecin",        d.getNotesMedecin(),          "#475569", "#f1f5f9");
+        addSection(detailPanel, "Objectif santé",          d.getObjectifSante(),         "#dc3545", "#fef2f2");
 
         // Boutons IA en bas du detail
         HBox iaBtns = new HBox(10);
-        iaBtns.setStyle("-fx-background-color:white;-fx-border-color:#e0d6f5;" +
-                "-fx-border-radius:10;-fx-background-radius:10;-fx-padding:14;");
+        iaBtns.getStyleClass().add("detail-header-card");
         iaBtns.setAlignment(Pos.CENTER);
 
         Button g = new Button("Analyser avec Groq LLaMA");
-        g.setStyle("-fx-background-color:#1a237e;-fx-text-fill:white;" +
-                "-fx-background-radius:8;-fx-font-size:12;-fx-font-weight:bold;" +
-                "-fx-padding:10 20;-fx-cursor:hand;-fx-border-color:transparent;");
+        g.getStyleClass().add("btn-ia-groq");
         g.setOnAction(e -> ouvrirAnalyseGroq());
 
         Button h = new Button("Analyser avec HuggingFace");
-        h.setStyle("-fx-background-color:#e65100;-fx-text-fill:white;" +
-                "-fx-background-radius:8;-fx-font-size:12;-fx-font-weight:bold;" +
-                "-fx-padding:10 20;-fx-cursor:hand;-fx-border-color:transparent;");
+        h.getStyleClass().add("btn-ia-hf");
         h.setOnAction(e -> ouvrirAnalyseHF());
 
         iaBtns.getChildren().addAll(g, h);
@@ -213,18 +208,16 @@ public class DossierMedicalController {
                 ? contenu : "Non renseigne";
 
         VBox box = new VBox(8);
-        box.setStyle("-fx-background-color:" + bgColor + ";" +
-                "-fx-border-color:" + color + ";" +
-                "-fx-border-width:0 0 0 4;" +
-                "-fx-border-radius:0 8 8 0;-fx-background-radius:0 8 8 0;" +
-                "-fx-padding:12 14;");
+        box.getStyleClass().add("medical-section");
+        box.setStyle("-fx-border-color:" + color + "; -fx-background-color:" + bgColor + ";");
 
         Label titre_lbl = new Label(titre.toUpperCase());
-        titre_lbl.setStyle("-fx-font-size:10;-fx-font-weight:bold;-fx-text-fill:" + color + ";");
+        titre_lbl.getStyleClass().add("section-label");
+        titre_lbl.setStyle("-fx-text-fill:" + color + ";");
 
         Label contenu_lbl = new Label(texte);
         contenu_lbl.setWrapText(true);
-        contenu_lbl.setStyle("-fx-font-size:12;-fx-text-fill:#333;-fx-line-spacing:2;");
+        contenu_lbl.getStyleClass().add("section-content");
 
         box.getChildren().addAll(titre_lbl, contenu_lbl);
         parent.getChildren().add(box);

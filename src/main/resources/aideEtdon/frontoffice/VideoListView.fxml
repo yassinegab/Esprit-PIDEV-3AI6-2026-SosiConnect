@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.aideEtdon.frontoffice.controller.VideoListController"
+      alignment="TOP_CENTER" spacing="30.0"
+      stylesheets="@don_styles.css"
+      styleClass="main-bg">
+
+    <!-- Page Header Banner -->
+    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="page-header-banner">
+        <VBox styleClass="page-header-icon, page-header-icon-red" alignment="CENTER">
+            <Label text=">" style="-fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: #dc2626;" />
+        </VBox>
+        <VBox spacing="4">
+            <Label text="Videos Sensibilisation" styleClass="page-title" />
+            <Label text="Contenu educatif sur le don et la solidarite" styleClass="page-subtitle-muted" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="Retour" onAction="#handleRetour" styleClass="back-button" />
+    </HBox>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-padding: 10;" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="videosContainer" hgap="40.0" vgap="40.0" alignment="CENTER" style="-fx-padding: 20;" />
+    </ScrollPane>
+</VBox>

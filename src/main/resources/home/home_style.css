@@ -1,31 +1,30 @@
 /* ═══════════════════════════════════════════════════════
-   HOME FRONT-OFFICE — Premium Design System
-   Brand: Sosi  ·  Primary #dc3545  ·  Font: Segoe UI
+   SOSI — HOME FRONT-OFFICE · Design System v2
+   Palette: #dc3545 Rouge · Blanc · Gris clair
    ═══════════════════════════════════════════════════════ */
 
-/* ROOT */
+/* ── ROOT ─────────────────────────────────────────────── */
 .home-root {
     -fx-font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    -fx-background-color: #f4f7fa;
+    -fx-background-color: #f8f9fb;
 }
 
-/* SIDEBAR LAYOUT (VS Code Style) */
+/* ── SIDEBAR ──────────────────────────────────────────── */
 .sidebar {
-    -fx-background-color: #f3f3f3; /* Light Grey precisely like VS Code */
-    -fx-pref-width: 60;
-    -fx-min-width: 60;
-    -fx-max-width: 60;
-    -fx-border-color: #e5e5e5;
+    -fx-background-color: #f1f5f9; /* Gris métallique clair */
+    -fx-border-color: #e2e8f0;
     -fx-border-width: 0 1 0 0;
+    -fx-pref-width: 68;
+    -fx-min-width: 68;
+    -fx-max-width: 68;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.30), 15, 0, 0, 0);
 }
 
 .sidebar-logo-container {
-    -fx-padding: 30 0;
+    -fx-padding: 18 0;
 }
 
-/* ──────────────────────────────────────────────────────
-   LOGO
-   ────────────────────────────────────────────────────── */
+/* ── LOGO ─────────────────────────────────────────────── */
 .logo-badge {
     -fx-background-color: linear-gradient(to bottom right, #dc3545, #b91c1c);
     -fx-background-radius: 10;
@@ -54,37 +53,34 @@
     -fx-text-fill: #dc3545;
 }
 
-/* ──────────────────────────────────────────────────────
-   NAVIGATION BUTTONS (SIDEBAR - VS Code Style)
-   ────────────────────────────────────────────────────── */
+/* ── NAVIGATION BUTTONS ───────────────────────────────── */
 .nav-btn {
     -fx-background-color: transparent;
     -fx-padding: 12;
     -fx-cursor: hand;
     -fx-border-color: transparent;
-    -fx-opacity: 0.6;
+    -fx-background-radius: 10;
+    -fx-min-width: 44;
+    -fx-min-height: 44;
+    -fx-pref-width: 44;
+    -fx-pref-height: 44;
 }
 
 .nav-btn:hover {
     -fx-background-color: rgba(0,0,0,0.05);
-    -fx-opacity: 0.9;
 }
 
 .active-nav {
-    -fx-background-color: #e5e5e5; /* Active background block */
-    -fx-opacity: 1.0;
-    -fx-border-color: #3b82f6; /* Subtle left indicator */
-    -fx-border-width: 0 0 0 2;
+    -fx-background-color: #dc3545; /* Rouge plein */
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.50), 10, 0, 0, 0);
+    -fx-background-radius: 12;
 }
 
 .nav-btn ImageView {
-    /* Thin icons look better without heavy shadows */
-    -fx-effect: null; 
+    -fx-effect: null;
 }
 
-/* ──────────────────────────────────────────────────────
-   SEARCH PILL
-   ────────────────────────────────────────────────────── */
+/* ── SEARCH PILL ──────────────────────────────────────── */
 .search-pill {
     -fx-background-color: #f1f5f9;
     -fx-background-radius: 22;
@@ -114,12 +110,10 @@
     -fx-padding: 0;
 }
 
-/* ──────────────────────────────────────────────────────
-   ICON BUTTON (bell, etc.)
-   ────────────────────────────────────────────────────── */
+/* ── ICON BUTTON ──────────────────────────────────────── */
 .icon-btn {
-    -fx-background-color: #f1f5f9;
-    -fx-text-fill: #475569;
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-text-fill: rgba(255,255,255,0.70);
     -fx-font-size: 16px;
     -fx-padding: 10;
     -fx-background-radius: 50;
@@ -130,51 +124,56 @@
 }
 
 .icon-btn:hover {
-    -fx-background-color: #fee2e2;
-    -fx-text-fill: #dc3545;
+    -fx-background-color: rgba(220,53,69,0.20);
+    -fx-text-fill: #fca5a5;
 }
 
-/* ──────────────────────────────────────────────────────
-   VERTICAL DIVIDER
-   ────────────────────────────────────────────────────── */
+/* ── VERTICAL DIVIDER ─────────────────────────────────── */
 .v-divider {
-    -fx-background-color: #e2e8f0;
+    -fx-background-color: rgba(255,255,255,0.12);
     -fx-min-width: 1;
     -fx-pref-width: 1;
     -fx-min-height: 30;
     -fx-pref-height: 30;
 }
 
-/* ──────────────────────────────────────────────────────
-   USER PROFILE CHIP & BOTTOM ACCENT (VS Code Style)
-   ────────────────────────────────────────────────────── */
+/* ── PROFILE CHIP ─────────────────────────────────────── */
 .profile-chip {
     -fx-background-color: transparent;
     -fx-padding: 10 0;
     -fx-cursor: hand;
-}
-
-.sidebar-bottom-accent {
-    -fx-background-color: #007acc; /* VS Code Blue Accent */
-    -fx-pref-height: 40;
-    -fx-min-width: 60;
-    -fx-alignment: center;
-}
-
-.logout-btn {
-    -fx-background-color: transparent;
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 16px;
-    -fx-cursor: hand;
-    -fx-border-color: transparent;
-    -fx-padding: 10;
+    -fx-background-radius: 10;
 }
 
 .profile-chip:hover {
-    -fx-background-color: #fff1f2;
-    -fx-border-color: #fca5a5;
+    -fx-background-color: rgba(220,53,69,0.12);
 }
 
+/* ── SIDEBAR BOTTOM ───────────────────────────────────── */
+.sidebar-bottom-accent {
+    -fx-background-color: #dc3545;
+    -fx-pref-height: 44;
+    -fx-min-width: 64;
+    -fx-alignment: center;
+}
+
+/* ── LOGOUT BUTTON ────────────────────────────────────── */
+.logout-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #475569;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-padding: 8;
+}
+
+.logout-btn:hover {
+    -fx-text-fill: white;
+    -fx-background-color: rgba(255,255,255,0.15);
+    -fx-background-radius: 8;
+}
+
+/* ── AVATAR ───────────────────────────────────────────── */
 .avatar-circle {
     -fx-background-color: linear-gradient(to bottom right, #dc3545, #b91c1c);
     -fx-background-radius: 18;
@@ -182,7 +181,7 @@
     -fx-min-height: 36;
     -fx-pref-width: 36;
     -fx-pref-height: 36;
-    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.30), 6, 0, 0, 2);
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.35), 6, 0, 0, 2);
 }
 
 .avatar-letters {
@@ -194,7 +193,7 @@
 .profile-name {
     -fx-font-weight: 700;
     -fx-font-size: 13px;
-    -fx-text-fill: #0f172a;
+    -fx-text-fill: #1e293b;
 }
 
 .profile-role {
@@ -203,25 +202,34 @@
     -fx-text-fill: #94a3b8;
 }
 
-/* ──────────────────────────────────────────────────────
-   LOGOUT BUTTON
-   ────────────────────────────────────────────────────── */
-.logout-btn {
-    -fx-background-color: transparent;
-    -fx-text-fill: #94a3b8;
-    -fx-font-size: 16px;
-    -fx-cursor: hand;
-    -fx-border-color: transparent;
-    -fx-padding: 4;
+/* ── NAV GLYPH ────────────────────────────────────────── */
+.icon-nav-glyph {
+    -fx-font-size: 20px;
+    -fx-text-fill: #475569;
 }
 
-.logout-btn:hover {
-    -fx-text-fill: #ef4444;
+.nav-icon-svg {
+    -fx-fill: #475569;
 }
 
-/* ──────────────────────────────────────────────────────
-   HERO / CONTENT AREA
-   ────────────────────────────────────────────────────── */
+.nav-btn:hover .nav-icon-svg {
+    -fx-fill: white;
+}
+
+.active-nav .nav-icon-svg {
+    -fx-fill: white;
+}
+
+.logout-icon-svg {
+    -fx-fill: white;
+}
+
+.logout-btn:hover .logout-icon-svg {
+    -fx-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.4), 5, 0, 0, 0);
+}
+
+/* ── HERO / CONTENT ───────────────────────────────────── */
 .hero-title {
     -fx-font-size: 40px;
     -fx-font-weight: 900;
@@ -237,8 +245,8 @@
 
 .premium-card {
     -fx-background-color: white;
-    -fx-background-radius: 28;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 40, 0, 0, 20);
+    -fx-background-radius: 24;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 30, 0, 0, 14);
 }
 
 .hero-button {
@@ -247,13 +255,189 @@
     -fx-font-weight: 700;
     -fx-font-size: 15px;
     -fx-padding: 13 32;
-    -fx-background-radius: 18;
-    -fx-translate-y: 20;
+    -fx-background-radius: 16;
     -fx-cursor: hand;
     -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.40), 14, 0, 0, 7);
 }
 
 .hero-button:hover {
-    -fx-translate-y: 18;
+    -fx-background-color: linear-gradient(to right, #b91c1c, #991b1b);
     -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.55), 18, 0, 0, 9);
+    -fx-translate-y: -2;
 }
+
+/* ── DASHBOARD CARDS ──────────────────────────────────── */
+.dashboard-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 16, 0, 0, 8);
+    -fx-cursor: hand;
+    -fx-min-width: 280;
+    -fx-pref-width: 280;
+    -fx-min-height: 220;
+    -fx-pref-height: 220;
+    -fx-border-color: #f1f5f9;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+}
+
+.dashboard-card:hover {
+    -fx-translate-y: -5;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.12), 24, 0, 0, 12);
+    -fx-border-color: #fecaca;
+}
+
+.dashboard-icon-container {
+    -fx-background-radius: 16;
+    -fx-min-width: 70;
+    -fx-min-height: 70;
+    -fx-pref-width: 70;
+    -fx-pref-height: 70;
+}
+
+.icon-wellbeing {
+    -fx-background-color: linear-gradient(to bottom right, #fca5a5, #dc3545);
+}
+
+.icon-medical {
+    -fx-background-color: linear-gradient(to bottom right, #f87171, #b91c1c);
+}
+
+.icon-cycle {
+    -fx-background-color: linear-gradient(to bottom right, #fecaca, #ef4444);
+}
+
+.icon-don {
+    -fx-background-color: linear-gradient(to bottom right, #fee2e2, #dc3545);
+}
+
+.dashboard-card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1e293b;
+}
+
+.dashboard-card-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+    -fx-line-spacing: 1.2;
+}
+
+/* ── SIDEBAR SEPARATOR ────────────────────────────────── */
+.sidebar-separator {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-pref-height: 1;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+    -fx-min-width: 40;
+    -fx-pref-width: 40;
+}
+
+/* ── NOTIFICATION BADGE ───────────────────────────────── */
+.notif-badge {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 1 4;
+    -fx-background-radius: 8;
+}
+/* ── PRO DASHBOARD ────────────────────────────────────── */
+.dashboard-pro-container {
+    -fx-padding: 30 40;
+}
+
+.stat-card-pro {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 20;
+    -fx-min-width: 220;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 5);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+}
+
+.stat-icon-bg {
+    -fx-background-radius: 12;
+    -fx-min-width: 44;
+    -fx-min-height: 44;
+    -fx-alignment: center;
+}
+
+.stat-value-pro {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #0f172a;
+}
+
+.stat-label-pro {
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #94a3b8;
+    -fx-text-transform: uppercase;
+}
+
+.chart-card-pro {
+    -fx-background-color: white;
+    -fx-background-radius: 24;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 20, 0, 0, 10);
+}
+
+.activity-list {
+    -fx-background-color: white;
+    -fx-background-radius: 24;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 20, 0, 0, 10);
+}
+
+.activity-item-pro {
+    -fx-padding: 12 0;
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 0 0 1 0;
+}
+
+.activity-icon-pro {
+    -fx-background-radius: 50;
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+    -fx-alignment: center;
+}
+
+.activity-title-pro {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1e293b;
+}
+
+.activity-time-pro {
+    -fx-font-size: 11px;
+    -fx-text-fill: #94a3b8;
+}
+
+.quick-action-btn {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 16;
+    -fx-padding: 15 20;
+    -fx-cursor: hand;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 1;
+}
+
+.quick-action-btn:hover {
+    -fx-background-color: white;
+    -fx-border-color: #dc3545;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.1), 10, 0, 0, 5);
+}
+
+/* ── CHARTS MINI ──────────────────────────────────────── */
+.mini-chart {
+    -fx-background-color: transparent;
+    -fx-legend-visible: false;
+}
+.mini-chart .chart-plot-background { -fx-background-color: transparent; }
+.mini-chart .chart-vertical-grid-lines,
+.mini-chart .chart-horizontal-grid-lines { -fx-stroke: transparent; }
+.mini-chart .axis { -fx-tick-label-fill: transparent; -fx-tick-mark-visible: false; -fx-axis-side: left; }
+.mini-chart .default-color0.chart-series-line { -fx-stroke: #dc3545; -fx-stroke-width: 3px; }
+.mini-chart .default-color0.chart-line-symbol { -fx-background-color: #dc3545, white; -fx-background-radius: 5; -fx-padding: 3px; }

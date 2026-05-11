@@ -21,7 +21,6 @@ public class HomeController {
 
     @FXML private Label avatarLabel;
     @FXML private StackPane contentArea;
-    @FXML private VBox dashboardView;
     @FXML private Button btnWellbeing;
     @FXML private Button btnServicesSociaux;
     @FXML private Button btnJournal;
@@ -34,6 +33,7 @@ public class HomeController {
     public void initialize() {
         instance = this;
         navButtons = Arrays.asList(btnWellbeing, btnServicesSociaux, btnJournal, btnAideEtdon, btnCycle);
+        showDashboard(); // Load the dashboard automatically on init
     }
 
     public static void navigateTo(Parent view) {
@@ -70,8 +70,26 @@ public class HomeController {
 
     @FXML
     private void showDashboard() {
-        contentArea.getChildren().setAll(dashboardView);
-        updateActiveButton(null);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/home/ClientDashboard.fxml"));
+            Parent dashboard = loader.load();
+            
+            // Set the home controller reference so it can navigate
+            Object controller = loader.getController();
+            if (controller instanceof ClientDashboardController) {
+                ((ClientDashboardController) controller).setHomeController(this);
+            }
+            
+            contentArea.getChildren().setAll(dashboard);
+            updateActiveButton(null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void showProfile() {
+        loadView("/user/ProfileView.fxml", null);
     }
 
     @FXML

@@ -25,6 +25,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
+import org.example.cycle.service.GoogleCalendarService;
+import org.example.utils.AlertHelper;
 import org.json.JSONObject;
 
 public class DisplayCycleController {
@@ -202,6 +204,46 @@ public class DisplayCycleController {
                 org.example.utils.AlertHelper.showErrorAlert("Erreur Export", "Échec de l'export: " + e.getMessage());
             }
         }
+    }
+
+    @FXML
+    private void syncWithGoogleCalendar() {
+        org.example.user.model.User currentUser = org.example.utils.SessionManager.getCurrentUser();
+        if (currentUser == null) {
+            AlertHelper.showErrorAlert("Erreur", "Veuillez vous connecter pour synchroniser avec Google.");
+            return;
+        }
+
+        List<Cycle> cycles = cycleService.getCyclesByUserId(currentUser.getId());
+        if (cycles.isEmpty()) {
+            AlertHelper.showWarningAlert("Données insuffisantes", "Veuillez ajouter au moins un cycle pour générer des prédictions à synchroniser.");
+            return;
+        }
+
+        // Re-calcul des prédictions pour être sûr d'avoir les données à jour
+        LocalDate nextPeriod = analysisService.predictNextPeriod(cycles);
+        LocalDate ovulation = nextPeriod.minusDays(14);
+        LocalDate fertileStart = ovulation.minusDays(5);
+        LocalDate fertileEnd = ovulation.plusDays(1);
+
+        // Animation de chargement / Feedback
+        AlertHelper.showSuccessAlert("Authentification Google", "Veuillez autoriser l'application dans votre navigateur pour continuer la synchronisation.");
+
+        new Thread(() -> {
+            try {
+                GoogleCalendarService googleService = new GoogleCalendarService();
+                googleService.syncCycleEvents(nextPeriod, ovulation, fertileStart, fertileEnd);
+                
+                Platform.runLater(() -> {
+                    AlertHelper.showSuccessAlert("Synchronisation Réussie", "Vos prédictions de cycle ont été ajoutées à votre Google Calendar dans le calendrier 'SOSI — Suivi de Cycle'.");
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    AlertHelper.showErrorAlert("Erreur Synchronisation", "Une erreur est survenue lors de la synchronisation : " + e.getMessage());
+                });
+            }
+        }).start();
     }
 
     // --- CHATBOT LOGIC ---

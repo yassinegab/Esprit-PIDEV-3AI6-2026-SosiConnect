@@ -191,4 +191,56 @@ public class ServiceUser implements IService<User> {
         }
         return false;
     }
+
+    /**
+     * Gère la connexion ou l'inscription via Google OAuth.
+     * Si l'utilisateur existe, retourne ses informations.
+     * Sinon, crée un nouveau compte avec les informations de base de Google.
+     */
+    public User loginOrRegisterWithGoogle(String email, String nom, String prenom) throws SQLException {
+        // 1. Check if user already exists
+        String query = "SELECT * FROM user WHERE email = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                // Utilisateur existant, on le retourne directement (Connexion réussie)
+                return extractUserFromResultSet(rs);
+            }
+        }
+
+        // 2. User doesn't exist, register them
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setNom(nom != null ? nom : "GoogleUser");
+        newUser.setPrenom(prenom != null ? prenom : "");
+        
+        // Mot de passe aléatoire très fort (inutilisable par l'utilisateur, ce qui force l'usage de Google ou du mot de passe oublié)
+        String randomPassword = java.util.UUID.randomUUID().toString();
+        newUser.setPassword(BCrypt.hashpw(randomPassword, BCrypt.gensalt()));
+        
+        // Valeurs par défaut
+        newUser.setRoles("[\"ROLE_PATIENT\"]");
+        newUser.setUser_role("ROLE_PATIENT");
+        newUser.setTelephone("");
+        newUser.setAge(18);
+        newUser.setSexe("Homme");
+        newUser.setTaille(0);
+        newUser.setPoids(0);
+        newUser.setHandicap(false);
+        newUser.setSpecialite("");
+
+        // On l'ajoute en base de données
+        this.ajouter(newUser);
+
+        // On le récupère pour avoir son ID auto-généré
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return extractUserFromResultSet(rs);
+            }
+        }
+        return null;
+    }
 }

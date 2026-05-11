@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.aideEtdon.frontoffice.controller.DemandeListController"
+      alignment="TOP_CENTER" spacing="14"
+      stylesheets="@don_styles.css"
+      styleClass="main-bg">
+
+    <!-- Page Header Banner -->
+    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="page-header-banner">
+        <VBox styleClass="page-header-icon, page-header-icon-green" alignment="CENTER">
+            <Label text="📋" style="-fx-font-size: 24px;" />
+        </VBox>
+        <VBox spacing="4">
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Demandes d'Aide" styleClass="page-title" />
+                <Label text="🆘" style="-fx-font-size: 20px;" />
+            </HBox>
+            <Label text="Parcourez les demandes actives et proposez votre aide" styleClass="page-subtitle-muted" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="⬅ Retour" onAction="#handleRetour" styleClass="back-button" />
+    </HBox>
+
+    <!-- Search & Filter Bar -->
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 20;">
+        <TextField fx:id="searchField" promptText="🔍 Rechercher une demande..." prefWidth="280"
+                   style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #cbd5e1; -fx-border-radius: 20; -fx-border-width: 1; -fx-padding: 7 14; -fx-font-size: 12px;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <HBox fx:id="filterBar" spacing="6" alignment="CENTER_LEFT">
+            <Button fx:id="filterAll" text="🌐 Toutes" onAction="#filterAll"
+                    style="-fx-background-color: #0ea5e9; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: 700; -fx-padding: 5 14; -fx-background-radius: 16; -fx-cursor: hand;" />
+            <Button fx:id="filterSang" text="🩸 Sang" onAction="#filterSang"
+                    style="-fx-background-color: #f1f5f9; -fx-text-fill: #475569; -fx-font-size: 11px; -fx-font-weight: 600; -fx-padding: 5 14; -fx-background-radius: 16; -fx-border-color: #e2e8f0; -fx-border-width: 1; -fx-border-radius: 16; -fx-cursor: hand;" />
+            <Button fx:id="filterOrgane" text="🫁 Organe" onAction="#filterOrgane"
+                    style="-fx-background-color: #f1f5f9; -fx-text-fill: #475569; -fx-font-size: 11px; -fx-font-weight: 600; -fx-padding: 5 14; -fx-background-radius: 16; -fx-border-color: #e2e8f0; -fx-border-width: 1; -fx-border-radius: 16; -fx-cursor: hand;" />
+            <Button fx:id="filterAutre" text="📦 Autre" onAction="#filterAutre"
+                    style="-fx-background-color: #f1f5f9; -fx-text-fill: #475569; -fx-font-size: 11px; -fx-font-weight: 600; -fx-padding: 5 14; -fx-background-radius: 16; -fx-border-color: #e2e8f0; -fx-border-width: 1; -fx-border-radius: 16; -fx-cursor: hand;" />
+            <Button fx:id="filterUrgent" text="🚨 Urgent" onAction="#filterUrgent"
+                    style="-fx-background-color: #f1f5f9; -fx-text-fill: #dc2626; -fx-font-size: 11px; -fx-font-weight: 600; -fx-padding: 5 14; -fx-background-radius: 16; -fx-border-color: #fecaca; -fx-border-width: 1; -fx-border-radius: 16; -fx-cursor: hand;" />
+        </HBox>
+        <Label fx:id="resultCountLabel" text="" style="-fx-font-size: 11px; -fx-text-fill: #94a3b8; -fx-font-weight: 600;" />
+    </HBox>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-width: 0; -fx-padding: 0;" VBox.vgrow="ALWAYS">
+        <FlowPane fx:id="cardsContainer" hgap="24" vgap="24" alignment="CENTER" style="-fx-padding: 10 20 20 20;" />
+    </ScrollPane>
+</VBox>

@@ -85,4 +85,32 @@ public class RendezVousService {
         }
         return map;
     }
+
+    // ✅ Récupérer le prochain rendez-vous pour un utilisateur
+    public RendezVous getProchainByUserId(int userId) throws SQLException {
+        String sql = "SELECT r.*, h.nom AS hopital_nom " +
+                "FROM rendez_vous r " +
+                "LEFT JOIN hopital h ON r.hopital_id = h.id " +
+                "WHERE r.patient_id = ? AND r.date_rendez_vous >= CURRENT_DATE " +
+                "ORDER BY r.date_rendez_vous ASC LIMIT 1";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    RendezVous rdv = new RendezVous(
+                            rs.getInt("id"),
+                            rs.getInt("patient_id"),
+                            rs.getInt("hopital_id"),
+                            rs.getString("type_consultation"),
+                            rs.getString("statut"),
+                            rs.getDate("date_rendez_vous"),
+                            rs.getString("notes")
+                    );
+                    rdv.setHopitalNom(rs.getString("hopital_nom"));
+                    return rdv;
+                }
+            }
+        }
+        return null;
+    }
 }

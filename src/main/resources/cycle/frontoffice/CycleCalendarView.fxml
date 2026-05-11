@@ -8,8 +8,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
 
-<BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #f4f6f8;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cycle.frontoffice.controller.CycleCalendarController">
+<BorderPane prefHeight="700.0" prefWidth="900.0" styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cycle.frontoffice.controller.CycleCalendarController">
     <stylesheets>
         <URL value="@DisplayCss.css" />
         <URL value="@calendar_style.css" />
@@ -17,31 +18,31 @@
 
     <!-- Header Section -->
     <top>
-        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #e2e8f0; -fx-border-width: 0 0 1 0;">
+        <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20 30; -fx-border-color: #f1f5f9; -fx-border-width: 0 0 1 0;">
             <HBox alignment="CENTER_LEFT" spacing="20">
-                <Button onAction="#goBack" styleClass="btn-secondary" text="← Retour aux Cycles" />
-                <HBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="20">
-                    <Button onAction="#prevMonth" styleClass="calendar-btn-nav" text="&lt;" />
-                    <Label fx:id="lblMonthYear" styleClass="calendar-header" text="Mois Année" prefWidth="200" alignment="CENTER" />
-                    <Button onAction="#nextMonth" styleClass="calendar-btn-nav" text="&gt;" />
+                <Button onAction="#goBack" styleClass="btn-outline" text="← Retour" />
+                <HBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="25">
+                    <Button onAction="#prevMonth" styleClass="calendar-btn-nav" text="‹" />
+                    <Label fx:id="lblMonthYear" styleClass="calendar-header" text="Mois Année" prefWidth="250" alignment="CENTER" />
+                    <Button onAction="#nextMonth" styleClass="calendar-btn-nav" text="›" />
                 </HBox>
+                <Region prefWidth="100" /> <!-- Spacer to balance the Back button -->
             </HBox>
         </VBox>
     </top>
 
     <!-- Calendar Grid Section -->
     <center>
-        <VBox spacing="10" style="-fx-padding: 30;">
+        <VBox spacing="15" style="-fx-padding: 30;">
             <!-- Days Header -->
-            <GridPane fx:id="daysHeaderGrid" hgap="5" vgap="5" alignment="CENTER">
-                <!-- Programmatically populated with Mon, Tue, etc. -->
+            <GridPane fx:id="daysHeaderGrid" hgap="8" vgap="8" alignment="CENTER">
+                <!-- Programmatically populated -->
             </GridPane>
             
             <!-- Calendar Days -->
-            <GridPane fx:id="calendarGrid" hgap="5" vgap="5" alignment="CENTER" VBox.vgrow="ALWAYS" styleClass="calendar-grid">
-                <!-- Programmatically populated based on month days -->
+            <GridPane fx:id="calendarGrid" hgap="8" vgap="8" alignment="CENTER" VBox.vgrow="ALWAYS" styleClass="calendar-grid">
+                <!-- Programmatically populated -->
             </GridPane>
         </VBox>
     </center>
-
 </BorderPane>

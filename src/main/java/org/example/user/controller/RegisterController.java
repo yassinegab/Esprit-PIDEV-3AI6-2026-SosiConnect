@@ -57,16 +57,25 @@ public class RegisterController {
                 dbUserRole = "ROLE_ADMIN";
             }
 
+            String ageText = ageField.getText();
+            int age = (ageText == null || ageText.trim().isEmpty()) ? 0 : Integer.parseInt(ageText.trim());
+
+            String tailleText = tailleField.getText();
+            double taille = (tailleText == null || tailleText.trim().isEmpty()) ? 0.0 : Double.parseDouble(tailleText.trim());
+
+            String poidsText = poidsField.getText();
+            double poids = (poidsText == null || poidsText.trim().isEmpty()) ? 0.0 : Double.parseDouble(poidsText.trim());
+
             User user = new User(
                 nomField.getText(),
                 prenomField.getText(),
                 emailField.getText(),
                 passwordField.getText(),
                 telephoneField.getText(),
-                Integer.parseInt(ageField.getText()),
+                age,
                 sexeBox.getValue(),
-                Double.parseDouble(tailleField.getText()),
-                Double.parseDouble(poidsField.getText()),
+                taille,
+                poids,
                 handicapBox.isSelected(),
                 "[\"" + dbUserRole + "\"]", 
                 dbUserRole, 
@@ -76,8 +85,19 @@ public class RegisterController {
             serviceUser.ajouter(user);
             System.out.println("User registered successfully!");
             navigateToLogin(event);
-        } catch (SQLException | NumberFormatException e) {
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de saisie");
+            alert.setHeaderText("Valeur numérique invalide");
+            alert.setContentText("Veuillez entrer des nombres valides pour l'âge, la taille et le poids.");
+            alert.showAndWait();
+        } catch (SQLException e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de base de données");
+            alert.setHeaderText("Erreur lors de l'inscription");
+            alert.setContentText("Une erreur est survenue lors de l'enregistrement de l'utilisateur.");
+            alert.showAndWait();
         }
     }
 

@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 
-<VBox spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.user.backoffice.UserControllerAdmin">
-   <children>
-      <Label style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #1e293b;" text="Gestion des Utilisateurs" />
-      <Label style="-fx-text-fill: #64748b;" text="Ici vous pouvez gérer les comptes, les rôles et les permissions." />
-      <!-- Dashboard content goes here -->
-   </children>
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.user.backoffice.UserControllerAdmin" style="-fx-background-color: #fcfbfd; -fx-padding: 30;">
+
+   <!-- Page Header Banner -->
+   <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: white; -fx-background-radius: 24; -fx-padding: 24 32; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 20, 0, 0, 5); -fx-border-color: #f1f5f9; -fx-border-width: 1; -fx-border-radius: 24;">
+       <VBox alignment="CENTER" style="-fx-background-color: #faf5ff; -fx-background-radius: 16; -fx-min-width: 56; -fx-min-height: 56; -fx-border-color: #f3e8ff; -fx-border-radius: 16;">
+           <Label text="👥" style="-fx-font-size: 26px;" />
+       </VBox>
+       <VBox spacing="5" HBox.hgrow="ALWAYS">
+           <Label text="Gestion des Utilisateurs" style="-fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: #1e293b; -fx-font-family: 'Segoe UI', sans-serif;" />
+           <Label text="Gérez les comptes, les rôles et les permissions de manière sécurisée." style="-fx-font-size: 13px; -fx-text-fill: #64748b; -fx-font-weight: 600; -fx-font-family: 'Segoe UI', sans-serif;" wrapText="true" />
+       </VBox>
+   </HBox>
+
+   <!-- Content Card -->
+   <VBox style="-fx-background-color: white; -fx-background-radius: 24; -fx-padding: 40; -fx-effect: dropshadow(three-pass-box, rgba(192, 132, 252, 0.04), 24, 0, 0, 8); -fx-border-color: #f1f5f9; -fx-border-width: 1; -fx-border-radius: 24;" VBox.vgrow="ALWAYS" alignment="CENTER" spacing="20">
+       <Label text="🏗️" style="-fx-font-size: 40px;" />
+       <Label text="Module Utilisateur en cours de développement" style="-fx-font-size: 18px; -fx-font-weight: 800; -fx-text-fill: #1e293b; -fx-font-family: 'Segoe UI', sans-serif;" />
+       <Label text="Les fonctionnalités d'administration seront bientôt disponibles." style="-fx-font-size: 14px; -fx-text-fill: #94a3b8; -fx-font-family: 'Segoe UI', sans-serif;" />
+   </VBox>
+
 </VBox>

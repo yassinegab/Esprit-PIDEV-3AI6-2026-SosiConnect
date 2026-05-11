@@ -19,47 +19,58 @@
     <left>
         <VBox styleClass="sidebar" alignment="TOP_CENTER">
             <!-- Logo area at the top -->
-            <VBox alignment="CENTER" prefHeight="60" style="-fx-cursor: hand;" onMouseClicked="#showDashboard">
-                <Label text="S" style="-fx-font-size: 22px; -fx-font-weight: 900; -fx-text-fill: #1e293b;" />
+            <VBox alignment="CENTER" prefHeight="80" styleClass="sidebar-logo-container" onMouseClicked="#showDashboard">
+                <StackPane styleClass="logo-badge">
+                    <ImageView fitHeight="28.0" fitWidth="28.0" preserveRatio="true">
+                        <image><Image url="@../assets/images/sosi_logo.png" /></image>
+                    </ImageView>
+                </StackPane>
             </VBox>
 
             <!-- Main Navigation icons -->
             <VBox spacing="5" alignment="CENTER">
                 <Button fx:id="btnWellbeing" onAction="#showWellbeing" styleClass="nav-btn,active-nav">
                     <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../assets/images/wellbeingicon.png" /></image>
-                        </ImageView>
+                        <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.5-9h-2.32l-.83-2.5a.5.5 0 0 0-.95 0l-.83 2.5H9.5a.5.5 0 0 0 0 1h2.32l.83 2.5a.5.5 0 0 0 .95 0l.83-2.5h2.32a.5.5 0 0 0 0-1z" 
+                                 fill="#475569" scaleX="1.2" scaleY="1.2" styleClass="nav-icon-svg"/>
                     </graphic>
                     <tooltip><Tooltip text="Bien-être" /></tooltip>
                 </Button>
 
                 <Button fx:id="btnServicesSociaux" onAction="#showServicesSociaux" styleClass="nav-btn">
-                    <graphic><Label text="⚕" style="-fx-font-size: 20px; -fx-text-fill: #555555;" /></graphic>
+                    <graphic>
+                        <SVGPath content="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z" 
+                                 fill="#475569" scaleX="1.2" scaleY="1.2" styleClass="nav-icon-svg"/>
+                    </graphic>
                     <tooltip><Tooltip text="Services Médicaux" /></tooltip>
                 </Button>
 
                 <Button fx:id="btnJournal" onAction="#showWellbeing" styleClass="nav-btn">
-                    <graphic><Label text="📖" style="-fx-font-size: 20px; -fx-text-fill: #555555;" /></graphic>
+                    <graphic>
+                        <SVGPath content="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" 
+                                 fill="#475569" scaleX="1.2" scaleY="1.2" styleClass="nav-icon-svg"/>
+                    </graphic>
                     <tooltip><Tooltip text="Journal" /></tooltip>
                 </Button>
 
                 <Button fx:id="btnAideEtdon" onAction="#showAideEtdon" styleClass="nav-btn">
-                    <graphic><Label text="🤝" style="-fx-font-size: 20px; -fx-text-fill: #555555;" /></graphic>
+                    <graphic>
+                        <SVGPath content="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+                                 fill="#475569" scaleX="1.2" scaleY="1.2" styleClass="nav-icon-svg"/>
+                    </graphic>
                     <tooltip><Tooltip text="Aide &amp; Don" /></tooltip>
                 </Button>
 
                 <StackPane>
                     <Button fx:id="btnCycle" onAction="#showCycle" styleClass="nav-btn">
                         <graphic>
-                            <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                                <image><Image url="@../assets/images/cyclemenstruelicon.png" /></image>
-                            </ImageView>
+                            <SVGPath content="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8zm0 18c-3.33 0-5.91-2.51-5.91-6.13 0-2.77 2.25-6.12 5.91-9.41 3.66 3.3 5.91 6.64 5.91 9.41 0 3.62-2.58 6.13-5.91 6.13z" 
+                                     fill="#475569" scaleX="1.2" scaleY="1.2" styleClass="nav-icon-svg"/>
                         </graphic>
                         <tooltip><Tooltip text="Cycle Menstruel" /></tooltip>
                     </Button>
                     <!-- Notification Badge for Cycle -->
-                    <Label text="2" style="-fx-background-color: #007acc; -fx-text-fill: white; -fx-font-size: 9px; -fx-font-weight: bold; -fx-padding: 1 4; -fx-background-radius: 8;" StackPane.alignment="TOP_RIGHT">
+                    <Label text="2" styleClass="notif-badge" StackPane.alignment="TOP_RIGHT">
                         <StackPane.margin><Insets top="10" right="10"/></StackPane.margin>
                     </Label>
                 </StackPane>
@@ -69,11 +80,17 @@
 
             <!-- Bottom Blue Accent consistent with VS Code Style -->
             <VBox alignment="CENTER" spacing="10">
-                <StackPane styleClass="profile-chip">
-                    <Label fx:id="avatarLabel" text=".." style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #555555;"/>
+                <StackPane styleClass="profile-chip" onMouseClicked="#showProfile">
+                    <Label fx:id="avatarLabel" text=".." styleClass="icon-nav-glyph" style="-fx-font-size: 13px; -fx-font-weight: bold;">
+                        <tooltip><Tooltip text="Mon Profil" /></tooltip>
+                    </Label>
                 </StackPane>
                 <VBox styleClass="sidebar-bottom-accent">
-                    <Button onAction="#handleLogout" styleClass="logout-btn" text="⏻">
+                    <Button onAction="#handleLogout" styleClass="logout-btn">
+                        <graphic>
+                            <SVGPath content="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z" 
+                                     fill="#475569" scaleX="1.1" scaleY="1.1" styleClass="logout-icon-svg"/>
+                        </graphic>
                         <tooltip><Tooltip text="Déconnexion" /></tooltip>
                     </Button>
                 </VBox>
@@ -88,15 +105,6 @@
     <!-- ═══════════════════════════════════════════════════════ -->
     <center>
         <StackPane fx:id="contentArea" style="-fx-background-color: #f4f7fa;">
-            <VBox fx:id="dashboardView" alignment="CENTER" spacing="30">
-                <Label text="Bonjour, bienvenue !" styleClass="hero-title"/>
-                <VBox alignment="CENTER" maxWidth="500" styleClass="premium-card">
-                    <padding><Insets top="50" bottom="50" left="50" right="50"/></padding>
-                    <Label text="Votre tableau de bord personnalisé est en cours de préparation."
-                           styleClass="hero-subtitle" textAlignment="CENTER" wrapText="true"/>
-                    <Button text="Commencer" styleClass="hero-button"/>
-                </VBox>
-            </VBox>
         </StackPane>
     </center>
 

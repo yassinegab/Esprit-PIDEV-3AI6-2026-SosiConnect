@@ -230,10 +230,10 @@ public class AnalyseIAController {
     }
     private void row(VBox parent, String label, String valeur) {
         HBox r = new HBox(8); r.setAlignment(Pos.CENTER_LEFT);
-        r.setStyle("-fx-padding:4 0;-fx-border-color:transparent transparent #f0e6ff transparent;");
-        Label l = new Label(label+":"); l.setStyle("-fx-font-size:10;-fx-text-fill:#9c27b0;-fx-min-width:85;-fx-font-weight:bold;");
-        String v = valeur != null && valeur.length()>40 ? valeur.substring(0,40)+"…" : nvl(valeur,"—");
-        Label val = new Label(v); val.setStyle("-fx-font-size:11;-fx-text-fill:#333;"); val.setWrapText(true);
+        r.setStyle("-fx-padding:8 0;-fx-border-color:transparent transparent #f1f5f9 transparent;");
+        Label l = new Label(label+":"); l.setStyle("-fx-font-size:11px;-fx-text-fill:#dc3545;-fx-min-width:90;-fx-font-weight:900;");
+        String v = valeur != null && valeur.length()>45 ? valeur.substring(0,45)+"…" : nvl(valeur,"—");
+        Label val = new Label(v); val.setStyle("-fx-font-size:12px;-fx-text-fill:#334155;"); val.setWrapText(true);
         r.getChildren().addAll(l,val); parent.getChildren().add(r);
     }
 
@@ -329,12 +329,12 @@ public class AnalyseIAController {
         System.out.println("[HF] Cle : "+key.substring(0,Math.min(8,key.length()))+"...");
 
         // Barre de progression
-        VBox progBox = new VBox(12); progBox.setStyle("-fx-padding:20;");
-        Label titP = new Label("Classification medicale en cours...");
-        titP.setStyle("-fx-font-size:13;-fx-font-weight:bold;-fx-text-fill:#6a1b9a;");
-        ProgressBar pb = new ProgressBar(0); pb.setMaxWidth(Double.MAX_VALUE); pb.setStyle("-fx-accent:#9c27b0;");
-        Label lblE = new Label("Preparation..."); lblE.setStyle("-fx-font-size:11;-fx-text-fill:#666;");
-        Label lblN = new Label("0 / 6"); lblN.setStyle("-fx-font-size:10;-fx-text-fill:#999;");
+        VBox progBox = new VBox(15); progBox.setStyle("-fx-padding:30; -fx-background-color: white; -fx-background-radius: 12;");
+        Label titP = new Label("Classification médicale en cours...");
+        titP.setStyle("-fx-font-size:14px;-fx-font-weight:800;-fx-text-fill:#1e293b;");
+        ProgressBar pb = new ProgressBar(0); pb.setMaxWidth(Double.MAX_VALUE); pb.setStyle("-fx-accent:#dc3545;");
+        Label lblE = new Label("Préparation..."); lblE.setStyle("-fx-font-size:12px;-fx-text-fill:#64748b;");
+        Label lblN = new Label("0 / 6"); lblN.setStyle("-fx-font-size:11px;-fx-text-fill:#94a3b8;");
         progBox.getChildren().addAll(titP,pb,lblE,lblN);
         hfPanel.getChildren().add(progBox);
         setStatus("HuggingFace en cours...");
@@ -605,28 +605,28 @@ public class AnalyseIAController {
         String os = System.getProperty("os.name","").toLowerCase();
         String moteur = os.contains("win")?"Windows SAPI (VBScript)":os.contains("mac")?"macOS say":"Linux espeak";
 
-        VBox hCard = card("#fce4ec","#c2185b");
-        lbl(hCard,"Resume Vocal — Dossier #"+dossier.getId(),13,"#880e4f",true);
-        lbl(hCard,"Moteur TTS : "+moteur,10,"#888",false);
+        VBox hCard = card("#f8f9fb","#e2e8f0");
+        lbl(hCard,"Résumé Vocal — Dossier #"+dossier.getId(),14,"#1e293b",true);
+        lbl(hCard,"Moteur TTS : "+moteur,11,"#64748b",false);
         voixPanel.getChildren().add(hCard);
 
-        VBox tCard = card("#f3e5f5","#6a1b9a");
-        lbl(tCard,"Contenu du resume",12,"#4a148c",true);
+        VBox tCard = card("white","#e2e8f0");
+        lbl(tCard,"Contenu du résumé",13,"#dc3545",true);
         for(String p : texte.split("\\. ")) {
             if(p.isBlank()) continue;
-            Label l=new Label("▶  "+p.trim()+"."); l.setStyle("-fx-font-size:12;-fx-text-fill:#333;-fx-padding:3 0;"); l.setWrapText(true);
+            Label l=new Label("▶  "+p.trim()+"."); l.setStyle("-fx-font-size:13px;-fx-text-fill:#334155;-fx-padding:4 0;"); l.setWrapText(true);
             tCard.getChildren().add(l);
         }
         voixPanel.getChildren().add(tCard);
 
-        VBox cCard = card("#e8eaf6","#283593");
-        lbl(cCard,"Controles",12,"#1a237e",true);
-        Label indic = new Label("Pret — cliquez Lire pour demarrer");
-        indic.setStyle("-fx-font-size:11;-fx-text-fill:#555;-fx-padding:6 0;");
-        Button btnLire=new Button("▶  Lire a voix haute"); btnLire.setStyle(btnSty("#1a237e","white"));
-        Button btnStop=new Button("■  Arreter");           btnStop.setStyle(btnSty("#c62828","white")); btnStop.setDisable(true);
-        Button btnCopy=new Button("⎘  Copier");            btnCopy.setStyle(btnSty("#2e7d32","white"));
-        HBox controls=new HBox(12); controls.setAlignment(Pos.CENTER_LEFT);
+        VBox cCard = card("#f1f5f9","#e2e8f0");
+        lbl(cCard,"Contrôles",13,"#1e293b",true);
+        Label indic = new Label("Prêt — cliquez Lire pour démarrer");
+        indic.setStyle("-fx-font-size:12px;-fx-text-fill:#64748b;-fx-padding:6 0;");
+        Button btnLire=new Button("▶  Lire à voix haute"); btnLire.setStyle(btnSty("#dc3545","white"));
+        Button btnStop=new Button("■  Arrêter");           btnStop.setStyle(btnSty("#1e293b","white")); btnStop.setDisable(true);
+        Button btnCopy=new Button("⎘  Copier");            btnCopy.setStyle(btnSty("white","#1e293b") + "-fx-border-color:#e2e8f0;");
+        HBox controls=new HBox(15); controls.setAlignment(Pos.CENTER_LEFT);
         controls.getChildren().addAll(btnLire,btnStop,btnCopy);
         cCard.getChildren().addAll(controls,indic);
         voixPanel.getChildren().add(cCard);
@@ -736,12 +736,12 @@ public class AnalyseIAController {
     private void afficherResultatsGroq(JsonNode j) {
         groqPanel.getChildren().clear();
         afficherScore(groqPanel,j.path("score_sante").asInt(70),j.path("gravite").asText("modere"),j.path("urgence").asBoolean(false));
-        cardSection(groqPanel,"Analyse clinique",j.path("resume_cas").asText(""),"#4a148c","#f3e5f5");
+        cardSection(groqPanel,"Analyse clinique",j.path("resume_cas").asText(""),"#1e293b","#f8f9fb");
         afficherScoresSys(groqPanel,j.path("score_details"));
-        liste(groqPanel,"Recommandations",        j.path("recommandations"),           "#1565c0","#e3f2fd","○");
-        liste(groqPanel,"Examens suggeres",        j.path("examens_suggeres"),          "#2e7d32","#e8f5e9",">");
-        liste(groqPanel,"Facteurs de risque",      j.path("facteurs_risque"),           "#e65100","#fff3e0","!");
-        liste(groqPanel,"Complications",           j.path("complications_potentielles"),"#c62828","#ffebee","!");
+        liste(groqPanel,"Recommandations",        j.path("recommandations"),           "#3b82f6","#eff6ff","○");
+        liste(groqPanel,"Examens suggérés",        j.path("examens_suggeres"),          "#10b981","#f0fdf4",">");
+        liste(groqPanel,"Facteurs de risque",      j.path("facteurs_risque"),           "#f59e0b","#fffbeb","!");
+        liste(groqPanel,"Complications",           j.path("complications_potentielles"),"#ef4444","#fef2f2","!");
         afficherPlan(groqPanel,j.path("plan_suivi"));
         afficherMedecins(groqPanel,j.path("medecins_experts"));
         afficherHopitaux(groqPanel,j.path("hopitaux_experts"));
@@ -829,11 +829,11 @@ public class AnalyseIAController {
         VBox gc2=card(gc+"11",gc); lbl(gc2,"Gravite: "+grav.toUpperCase(),13,gc,true);
         if(j.path("recommandation_urgence").asBoolean(false)) lbl(gc2,"CONSULTATION URGENTE RECOMMANDEE",12,"#c62828",true);
         visionPanel.getChildren().add(gc2);
-        cardSection(visionPanel,"Description",j.path("description_detaillee").asText(""),"#4a148c","#f3e5f5");
-        liste(visionPanel,"Anomalies",anomaliesToArr(j.path("anomalies_detectees")),"#c62828","#ffebee","!");
-        liste(visionPanel,"Diagnostic differentiel",j.path("diagnostic_differentiel"),"#1565c0","#e3f2fd",">");
-        liste(visionPanel,"Examens complementaires",j.path("examens_complementaires"),"#6a1b9a","#f3e5f5",">");
-        cardSection(visionPanel,"Conclusion",j.path("conclusion").asText(""),"#2e7d32","#e8f5e9");
+        cardSection(visionPanel,"Description",j.path("description_detaillee").asText(""),"#1e293b","#f8f9fb");
+        liste(visionPanel,"Anomalies",anomaliesToArr(j.path("anomalies_detectees")),"#ef4444","#fef2f2","!");
+        liste(visionPanel,"Diagnostic différentiel",j.path("diagnostic_differentiel"),"#3b82f6","#eff6ff",">");
+        liste(visionPanel,"Examens complémentaires",j.path("examens_complementaires"),"#dc3545","#fef2f2",">");
+        cardSection(visionPanel,"Conclusion",j.path("conclusion").asText(""),"#10b981","#f0fdf4");
         animFade(visionPanel);
     }
 
@@ -883,20 +883,25 @@ public class AnalyseIAController {
 
     /* ── Widgets ── */
     private void afficherScore(VBox p, int score, String grav, boolean urg) {
-        String c=score>=75?"#2e7d32":score>=50?"#f57f17":"#c62828";
-        VBox box=card("#fff8e1","#f9a825"); HBox r=new HBox(24); r.setAlignment(Pos.CENTER_LEFT);
+        String c = score >= 75 ? "#10b981" : score >= 50 ? "#f59e0b" : "#ef4444";
+        VBox box=card("white","#e2e8f0"); box.getStyleClass().add("result-card");
+        HBox r=new HBox(30); r.setAlignment(Pos.CENTER_LEFT);
         VBox sb=new VBox(4); sb.setAlignment(Pos.CENTER);
-        Label sl=new Label(score+"/100"); sl.setStyle("-fx-font-size:28;-fx-font-weight:bold;-fx-text-fill:"+c+";");
-        Label st=new Label("Score de Sante"); st.setStyle("-fx-font-size:10;-fx-text-fill:#888;"); sb.getChildren().addAll(st,sl);
-        VBox inf=new VBox(6); inf.setAlignment(Pos.CENTER_LEFT);
-        Label gl=new Label("Gravite: "+grav.toUpperCase()); gl.setStyle("-fx-font-size:13;-fx-font-weight:bold;-fx-text-fill:"+c+";"); inf.getChildren().add(gl);
-        if(urg){ Label ul=new Label("URGENCE — Consultation immediate"); ul.setStyle("-fx-font-size:11;-fx-text-fill:#c62828;-fx-font-weight:bold;-fx-background-color:#ffebee;-fx-padding:5 12;-fx-background-radius:8;"); inf.getChildren().add(ul); }
+        Label sl=new Label(score+"/100"); sl.getStyleClass().add("score-badge");
+        if(score < 50) sl.setStyle("-fx-text-fill: #ef4444; -fx-background-color: #fef2f2;");
+        else if(score < 75) sl.setStyle("-fx-text-fill: #f59e0b; -fx-background-color: #fffbeb;");
+        else sl.setStyle("-fx-text-fill: #10b981; -fx-background-color: #f0fdf4;");
+        
+        Label st=new Label("Score de Santé"); st.setStyle("-fx-font-size:11px;-fx-text-fill:#64748b;-fx-font-weight:700;"); sb.getChildren().addAll(sl,st);
+        VBox inf=new VBox(8); inf.setAlignment(Pos.CENTER_LEFT);
+        Label gl=new Label("Gravité: "+grav.toUpperCase()); gl.setStyle("-fx-font-size:16px;-fx-font-weight:900;-fx-text-fill:"+c+";"); inf.getChildren().add(gl);
+        if(urg){ Label ul=new Label("URGENCE — Consultation immédiate"); ul.setStyle("-fx-font-size:12px;-fx-text-fill:white;-fx-font-weight:900;-fx-background-color:#dc3545;-fx-padding:8 15;-fx-background-radius:10;"); inf.getChildren().add(ul); }
         r.getChildren().addAll(sb,inf); box.getChildren().add(r); p.getChildren().add(box);
     }
 
     private void afficherScoresSys(VBox parent, JsonNode scores) {
-        if(scores.isMissingNode()) return;
-        VBox box=card("#f3e5f5","#7b1fa2"); lbl(box,"Scores par Systemes",12,"#4a148c",true);
+        VBox box=card("white","#e2e8f0"); box.getStyleClass().add("result-card");
+        lbl(box,"Scores par Systèmes",14,"#dc3545",true);
         HBox grid=new HBox(10); grid.setAlignment(Pos.CENTER_LEFT);
         for(String[] s:new String[][]{{"cardiovasculaire","Cardio"},{"metabolique","Metabolo"},{"respiratoire","Respi"},{"renal","Renal"},{"hepatique","Hepato"},{"neurologique","Neuro"}})
             grid.getChildren().add(scoreCell(s[1],scores.path(s[0]).asInt(75)));
@@ -997,7 +1002,8 @@ public class AnalyseIAController {
 
     private VBox card(String bg, String border) {
         VBox v=new VBox(8);
-        v.setStyle("-fx-background-color:"+bg+";-fx-border-color:"+border+"22;-fx-border-radius:10;-fx-background-radius:10;-fx-padding:14;-fx-effect:dropshadow(gaussian,rgba(0,0,0,0.05),6,0,0,2);");
+        v.getStyleClass().add("result-card");
+        v.setStyle("-fx-border-color:"+border+";");
         return v;
     }
 

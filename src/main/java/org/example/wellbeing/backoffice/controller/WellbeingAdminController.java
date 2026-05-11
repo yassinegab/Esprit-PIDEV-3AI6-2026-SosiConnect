@@ -1,5 +1,5 @@
 package org.example.wellbeing.backoffice.controller;
-
+import javafx.scene.layout.HBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

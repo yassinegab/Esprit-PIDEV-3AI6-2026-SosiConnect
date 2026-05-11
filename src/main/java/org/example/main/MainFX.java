@@ -2,8 +2,20 @@ package org.example.main;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-
 public class MainFX extends Application {
+    private static MainFX instance;
+
+    public MainFX() {
+        instance = this;
+    }
+
+    public static MainFX getInstance() {
+        return instance;
+    }
+
+    public void openUrl(String url) {
+        getHostServices().showDocument(url);
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -11,7 +23,7 @@ public class MainFX extends Application {
         javafx.scene.Parent root = loader.load();
         javafx.scene.Scene scene = new javafx.scene.Scene(root);
         stage.setScene(scene);
-        stage.setTitle("SOSI+ Healthcare - Login");
+        stage.setTitle("SOSI+ Healthcare - Admin");
         stage.show();
     }
 

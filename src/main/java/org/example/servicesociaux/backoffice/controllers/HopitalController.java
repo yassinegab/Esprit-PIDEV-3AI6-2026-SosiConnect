@@ -95,6 +95,7 @@ public class HopitalController implements AdminBaseController.AdminAware {
         colNbRdv  .setCellValueFactory(d -> new SimpleIntegerProperty((int) d.getValue()[6]).asObject());
         colRdvWait.setCellValueFactory(d -> new SimpleIntegerProperty((int) d.getValue()[7]).asObject());
         colAdresse.setCellValueFactory(d -> new SimpleStringProperty(str(d.getValue()[2])));
+        colType   .setCellValueFactory(d -> new SimpleStringProperty(str(d.getValue()[10])));
 
         // Style tableau
         tableView.setStyle(

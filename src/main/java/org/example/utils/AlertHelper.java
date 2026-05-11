@@ -30,6 +30,17 @@ public class AlertHelper {
     }
 
     /**
+     * Show a Warning Alert.
+     */
+    public static void showWarningAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    /**
      * Show a Confirmation Alert. Returns true if user clicked OK.
      */
     public static boolean showConfirmationAlert(String title, String content) {

@@ -1,0 +1,180 @@
+/* ═══════════════════════════════════════════════════════
+   SOSI — DOSSIER MÉDICAL FRONT-OFFICE · Design System v2
+   Palette: #dc3545 Rouge · Blanc · Gris clair
+   ═══════════════════════════════════════════════════════ */
+
+.root {
+    -fx-font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -fx-background-color: #f8f9fb;
+}
+
+.main-container {
+    -fx-background-color: #f8f9fb;
+}
+
+/* ── HEADER ─────────────────────────────────────────── */
+.header-box {
+    -fx-background-color: white;
+    -fx-padding: 15 25;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: center-left;
+}
+
+.header-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #1e293b;
+}
+
+.btn-back {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #64748b;
+    -fx-background-radius: 20;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+.btn-back:hover {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #dc3545;
+}
+
+/* ── SIDEBAR ────────────────────────────────────────── */
+.sidebar-container {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 1 0 0;
+}
+
+.sidebar-header {
+    -fx-padding: 15 20;
+    -fx-background-color: #f8f9fb;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.sidebar-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #dc3545;
+}
+
+.btn-new {
+    -fx-background-color: linear-gradient(to right, #dc3545, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-weight: 800;
+    -fx-background-radius: 8;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.3), 8, 0, 0, 3);
+}
+.btn-new:hover {
+    -fx-background-color: linear-gradient(to right, #b91c1c, #991b1b);
+    -fx-translate-y: -1;
+}
+
+/* ── DOSSIER CARDS ──────────────────────────────────── */
+.dossier-card {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.02), 6, 0, 0, 2);
+}
+.dossier-card:hover {
+    -fx-border-color: #dc3545;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.1), 10, 0, 0, 4);
+}
+
+.dossier-id {
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1e293b;
+}
+
+.dossier-date {
+    -fx-font-size: 11px;
+    -fx-text-fill: #94a3b8;
+}
+
+.badge-activite {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #475569;
+    -fx-padding: 3 12;
+    -fx-background-radius: 20;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+}
+
+/* ── DETAIL SECTION ─────────────────────────────────── */
+.detail-container {
+    -fx-background-color: #f8f9fb;
+    -fx-padding: 25;
+}
+
+.detail-header-card {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.02), 10, 0, 0, 4);
+}
+
+.medical-section {
+    -fx-background-color: white;
+    -fx-background-radius: 0 12 12 0;
+    -fx-border-radius: 0 12 12 0;
+    -fx-padding: 15 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.01), 5, 0, 0, 2);
+}
+
+.section-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 900;
+    -fx-letter-spacing: 1px;
+}
+
+.section-content {
+    -fx-font-size: 13px;
+    -fx-text-fill: #334155;
+    -fx-line-spacing: 1.5;
+}
+
+/* ── FORM FIELDS ────────────────────────────────────── */
+.form-input-area {
+    -fx-background-color: #f8f9fb;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-size: 12px;
+    -fx-padding: 8;
+}
+.form-input-area:focused {
+    -fx-border-color: #dc3545;
+    -fx-background-color: white;
+}
+
+/* ── AI BUTTONS ─────────────────────────────────────── */
+.btn-ia-groq {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: white;
+    -fx-font-weight: 800;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+.btn-ia-groq:hover { -fx-background-color: #0f172a; }
+
+.btn-ia-hf {
+    -fx-background-color: #ea580c;
+    -fx-text-fill: white;
+    -fx-font-weight: 800;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+.btn-ia-hf:hover { -fx-background-color: #c2410c; }

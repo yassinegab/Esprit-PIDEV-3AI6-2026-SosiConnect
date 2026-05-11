@@ -23,6 +23,7 @@ public class AdminBaseController {
     @FXML private Button btnWellbeing;
     @FXML private Button btnMedical;
     @FXML private Button btnAide;
+    @FXML private Button btnAlertes;
     @FXML private Button btnCycle;
 
     private List<Button> navButtons;
@@ -30,7 +31,7 @@ public class AdminBaseController {
     @FXML
     public void initialize() {
         instance = this;
-        navButtons = Arrays.asList(btnDashboard, btnUsers, btnWellbeing, btnMedical, btnAide, btnCycle);
+        navButtons = Arrays.asList(btnDashboard, btnUsers, btnWellbeing, btnMedical, btnAide, btnAlertes, btnCycle);
         // Load default view
         showWellbeingAdmin(); 
     }
@@ -70,7 +71,12 @@ public class AdminBaseController {
 
     @FXML
     private void showAideAdmin() {
-        loadView("/aideEtdon/backoffice/AideEtdonAdminView.fxml", btnAide);
+        loadView("/aideEtdon/backoffice/AidesEtDonsAdminView.fxml", btnAide);
+    }
+    
+    @FXML
+    private void showAlertesAdmin() {
+        loadView("/aideEtdon/backoffice/AideEtdonAlertesAdminView.fxml", btnAlertes);
     }
 
     @FXML

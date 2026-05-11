@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.user.controller.ProfileController"
+            fitToWidth="true"
+            style="-fx-background-color: transparent; -fx-background: #f4f7fa;">
+
+    <VBox alignment="TOP_CENTER" spacing="20" style="-fx-padding: 40 20;">
+        <Label text="Mon Profil" styleClass="hero-title"/>
+        <Label text="Mettez à jour vos informations personnelles" styleClass="hero-subtitle"/>
+
+        <VBox maxWidth="600" spacing="20" styleClass="premium-card">
+            <padding><Insets top="30" bottom="30" left="40" right="40"/></padding>
+            
+            <GridPane hgap="15" vgap="20">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50" />
+                    <ColumnConstraints percentWidth="50" />
+                </columnConstraints>
+
+                <!-- Row 1 -->
+                <VBox GridPane.rowIndex="0" GridPane.columnIndex="0" spacing="5">
+                    <Label text="Nom" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="nomField" styleClass="search-pill"/>
+                </VBox>
+                <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" spacing="5">
+                    <Label text="Prénom" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="prenomField" styleClass="search-pill"/>
+                </VBox>
+
+                <!-- Row 2 -->
+                <VBox GridPane.rowIndex="1" GridPane.columnIndex="0" spacing="5">
+                    <Label text="Email" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="emailField" styleClass="search-pill"/>
+                </VBox>
+                <VBox GridPane.rowIndex="1" GridPane.columnIndex="1" spacing="5">
+                    <Label text="Téléphone" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="telephoneField" styleClass="search-pill"/>
+                </VBox>
+
+                <!-- Row 3 -->
+                <VBox GridPane.rowIndex="2" GridPane.columnIndex="0" spacing="5">
+                    <Label text="Âge" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="ageField" styleClass="search-pill"/>
+                </VBox>
+                <VBox GridPane.rowIndex="2" GridPane.columnIndex="1" spacing="5">
+                    <Label text="Sexe" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <ChoiceBox fx:id="sexeBox" styleClass="search-pill" maxWidth="Infinity">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Homme" />
+                                <String fx:value="Femme" />
+                                <String fx:value="Autre" />
+                            </FXCollections>
+                        </items>
+                    </ChoiceBox>
+                </VBox>
+
+                <!-- Row 4 -->
+                <VBox GridPane.rowIndex="3" GridPane.columnIndex="0" spacing="5">
+                    <Label text="Taille (cm)" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="tailleField" styleClass="search-pill"/>
+                </VBox>
+                <VBox GridPane.rowIndex="3" GridPane.columnIndex="1" spacing="5">
+                    <Label text="Poids (kg)" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                    <TextField fx:id="poidsField" styleClass="search-pill"/>
+                </VBox>
+
+            </GridPane>
+
+            <!-- Row 5 (Handicap) -->
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                <CheckBox fx:id="handicapBox" text="Je suis en situation de handicap" />
+            </HBox>
+
+            <!-- Error message label -->
+            <Label fx:id="messageLabel" text="" style="-fx-text-fill: #dc3545; -fx-font-weight: bold; -fx-alignment: center;" maxWidth="Infinity"/>
+
+            <!-- Save Button -->
+            <VBox alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                <Button text="Enregistrer les modifications" onAction="#handleSave" styleClass="hero-button" style="-fx-translate-y: 0;" />
+            </VBox>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

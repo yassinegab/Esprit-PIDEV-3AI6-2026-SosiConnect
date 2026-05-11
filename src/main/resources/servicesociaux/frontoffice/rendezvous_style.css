@@ -1,0 +1,216 @@
+/* ═══════════════════════════════════════════════════════
+   SOSI — RENDEZ-VOUS FRONT-OFFICE · Design System v2
+   Palette: #dc3545 Rouge · Blanc · Gris clair
+   ═══════════════════════════════════════════════════════ */
+
+.root {
+    -fx-font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -fx-background-color: #f8f9fb;
+}
+
+.main-container {
+    -fx-background-color: #f8f9fb;
+}
+
+/* ── HEADER ─────────────────────────────────────────── */
+.header-box {
+    -fx-background-color: white;
+    -fx-padding: 20 30;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: center-left;
+}
+
+.header-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #1e293b;
+}
+
+.btn-back {
+    -fx-background-color: white;
+    -fx-text-fill: #64748b;
+    -fx-background-radius: 50;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 50;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+    -fx-font-weight: 700;
+}
+.btn-back:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #dc3545;
+    -fx-border-color: #dc3545;
+}
+
+/* ── SIDEBAR FORM ───────────────────────────────────── */
+.form-sidebar {
+    -fx-background-color: white;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 1 0 0;
+    -fx-padding: 25 20;
+}
+
+.form-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #64748b;
+    -fx-padding: 5 0 2 0;
+}
+
+.input-field, .combo-box, .date-picker {
+    -fx-background-color: #f8f9fb;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 8 12;
+    -fx-font-size: 13px;
+}
+.input-field:focused, .combo-box:focused, .date-picker:focused {
+    -fx-border-color: #dc3545;
+    -fx-background-color: white;
+}
+
+.text-area {
+    -fx-background-color: #f8f9fb;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-font-size: 13px;
+}
+
+/* ── SECTION TITLES ────────────────────────────────── */
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #dc3545;
+    -fx-padding: 5 0 10 0;
+}
+
+/* ── STAT CARDS ────────────────────────────────────── */
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 15 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+}
+.stat-value {
+    -fx-font-size: 22px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1e293b;
+}
+.stat-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
+}
+
+/* Specific Stat Card Variants */
+.stat-card-wait { -fx-border-left-color: #f59e0b; -fx-border-left-width: 4; }
+.stat-card-confirm { -fx-border-left-color: #10b981; -fx-border-left-width: 4; }
+.stat-card-done { -fx-border-left-color: #3b82f6; -fx-border-left-width: 4; }
+.stat-card-cancel { -fx-border-left-color: #dc3545; -fx-border-left-width: 4; }
+
+/* ── FILTER BOX ────────────────────────────────────── */
+.filter-box {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.02), 10, 0, 0, 5);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+}
+
+/* ── BUTTONS ────────────────────────────────────────── */
+.btn-add {
+    -fx-background-color: linear-gradient(to right, #dc3545, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-weight: 800;
+    -fx-background-radius: 12;
+    -fx-padding: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.25), 8, 0, 0, 4);
+}
+.btn-add:hover {
+    -fx-background-color: linear-gradient(to right, #b91c1c, #991b1b);
+    -fx-translate-y: -1;
+}
+
+.btn-modify {
+    -fx-background-color: white;
+    -fx-text-fill: #1e293b;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-padding: 12;
+    -fx-cursor: hand;
+}
+.btn-modify:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-border-color: #3b82f6;
+    -fx-text-fill: #3b82f6;
+}
+
+.btn-delete {
+    -fx-background-color: white;
+    -fx-text-fill: #ef4444;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-border-color: #fee2e2;
+    -fx-border-radius: 12;
+    -fx-padding: 12;
+    -fx-cursor: hand;
+}
+.btn-delete:hover {
+    -fx-background-color: #fef2f2;
+    -fx-border-color: #ef4444;
+}
+
+.btn-export {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-background-radius: 10;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+/* ── TABLE VIEW ─────────────────────────────────────── */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: #e2e8f0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f8f9fb;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 45;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #64748b;
+    -fx-font-weight: 800;
+    -fx-font-size: 12px;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f1f5f9 transparent;
+    -fx-padding: 8;
+}
+.table-row-cell:odd { -fx-background-color: #fafafa; }
+.table-row-cell:hover { -fx-background-color: #fff1f2; }
+.table-row-cell:selected {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #1e293b;
+}

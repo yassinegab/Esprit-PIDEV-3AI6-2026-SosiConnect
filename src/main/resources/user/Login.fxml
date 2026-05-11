@@ -82,7 +82,7 @@
             <Separator maxWidth="200"/>
 
             <HBox spacing="10.0" alignment="CENTER">
-                <Button text="Google" styleClass="social-button">
+                <Button text="Google" onAction="#handleGoogleLogin" styleClass="social-button">
                     <graphic>
                         <Label text="G" style="-fx-text-fill: #DB4437; -fx-font-weight: bold;"/>
                     </graphic>

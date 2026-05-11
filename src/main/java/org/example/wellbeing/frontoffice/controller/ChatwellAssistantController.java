@@ -11,7 +11,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import netscape.javascript.JSObject;
 import org.example.utils.*;
 import org.example.wellbeing.service.EmotionAnalysisService;
 
@@ -133,7 +132,7 @@ public class ChatwellAssistantController {
             targetLine.close();
         }
 
-        btnRecord.setStyle("-fx-background-color: #6366f1; -fx-background-radius: 50%; -fx-min-width: 60; -fx-min-height: 60;");
+        btnRecord.setStyle("-fx-background-color: #dc3545; -fx-background-radius: 50%; -fx-min-width: 60; -fx-min-height: 60;");
         statusCircle.setFill(Color.web("#10b981"));
         setAvatarStatus("Processing...");
 
@@ -274,7 +273,7 @@ public class ChatwellAssistantController {
             String moodColor = switch(emotion.mood) {
                 case "joy" -> "#10b981";
                 case "anxious" -> "#f59e0b";
-                case "sad" -> "#6366f1";
+                case "sad" -> "#dc3545";
                 case "angry" -> "#ef4444";
                 default -> "#64748b";
             };
@@ -294,7 +293,7 @@ public class ChatwellAssistantController {
             label.setPadding(new Insets(10, 15, 10, 15));
 
             if (role.equals("user")) {
-                label.setStyle("-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 15 15 2 15;");
+                label.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; -fx-background-radius: 15 15 2 15;");
             } else {
                 label.setStyle("-fx-background-color: #f1f5f9; -fx-text-fill: #1e293b; -fx-background-radius: 15 15 15 2;");
             }

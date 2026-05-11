@@ -12,7 +12,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.cycle.model.Cycle;
 import org.example.cycle.service.CycleService;
+import org.example.cycle.service.GoogleCalendarService;
 import org.example.home.controller.HomeController;
+import com.google.api.services.calendar.model.Event;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -29,6 +31,7 @@ public class CycleCalendarController {
     private YearMonth currentYearMonth;
     private final org.example.cycle.service.CycleService cycleService = new org.example.cycle.service.CycleService();
     private final org.example.cycle.service.CycleAnalysisService analysisService = new org.example.cycle.service.CycleAnalysisService();
+    private final GoogleCalendarService googleCalendarService = new GoogleCalendarService();
 
     private int getCurrentUserId() {
         org.example.user.model.User currentUser = org.example.utils.SessionManager.getCurrentUser();
@@ -69,6 +72,14 @@ public class CycleCalendarController {
 
         List<Cycle> userCycles = cycleService.getCyclesByUserId(getCurrentUserId());
         List<org.example.cycle.model.CycleAnalysis> analyses = analysisService.analyzeAllUserCycles(userCycles);
+
+        // Récupération des événements Google
+        List<Event> googleEvents = new java.util.ArrayList<>();
+        try {
+            googleEvents = googleCalendarService.getEventsForMonth(currentYearMonth);
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la récupération des événements Google : " + e.getMessage());
+        }
 
         int row = 0;
         int col = dayOfWeekOfFirst - 1;
@@ -116,6 +127,22 @@ public class CycleCalendarController {
                 Label lblFertile = new Label("🩵 Fertile");
                 lblFertile.getStyleClass().add("fertile-label");
                 dayBox.getChildren().add(lblFertile);
+            }
+
+            // --- AFFICHAGE ÉVÉNEMENTS GOOGLE ---
+            for (Event event : googleEvents) {
+                String eventDateStr = "";
+                if (event.getStart().getDate() != null) {
+                    eventDateStr = event.getStart().getDate().toString();
+                } else if (event.getStart().getDateTime() != null) {
+                    eventDateStr = event.getStart().getDateTime().toString().substring(0, 10);
+                }
+
+                if (eventDateStr.equals(currentDate.toString())) {
+                    Label lblGoogle = new Label("🔹 " + event.getSummary());
+                    lblGoogle.setStyle("-fx-font-size: 10px; -fx-text-fill: #4285F4; -fx-font-weight: bold; -fx-padding: 2 0;");
+                    dayBox.getChildren().add(lblGoogle);
+                }
             }
 
             Cycle activeCycle = analysisService.getCycleForDate(currentDate, userCycles);

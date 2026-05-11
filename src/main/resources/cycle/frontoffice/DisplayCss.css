@@ -1,197 +1,248 @@
-/* =========================
-   GLOBAL THEME - PREMIUM UI (CYCLES & SYMPTOMS)
-========================= */
+/* ═══════════════════════════════════════════════════════
+   SOSI — CYCLE FRONT-OFFICE · Design System v2
+   Palette: #dc3545 Rouge · Blanc · Gris clair
+   ═══════════════════════════════════════════════════════ */
 
-.main-container {
-    -fx-background-color: #f8fafc;
-    -fx-padding: 40;
-    -fx-alignment: top-center;
+.root, .main-container {
+    -fx-primary-red: #dc3545;
+    -fx-primary-dark: #b91c1c;
+    -fx-bg-soft: #f8f9fb;
+    -fx-text-dark: #1e293b;
+    -fx-text-muted: #64748b;
 }
 
-/* =========================
-   HEADER STYLING
-========================= */
-.header-container {
-    -fx-padding: 0 0 20 0;
-    -fx-spacing: 20;
-    -fx-alignment: center-left;
-}
+.main-container { -fx-background-color: #f8f9fb; }
 
-.header-title {
-    -fx-font-size: 26px;
-    -fx-font-weight: 800;
-    -fx-text-fill: #1e293b;
-}
-
-/* =========================
-   CARDS (FORMS & DISPLAY)
-========================= */
-.form-card, .cycle-card {
-    -fx-background-color: white;
-    -fx-padding: 30;
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 25, 0, 0, 10);
-    -fx-min-width: 450px;
-}
-
-.cycle-card {
-    -fx-min-width: 300px;
-    -fx-pref-width: 300px;
-    -fx-transition: all 0.3s;
-}
-
-.cycle-card:hover {
-    -fx-translate-y: -5;
-    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.25), 25, 0, 0, 12);
-}
-
-/* =========================
-   LABELS & INPUTS
-========================= */
-.form-label, .cycle-label-title {
-    -fx-font-size: 14px;
-    -fx-font-weight: 600;
-    -fx-text-fill: #64748b;
-    -fx-padding: 5 0 2 0;
-}
-
-.cycle-label-value {
-    -fx-font-size: 16px;
-    -fx-text-fill: #0f172a;
-    -fx-font-weight: 800;
-    -fx-padding: 0 0 10 0;
-}
-
-.form-combobox, .form-datepicker, .text-field {
-    -fx-pref-width: 350px;
-    -fx-pref-height: 40px;
-    -fx-font-size: 14px;
-    -fx-background-radius: 8;
-    -fx-border-color: #e2e8f0;
-    -fx-border-radius: 8;
-    -fx-background-color: #f8fafc;
-    -fx-padding: 0 5;
-}
-
-.form-combobox:focused, .form-datepicker:focused, .text-field:focused {
-    -fx-border-color: #ff4d6d;
-    -fx-background-color: white;
-}
-
-/* =========================
-   BUTTONS (UNIFIED)
-========================= */
-.button-container {
-    -fx-spacing: 15;
-    -fx-alignment: center;
-    -fx-padding: 30 0 0 0;
-}
-
-.cycle-buttons {
-    -fx-spacing: 10;
-    -fx-padding: 10 0 0 0;
-}
-
-/* Primary (Add, Save) */
-.btn-primary {
-    -fx-background-color: linear-gradient(to right, #ff4d6d, #c9184a);
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-font-weight: 700;
-    -fx-background-radius: 10;
-    -fx-padding: 10 20;
-    -fx-cursor: hand;
-}
-
-.btn-primary:hover {
-    -fx-opacity: 0.9;
-    -fx-translate-y: -1;
-}
-
-/* Secondary (Cancel, Back) */
-.btn-secondary {
+/* ── NAV TABS (PILL STYLE) ────────────────────────────── */
+.btn-tab {
     -fx-background-color: transparent;
     -fx-text-fill: #64748b;
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-font-weight: 700;
-    -fx-background-radius: 10;
-    -fx-padding: 10 15;
+    -fx-padding: 8 16;
+    -fx-background-radius: 20;
     -fx-cursor: hand;
     -fx-border-color: transparent;
 }
+.btn-tab:hover {
+    -fx-background-color: rgba(220,53,69,0.08);
+    -fx-text-fill: #dc3545;
+}
+.btn-tab:selected, .btn-tab.active {
+    -fx-background-color: white;
+    -fx-text-fill: #dc3545;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.12), 10, 0, 0, 2);
+}
 
-.btn-secondary:hover {
-    -fx-background-color: #e2e8f0;
+/* ── HERO CARD ────────────────────────────────────────── */
+.hero-card {
+    -fx-background-color: linear-gradient(to bottom right, #dc3545, #b91c1c);
+    -fx-background-radius: 24;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.40), 25, 0, 0, 12);
+}
+.hero-title {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: 800;
+    -fx-opacity: 0.9;
+}
+.hero-value {
+    -fx-text-fill: white;
+    -fx-font-size: 38px;
+    -fx-font-weight: 900;
+}
+.hero-badge {
+    -fx-background-color: rgba(255,255,255,0.25);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-padding: 6 16;
+    -fx-background-radius: 20;
+}
+
+/* ── INFO CARDS ───────────────────────────────────────── */
+.info-card {
+    -fx-background-color: white;
+    -fx-background-radius: 24;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 20, 0, 0, 10);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+    -fx-border-radius: 24;
+}
+.info-card:hover {
+    -fx-border-color: #fecaca;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.08), 24, 0, 0, 12);
+}
+
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+}
+.stat-label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+.stat-value {
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+}
+
+/* ── CHATBOT ──────────────────────────────────────────── */
+.chat-container {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 20, 0, 0, 10);
+}
+.chat-bubble-ai {
+    -fx-background-color: #f1f5f9;
     -fx-text-fill: #334155;
+    -fx-padding: 12 18;
+    -fx-background-radius: 20 20 20 4;
+    -fx-max-width: 450;
+}
+.chat-input {
+    -fx-background-color: #f8f9fb;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 24;
+    -fx-background-radius: 24;
+    -fx-padding: 12 20;
+    -fx-font-size: 14px;
+}
+.chat-input:focused {
+    -fx-border-color: #dc3545;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.12), 8, 0, 0, 0);
 }
 
-/* Danger (Delete) */
-.btn-delete, .btn-danger {
-    -fx-background-color: linear-gradient(to right, #dc3545, #b02a37);
+/* ── BUTTONS ──────────────────────────────────────────── */
+.btn-primary-cycle {
+    -fx-background-color: linear-gradient(to right, #dc3545, #b91c1c);
     -fx-text-fill: white;
-    -fx-font-weight: 700;
-    -fx-background-radius: 10;
-    -fx-padding: 8 16;
+    -fx-font-weight: 800;
+    -fx-background-radius: 24;
+    -fx-padding: 10 24;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.35), 12, 0, 0, 6);
     -fx-cursor: hand;
 }
-
-.btn-delete:hover, .btn-danger:hover {
-    -fx-opacity: 0.85;
+.btn-primary-cycle:hover {
+    -fx-background-color: linear-gradient(to right, #b91c1c, #991b1b);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.50), 16, 0, 0, 8);
 }
 
-/* Edit / Neutral Active (Blue/Orange) */
+.btn-outline {
+    -fx-background-color: white;
+    -fx-text-fill: #64748b;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 24;
+    -fx-background-radius: 24;
+    -fx-padding: 9 20;
+    -fx-cursor: hand;
+}
+.btn-outline:hover {
+    -fx-background-color: #fff1f2;
+    -fx-border-color: #fecaca;
+    -fx-text-fill: #dc3545;
+}
+
+/* ── ALERTS ───────────────────────────────────────────── */
+.alert-card {
+    -fx-background-color: #fff1f2;
+    -fx-background-radius: 16;
+    -fx-padding: 15 20;
+    -fx-border-color: #fecaca;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+}
+.alert-text {
+    -fx-text-fill: #dc3545;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+}
+.typing-indicator {
+    -fx-text-fill: #64748b;
+    -fx-font-style: italic;
+    -fx-font-size: 12px;
+    -fx-padding: 0 0 0 10;
+}
+
+/* ── FORM COMPONENTS ──────────────────────────────────── */
+.combo-box, .date-picker {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 2;
+    -fx-font-size: 13px;
+}
+.combo-box:hover, .date-picker:hover {
+    -fx-border-color: #fecaca;
+}
+.combo-box:focused, .date-picker:focused {
+    -fx-border-color: #dc3545;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.1), 8, 0, 0, 0);
+}
+.combo-box .list-cell {
+    -fx-text-fill: #1e293b;
+    -fx-padding: 8 12;
+}
+
+/* ── CYCLE/SYMPTOM CARDS ────────────────────────────── */
+.cycle-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 15, 0, 0, 6);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+}
+.cycle-label-title {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-text-transform: uppercase;
+}
+.cycle-label-value {
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+}
+.cycle-buttons {
+    -fx-spacing: 12;
+    -fx-padding: 10 0 0 0;
+}
 .btn-edit {
-    -fx-background-color: linear-gradient(to right, #3b82f6, #2563eb); /* Modern Blue */
-    -fx-text-fill: white;
-    -fx-font-weight: 700;
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #475569;
+    -fx-font-weight: 800;
     -fx-background-radius: 10;
-    -fx-padding: 8 16;
+    -fx-padding: 6 15;
     -fx-cursor: hand;
 }
-
 .btn-edit:hover {
-    -fx-opacity: 0.85;
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #1e293b;
 }
-
-/* =========================
-   SCROLL PANE OVERRIDES
-========================= */
-.custom-scroll {
-    -fx-background: transparent;
-    -fx-background-color: transparent;
-}
-
-.custom-scroll .viewport {
-    -fx-background-color: transparent;
-}
-
-.scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-pref-width: 8;
-}
-
-.scroll-bar .thumb {
-    -fx-background-color: rgba(220, 53, 69, 0.4);
+.btn-delete {
+    -fx-background-color: #fef2f2;
+    -fx-text-fill: #dc3545;
+    -fx-font-weight: 800;
     -fx-background-radius: 10;
+    -fx-padding: 6 15;
+    -fx-cursor: hand;
 }
-
-.scroll-bar .thumb:hover {
-    -fx-background-color: rgba(220, 53, 69, 0.8);
+.btn-delete:hover {
+    -fx-background-color: #fee2e2;
 }
-
-/* =========================
-   CHARTS OVERRIDES (PINK THEME)
-========================= */
-.chart-bar {
-    -fx-bar-fill: #f472b6; /* Light pink for bars */
-}
-
-/* Pie Chart Colors */
-.default-color0.chart-pie { -fx-pie-color: #fbcfe8; }
-.default-color1.chart-pie { -fx-pie-color: #f9a8d4; }
-.default-color2.chart-pie { -fx-pie-color: #f472b6; }
-.default-color3.chart-pie { -fx-pie-color: #ec4899; }
-.default-color4.chart-pie { -fx-pie-color: #db2777; }
-.default-color5.chart-pie { -fx-pie-color: #be185d; }
-.default-color6.chart-pie { -fx-pie-color: #9d174d; }

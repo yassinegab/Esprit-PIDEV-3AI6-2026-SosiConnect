@@ -1,0 +1,142 @@
+/* ═══════════════════════════════════════════════════════
+   SOSI — SERVICES SOCIAUX BACK-OFFICE · Design System v2
+   Palette: #dc3545 Rouge · Blanc · Slate #1e293b
+   ═══════════════════════════════════════════════════════ */
+
+/* ── GLOBAL CONTAINERS ────────────────────────────────── */
+.admin-view-bg {
+    -fx-background-color: #f8f9fb;
+}
+
+.admin-header-strip {
+    -fx-background-color: #1e293b;
+    -fx-padding: 14 22;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5);
+}
+
+/* ── STAT CARDS ───────────────────────────────────────── */
+.stat-card-admin {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 14 18;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 0.5 0.5 0.5 4;
+}
+.stat-card-total { -fx-border-color: #dc3545, #f1f5f9, #f1f5f9, #dc3545; }
+.stat-card-warning { -fx-border-color: #f59e0b, #f1f5f9, #f1f5f9, #f59e0b; }
+.stat-card-success { -fx-border-color: #10b981, #f1f5f9, #f1f5f9, #10b981; }
+.stat-card-purple { -fx-border-color: #6366f1, #f1f5f9, #f1f5f9, #6366f1; }
+.stat-card-danger { -fx-border-color: #dc3545, #f1f5f9, #f1f5f9, #dc3545; }
+
+.stat-label-small {
+    -fx-font-size: 9px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #94a3b8;
+}
+.stat-value-large {
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1e293b;
+}
+
+/* ── FORM PANEL ───────────────────────────────────────── */
+.admin-side-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 15, 0, 0, 6);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+}
+
+.admin-field-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #475569;
+}
+
+.admin-input-small {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 10;
+    -fx-font-size: 12px;
+}
+.admin-input-small:focused {
+    -fx-border-color: #dc3545;
+    -fx-background-color: white;
+}
+
+/* ── BUTTONS ──────────────────────────────────────────── */
+.btn-admin-primary {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-weight: 800;
+    -fx-padding: 10 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+.btn-admin-primary:hover { -fx-background-color: #b91c1c; }
+
+.btn-admin-outline {
+    -fx-background-color: white;
+    -fx-text-fill: #475569;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 16;
+    -fx-cursor: hand;
+}
+.btn-admin-outline:hover {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #dc3545;
+    -fx-text-fill: #dc3545;
+}
+
+.btn-admin-danger {
+    -fx-background-color: #fef2f2;
+    -fx-text-fill: #dc3545;
+    -fx-border-color: #fecaca;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 16;
+    -fx-cursor: hand;
+}
+.btn-admin-danger:hover {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+}
+
+/* ── TABLE VIEW ───────────────────────────────────────── */
+.admin-table {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: #f1f5f9;
+    -fx-border-radius: 12;
+}
+
+/* ── DASHBOARD BUTTONS ────────────────────────────────── */
+.btn-dash-card {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-background-radius: 16;
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);
+    -fx-cursor: hand;
+}
+.btn-dash-card:hover {
+    -fx-border-color: #fecaca;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.1), 15, 0, 0, 6);
+}
+.dash-card-icon {
+    -fx-font-size: 24px;
+    -fx-text-fill: #dc3545;
+}
+.dash-card-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1e293b;
+}

@@ -10,6 +10,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import java.net.URL?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -17,16 +18,20 @@
             prefHeight="600.0" prefWidth="800.0"
             style="-fx-background-color: #f4f7fa;">
 
+    <stylesheets>
+        <URL value="@wellbeing_style.css" />
+    </stylesheets>
+
     <StackPane fx:id="mainContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         
         <!-- Dashboard / List View -->
         <VBox fx:id="dashboardView" spacing="20.0" style="-fx-padding: 30;">
             <HBox alignment="CENTER_LEFT" spacing="20.0">
-                <Label text="Mes Données de Bien-être" style="-fx-font-size: 28px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+                <Label text="Mes Données de Bien-être" styleClass="wb-section-title" />
                 <Region HBox.hgrow="ALWAYS" />
                 <HBox spacing="10">
-                    <Button text="🥗 Analyse de Repas" onAction="#showMealAnalysis" style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-font-weight: 700; -fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand;" />
-                    <Button text="+ Évaluer mon bien-être" onAction="#showForm" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: 700; -fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand;" />
+                    <Button text="🥗 Analyse de Repas" onAction="#showMealAnalysis" styleClass="btn-wb-primary" />
+                    <Button text="+ Évaluer mon bien-être" onAction="#showForm" styleClass="btn-wb-success" />
                 </HBox>
             </HBox>
             
@@ -38,23 +43,23 @@
                     </VBox>
 
                     <!-- Banner Section -->
-                    <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: linear-gradient(to right, #6366f1, #8b5cf6); -fx-background-radius: 15; -fx-padding: 20;">
+                    <HBox alignment="CENTER_LEFT" spacing="20" styleClass="wb-banner">
                         <VBox spacing="5" HBox.hgrow="ALWAYS">
                             <Label text="Detailed Analysis Available" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: 800;" />
                             <Label text="Visualize your well-being trends over time." style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 13px;" />
                         </VBox>
-                        <Button text="View Stress Statistics ›" style="-fx-background-color: white; -fx-text-fill: #6366f1; -fx-font-weight: 700; -fx-padding: 10 20; -fx-background-radius: 10; -fx-cursor: hand;" />
+                        <Button text="View Stress Statistics ›" styleClass="wb-banner-btn" />
                     </HBox>
 
                     <!-- Meals Section -->
                     <VBox spacing="15.0">
                         <HBox alignment="CENTER_LEFT" spacing="15">
-                            <Label text="My Meals" style="-fx-font-size: 22px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+                            <Label text="My Meals" styleClass="wb-card-title" />
                             <Region HBox.hgrow="ALWAYS" />
                             <HBox spacing="10" alignment="CENTER_RIGHT">
-                                <TextField fx:id="searchField" promptText="🔍 Rechercher un repas..." style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-color: #e2e8f0; -fx-border-radius: 10; -fx-padding: 8 12; -fx-pref-width: 200;" />
-                                <ComboBox fx:id="filterCombo" promptText="Filtrer par calories" style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-color: #e2e8f0; -fx-border-radius: 10; -fx-padding: 5;" />
-                                <Button text="🍽 Add Meal" onAction="#showMealAnalysis" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: 700; -fx-padding: 8 15; -fx-background-radius: 8; -fx-cursor: hand;" />
+                                <TextField fx:id="searchField" promptText="🔍 Rechercher un repas..." styleClass="wb-input-pill" prefWidth="200" />
+                                <ComboBox fx:id="filterCombo" promptText="Filtrer par calories" styleClass="wb-input-pill" style="-fx-padding: 5" />
+                                <Button text="🍽 Add Meal" onAction="#showMealAnalysis" styleClass="btn-wb-success" />
                             </HBox>
                         </HBox>
                         <FlowPane fx:id="mealsContainer" hgap="20.0" vgap="20.0" style="-fx-padding: 5;" />
@@ -63,7 +68,7 @@
                     <!-- Statistics Section -->
                     <VBox spacing="20.0">
                         <HBox alignment="CENTER_LEFT">
-                            <Label text="Mes Statistiques" style="-fx-font-size: 22px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+                            <Label text="Mes Statistiques" styleClass="wb-card-title" />
                         </HBox>
                         
                         <!-- Large Stress Trend -->
@@ -73,7 +78,7 @@
                                     <Label text="📈 Stress Score Trend" style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
                                     <Region HBox.hgrow="ALWAYS" />
                                     <VBox alignment="CENTER_RIGHT" spacing="2">
-                                        <Label fx:id="lblCurrentStress" text="--" style="-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #6366f1;" />
+                                        <Label fx:id="lblCurrentStress" text="--" style="-fx-font-size: 18px; -fx-font-weight: 900; -fx-text-fill: #dc3545;" />
                                         <Label text="Dernier Score" style="-fx-font-size: 9px; -fx-text-fill: #94a3b8; -fx-text-transform: uppercase;" />
                                     </VBox>
                                     <Region prefWidth="20" />
@@ -108,7 +113,7 @@
                                     <HBox alignment="CENTER_LEFT">
                                         <Label text="📉 Mood Trends" style="-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
                                         <Region HBox.hgrow="ALWAYS" />
-                                        <Label fx:id="lblMoodStatus" text="--" style="-fx-font-size: 12px; -fx-font-weight: 800; -fx-text-fill: #3b82f6;" />
+                                        <Label fx:id="lblMoodStatus" text="--" style="-fx-font-size: 12px; -fx-font-weight: 800; -fx-text-fill: #dc3545;" />
                                     </HBox>
                                     <Label text="Suivi de l'anxiété et irritabilité." style="-fx-font-size: 10px; -fx-text-fill: #64748b;" wrapText="true" />
                                 </VBox>
@@ -140,7 +145,7 @@
                                     <HBox alignment="CENTER_LEFT">
                                         <Label text="📅 Log Frequency" style="-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
                                         <Region HBox.hgrow="ALWAYS" />
-                                        <Label fx:id="lblTotalLogs" text="-- logs" style="-fx-font-size: 12px; -fx-font-weight: 800; -fx-text-fill: #8b5cf6;" />
+                                        <Label fx:id="lblTotalLogs" text="-- logs" style="-fx-font-size: 12px; -fx-font-weight: 800; -fx-text-fill: #dc3545;" />
                                     </HBox>
                                     <Label text="Assiduité (Évaluations + Repas)." style="-fx-font-size: 10px; -fx-text-fill: #64748b;" wrapText="true" />
                                 </VBox>
@@ -162,7 +167,7 @@
                 <VBox alignment="TOP_CENTER" spacing="30.0" style="-fx-padding: 40;">
                     
                     <HBox alignment="CENTER_LEFT">
-                        <Button text="← Retour" onAction="#showDashboard" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-padding: 8 15; -fx-background-radius: 8; -fx-cursor: hand;" />
+                        <Button text="← Retour" onAction="#showDashboard" styleClass="btn-wb-secondary" />
                     </HBox>
 
                     <!-- Header Section -->
@@ -182,7 +187,6 @@
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="50.0" />
                             </columnConstraints>
                             
-                            <!-- Helper Macro for Slider with Guides -->
                             <!-- Environment Work -->
                             <VBox spacing="8.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
                                 <Label text="Environnement de travail" style="-fx-font-weight: 700; -fx-text-fill: #1e293b;" />
@@ -295,7 +299,7 @@
                         </GridPane>
 
                         <HBox alignment="CENTER" style="-fx-padding: 10 0 0 0;">
-                            <Button text="Enregistrer mes données" onAction="#handleSubmit" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: 800; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 20; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(40, 167, 69, 0.3), 15, 0, 0, 8);" />
+                            <Button text="Enregistrer mes données" onAction="#handleSubmit" style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-weight: 800; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 20; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(16, 185, 129, 0.3), 15, 0, 0, 8);" />
                         </HBox>
                     </VBox>
 
@@ -306,7 +310,7 @@
         <!-- Meal Analysis View (Initially Hidden) -->
         <VBox fx:id="mealViewContainer" visible="false" style="-fx-background-color: #f8fafc;">
             <HBox alignment="CENTER_LEFT" style="-fx-padding: 20 40 0 40;">
-                <Button text="← Retour" onAction="#showDashboard" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-padding: 8 15; -fx-background-radius: 8; -fx-cursor: hand;" />
+                <Button text="← Retour" onAction="#showDashboard" styleClass="btn-wb-secondary" />
             </HBox>
             <StackPane fx:id="mealContentArea" VBox.vgrow="ALWAYS" />
         </VBox>
@@ -325,7 +329,7 @@
         <children>
             <!-- ChatWell AI Button (Premium) -->
             <StackPane>
-                <Button onAction="#launchChatWell" style="-fx-background-color: linear-gradient(to bottom, #6366f1, #4f46e5); -fx-background-radius: 50%; -fx-min-width: 65; -fx-min-height: 65; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(99, 102, 241, 0.4), 15, 0, 0, 5);">
+                <Button onAction="#launchChatWell" style="-fx-background-color: linear-gradient(to bottom, #dc3545, #b91c1c); -fx-background-radius: 50%; -fx-min-width: 65; -fx-min-height: 65; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(220, 53, 69, 0.4), 15, 0, 0, 5);">
                     <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                             <image>

@@ -16,9 +16,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import org.example.user.service.ServiceUser;
+import org.example.user.service.GoogleAuthService;
 import org.example.user.model.User;
 import org.example.home.controller.HomeController;
 import org.example.backoffice.controller.AdminBaseController;
+import org.json.JSONObject;
+
+import javafx.application.Platform;
 
 public class LoginController {
 
@@ -102,5 +106,37 @@ public class LoginController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleGoogleLogin(ActionEvent event) {
+        System.out.println("Starting Google OAuth Flow...");
+        // Run in background thread to not freeze UI
+        new Thread(() -> {
+            try {
+                JSONObject userInfo = GoogleAuthService.authenticateAndGetUserInfo();
+                System.out.println("Google User Info: " + userInfo.toString());
+                
+                String email = userInfo.optString("email");
+                String prenom = userInfo.optString("given_name");
+                String nom = userInfo.optString("family_name");
+                
+                if (email == null || email.isEmpty()) {
+                    System.err.println("Could not retrieve email from Google.");
+                    return;
+                }
+
+                User user = serviceUser.loginOrRegisterWithGoogle(email, nom, prenom);
+                
+                if (user != null) {
+                    org.example.utils.SessionManager.setCurrentUser(user);
+                    // Navigate on UI Thread
+                    Platform.runLater(() -> navigateAfterLogin(user));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Google Login Failed: " + e.getMessage());
+            }
+        }).start();
     }
 }
