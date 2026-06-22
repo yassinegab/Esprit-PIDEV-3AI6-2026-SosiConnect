@@ -36,6 +36,13 @@ public class MainFX extends Application {
     }
 
     public static void main(String[] args) {
+        // Load environment variables into system properties for Spring Boot configuration
+        io.github.cdimascio.dotenv.Dotenv.configure()
+                .ignoreIfMissing()
+                .ignoreIfMalformed()
+                .systemProperties()
+                .load();
+
         // Démarrer Spring Boot en arrière-plan
         org.springframework.context.ApplicationContext context = org.springframework.boot.SpringApplication.run(org.example.SosiApplication.class, args);
         org.example.SosiApplication.setContext(context);
