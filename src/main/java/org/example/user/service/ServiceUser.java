@@ -27,10 +27,10 @@ public class ServiceUser implements IService<User> {
         String query = "INSERT INTO user (nom, prenom, email, password, telephone, age, sexe, taille, poids, handicap, roles, user_role, specialite, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(query);
         
-        // Hash password if not already hashed
+        // Hash password if not already hashed (supports Java $2a$ and PHP $2y$ prefixes)
         String password = user.getPassword();
-        if (!password.startsWith("$2a$")) {
-            password = BCrypt.hashpw(password, BCrypt.gensalt());
+        if (!password.startsWith("$2a$") && !password.startsWith("$2y$")) {
+            password = BCrypt.hashpw(password, BCrypt.gensalt(12));
         }
 
         ps.setString(1, user.getNom());
@@ -98,8 +98,11 @@ public class ServiceUser implements IService<User> {
         if (rs.next()) {
             String storedPassword = rs.getString("password");
             boolean valid = false;
-            if (storedPassword.startsWith("$2a$")) {
-                valid = BCrypt.checkpw(password, storedPassword);
+            // Supports standard BCrypt ($2a$) and PHP-specific BCrypt ($2y$)
+            if (storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2y$")) {
+                // jBCrypt expects $2a$ prefix, so we normalize $2y$ to $2a$ for verification
+                String normalizedHash = storedPassword.replace("$2y$", "$2a$");
+                valid = BCrypt.checkpw(password, normalizedHash);
             } else {
                 valid = password.equals(storedPassword);
                 // Optional: migrate plain password to bcrypt here

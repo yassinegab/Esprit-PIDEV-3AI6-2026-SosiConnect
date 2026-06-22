@@ -25,7 +25,7 @@
         <!-- Stats Row -->
         <HBox spacing="25">
             <!-- Cycle Stat -->
-            <VBox styleClass="stat-card-pro" HBox.hgrow="ALWAYS">
+            <VBox fx:id="cycleStatCard" styleClass="stat-card-pro" HBox.hgrow="ALWAYS">
                 <HBox spacing="15" alignment="CENTER_LEFT">
                     <StackPane styleClass="stat-icon-bg" style="-fx-background-color: #fee2e2;">
                         <Label text="C" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #dc3545;" />
@@ -110,7 +110,7 @@
                         </HBox>
                     </graphic>
                 </Button>
-                <Button onAction="#goToCycle" styleClass="quick-action-btn" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308">
+                <Button fx:id="btnQuickCycle" onAction="#goToCycle" styleClass="quick-action-btn" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308">
                     <graphic>
                         <HBox alignment="CENTER_LEFT" spacing="12">
                             <Label text="C" style="-fx-font-size: 18px; -fx-font-weight: bold;" />

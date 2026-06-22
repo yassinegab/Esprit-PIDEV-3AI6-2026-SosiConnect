@@ -54,6 +54,14 @@ public class HomeController {
         if (user.getNom() != null && !user.getNom().isEmpty()) initials += user.getNom().substring(0, 1).toUpperCase();
         if (user.getPrenom() != null && !user.getPrenom().isEmpty()) initials += user.getPrenom().substring(0, 1).toUpperCase();
         avatarLabel.setText(initials);
+
+        // Hide Cycle button for male users
+        if (user.getSexe() != null && (user.getSexe().equalsIgnoreCase("Homme") || user.getSexe().equalsIgnoreCase("Male"))) {
+            if (btnCycle != null) {
+                btnCycle.setVisible(false);
+                btnCycle.setManaged(false);
+            }
+        }
     }
 
     @FXML

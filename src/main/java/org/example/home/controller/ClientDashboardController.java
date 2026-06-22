@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -33,6 +34,8 @@ public class ClientDashboardController {
     @FXML private Label lblNextAppointment;
     @FXML private LineChart<String, Number> stressChart;
     @FXML private VBox activityContainer;
+    @FXML private VBox cycleStatCard;
+    @FXML private Button btnQuickCycle;
 
     private HomeController homeController;
     private final CycleService cycleService = new CycleService();
@@ -46,22 +49,40 @@ public class ClientDashboardController {
         User currentUser = SessionManager.getCurrentUser();
         if (currentUser != null) {
             welcomeLabel.setText("Bonjour, " + currentUser.getPrenom() + " !");
-            loadDashboardData(currentUser.getId());
+            
+            // Hide cycle related UI for male users
+            if (currentUser.getSexe() != null && (currentUser.getSexe().equalsIgnoreCase("Homme") || currentUser.getSexe().equalsIgnoreCase("Male"))) {
+                if (cycleStatCard != null) {
+                    cycleStatCard.setVisible(false);
+                    cycleStatCard.setManaged(false);
+                }
+                if (btnQuickCycle != null) {
+                    btnQuickCycle.setVisible(false);
+                    btnQuickCycle.setManaged(false);
+                }
+            }
+            
+            loadDashboardData(currentUser);
         }
         
         dateLabel.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE d MMMM yyyy", Locale.FRENCH)));
     }
 
-    private void loadDashboardData(int userId) {
+    private void loadDashboardData(User user) {
         try {
-            // 1. Cycle Data
-            List<org.example.cycle.model.Cycle> cycles = cycleService.getCyclesByUserId(userId);
-            LocalDate nextPeriod = cycleAnalysisService.predictNextPeriod(cycles);
-            if (nextPeriod != null) {
-                long daysLeft = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), nextPeriod);
-                lblNextPeriod.setText("Dans " + daysLeft + " jours");
-            } else {
-                lblNextPeriod.setText("Non défini");
+            int userId = user.getId();
+            boolean isFemale = user.getSexe() == null || (!user.getSexe().equalsIgnoreCase("Homme") && !user.getSexe().equalsIgnoreCase("Male"));
+
+            // 1. Cycle Data (Only for females)
+            if (isFemale) {
+                List<org.example.cycle.model.Cycle> cycles = cycleService.getCyclesByUserId(userId);
+                LocalDate nextPeriod = cycleAnalysisService.predictNextPeriod(cycles);
+                if (nextPeriod != null) {
+                    long daysLeft = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), nextPeriod);
+                    lblNextPeriod.setText("Dans " + daysLeft + " jours");
+                } else {
+                    lblNextPeriod.setText("Non défini");
+                }
             }
 
             // 2. Wellbeing Data (Stress)
@@ -86,7 +107,7 @@ public class ClientDashboardController {
             loadStressChart(userId);
             
             // 5. Recent Activities
-            loadRecentActivities(userId);
+            loadRecentActivities(user);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,8 +135,10 @@ public class ClientDashboardController {
         }
     }
 
-    private void loadRecentActivities(int userId) throws java.sql.SQLException {
+    private void loadRecentActivities(User user) throws java.sql.SQLException {
         activityContainer.getChildren().clear();
+        int userId = user.getId();
+        boolean isFemale = user.getSexe() == null || (!user.getSexe().equalsIgnoreCase("Homme") && !user.getSexe().equalsIgnoreCase("Male"));
         
         // Fetch Meals
         List<Meal> meals = mealService.getByUserId(userId);
@@ -126,12 +149,14 @@ public class ClientDashboardController {
                 meal.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM HH:mm")));
         }
         
-        // Fetch last cycle
-        List<org.example.cycle.model.Cycle> cycles = cycleService.getCyclesByUserId(userId);
-        if (!cycles.isEmpty()) {
-            org.example.cycle.model.Cycle last = cycles.get(cycles.size()-1);
-            addActivityItem("🩸", "Cycle mis à jour", 
-                last.getDate_debut_m().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM")));
+        // Fetch last cycle (Only for females)
+        if (isFemale) {
+            List<org.example.cycle.model.Cycle> cycles = cycleService.getCyclesByUserId(userId);
+            if (!cycles.isEmpty()) {
+                org.example.cycle.model.Cycle last = cycles.get(cycles.size()-1);
+                addActivityItem("🩸", "Cycle mis à jour", 
+                    last.getDate_debut_m().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM")));
+            }
         }
     }
 

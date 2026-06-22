@@ -12,6 +12,7 @@ import org.example.utils.SessionManager;
 import org.example.wellbeing.model.Meal;
 import org.example.wellbeing.service.MealService;
 import org.json.JSONObject;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,8 @@ public class WellbeingMealController {
     private final MealService mealService = new MealService();
 
     // Constant for storage
-    private static final String UPLOAD_DIR = "src/main/resources/assets/meal_images/";
+    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private static final String UPLOAD_DIR = dotenv.get("MEALS_UPLOAD_DIR") != null ? dotenv.get("MEALS_UPLOAD_DIR") : "src/main/resources/assets/meal_images/";
 
     @FXML
     public void initialize() {

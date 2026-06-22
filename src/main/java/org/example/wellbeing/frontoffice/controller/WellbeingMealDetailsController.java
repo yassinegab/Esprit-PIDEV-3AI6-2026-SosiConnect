@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.example.wellbeing.model.Meal;
+import io.github.cdimascio.dotenv.Dotenv;
 import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -23,7 +24,8 @@ public class WellbeingMealDetailsController {
     private Meal meal;
     private WellbeingControllerClientController mainController;
 
-    private static final String UPLOAD_DIR = "src/main/resources/assets/meal_images/";
+    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private static final String UPLOAD_DIR = dotenv.get("MEALS_UPLOAD_DIR") != null ? dotenv.get("MEALS_UPLOAD_DIR") : "src/main/resources/assets/meal_images/";
 
     public void setData(Meal meal, WellbeingControllerClientController mainController) {
         this.meal = meal;
