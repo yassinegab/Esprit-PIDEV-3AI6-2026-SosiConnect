@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.example.utils.AlertUtil;
@@ -16,8 +15,16 @@ import java.io.IOException;
 
 public class AdminBaseController {
 
-    @FXML
-    private StackPane adminContentArea;
+    private static AdminBaseController instance;
+
+    @FXML private StackPane adminContentArea;
+    @FXML private Button btnDashboard;
+    @FXML private Button btnUsers;
+    @FXML private Button btnWellbeing;
+    @FXML private Button btnMedical;
+    @FXML private Button btnAide;
+    @FXML private Button btnAlertes;
+    @FXML private Button btnCycle;
 
     @FXML
     private Button btnDashboard;
@@ -39,13 +46,28 @@ public class AdminBaseController {
 
     @FXML
     public void initialize() {
-        showUserAdmin();
+        instance = this;
+        navButtons = Arrays.asList(btnDashboard, btnUsers, btnWellbeing, btnMedical, btnAide, btnAlertes, btnCycle);
+        // Load default view
+        showWellbeingAdmin(); 
+    }
+
+    public StackPane getAdminContentArea() { return adminContentArea; }
+
+    public static void navigateTo(Parent view) {
+        if (instance != null && instance.adminContentArea != null) {
+            instance.adminContentArea.getChildren().setAll(view);
+        } else {
+            System.err.println("❌ AdminBaseController instance non disponible.");
+        }
     }
 
     @FXML
     private void showDashboard() {
-        loadContent("/user/backoffice/UserAdminView.fxml");
-        setActiveButton(btnDashboard);
+        updateActiveButton(btnDashboard);
+        Label ph = new Label("Tableau de bord principal");
+        ph.setStyle("-fx-font-size:22;-fx-text-fill:#94a3b8;-fx-font-weight:bold;");
+        adminContentArea.getChildren().setAll(ph);
     }
 
     @FXML
@@ -62,20 +84,62 @@ public class AdminBaseController {
 
     @FXML
     private void showMedicalAdmin() {
-        loadContent("/servicesociaux/backoffice/ServicesSociauxAdminView.fxml");
-        setActiveButton(btnMedical);
+        loadView("/servicesociaux/backoffice/MainMenu.fxml", btnMedical);
     }
 
     @FXML
     private void showAideAdmin() {
-        loadContent("/aideEtdon/backoffice/AideEtdonAdminView.fxml");
-        setActiveButton(btnAide);
+        loadView("/aideEtdon/backoffice/AidesEtDonsAdminView.fxml", btnAide);
+    }
+    
+    @FXML
+    private void showAlertesAdmin() {
+        loadView("/aideEtdon/backoffice/AideEtdonAlertesAdminView.fxml", btnAlertes);
     }
 
     @FXML
     private void showCycleAdmin() {
-        loadContent("/cycle/backoffice/CycleAdminView.fxml");
-        setActiveButton(btnCycle);
+        loadView("/cycle/backoffice/CycleAdminView.fxml", btnCycle);
+    }
+
+    public void loadView(String fxmlPath, Button activeBtn) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent view = loader.load();
+
+            // Inject this into the loaded controller if it's AdminAware
+            Object ctrl = loader.getController();
+            if (ctrl instanceof AdminAware aa) {
+                aa.setAdminController(this);
+            }
+
+            adminContentArea.getChildren().setAll(view);
+            updateActiveButton(activeBtn);
+        } catch (Exception e) {
+            Label err = new Label(
+                    "Impossible de charger : " + fxmlPath + "\n"
+                            + (e.getCause() != null ? e.getCause().getMessage() : e.getMessage())
+            );
+            err.setStyle("-fx-font-size:13;-fx-text-fill:#ef4444;-fx-padding:20;");
+            err.setWrapText(true);
+            adminContentArea.getChildren().setAll(err);
+            updateActiveButton(activeBtn);
+            e.printStackTrace();
+        }
+    }
+
+    private void updateActiveButton(Button activeBtn) {
+        for (Button btn : navButtons) {
+            if (btn != null) {
+                btn.getStyleClass().remove("active");
+                btn.setStyle(""); // Clear any inline styles
+            }
+        }
+        if (activeBtn != null) {
+            if (!activeBtn.getStyleClass().contains("active")) {
+                activeBtn.getStyleClass().add("active");
+            }
+        }
     }
 
     @FXML
@@ -96,66 +160,7 @@ public class AdminBaseController {
         }
     }
 
-    private void loadContent(String fxmlPath) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent content = loader.load();
-
-            ScrollPane scrollPane = new ScrollPane();
-            scrollPane.setContent(content);
-            scrollPane.setFitToWidth(true);
-            scrollPane.setFitToHeight(false);
-            scrollPane.setPannable(true);
-            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-
-            scrollPane.setStyle(
-                    "-fx-background-color: transparent;" +
-                            "-fx-background: transparent;" +
-                            "-fx-border-color: transparent;"
-            );
-
-            adminContentArea.getChildren().setAll(scrollPane);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-            Label errorLabel = new Label("Impossible de charger : " + fxmlPath);
-            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16px; -fx-font-weight: bold;");
-            adminContentArea.getChildren().setAll(errorLabel);
-        }
-    }
-
-    private void setActiveButton(Button activeButton) {
-        resetButtonStyle(btnDashboard);
-        resetButtonStyle(btnUsers);
-        resetButtonStyle(btnWellbeing);
-        resetButtonStyle(btnMedical);
-        resetButtonStyle(btnAide);
-        resetButtonStyle(btnCycle);
-
-        if (activeButton != null) {
-            activeButton.setStyle(
-                    "-fx-background-color: #dc2626;" +
-                            "-fx-text-fill: white;" +
-                            "-fx-background-radius: 10;" +
-                            "-fx-padding: 12 18;" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-alignment: CENTER_LEFT;"
-            );
-        }
-    }
-
-    private void resetButtonStyle(Button button) {
-        if (button != null) {
-            button.setStyle(
-                    "-fx-background-color: transparent;" +
-                            "-fx-text-fill: #334155;" +
-                            "-fx-background-radius: 10;" +
-                            "-fx-padding: 12 18;" +
-                            "-fx-font-weight: normal;" +
-                            "-fx-alignment: CENTER_LEFT;"
-            );
-        }
+    public interface AdminAware {
+        void setAdminController(AdminBaseController admin);
     }
 }

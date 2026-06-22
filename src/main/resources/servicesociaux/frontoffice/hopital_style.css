@@ -1,0 +1,182 @@
+/* ═══════════════════════════════════════════════════════
+   SOSI — HÔPITAL FRONT-OFFICE · Design System v2
+   Palette: #dc3545 Rouge · Blanc · Gris clair
+   ═══════════════════════════════════════════════════════ */
+
+.root {
+    -fx-font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -fx-background-color: #f8f9fb;
+}
+
+.main-container {
+    -fx-background-color: #f8f9fb;
+}
+
+/* ── HEADER ─────────────────────────────────────────── */
+.header-box {
+    -fx-background-color: white;
+    -fx-padding: 20 30;
+    -fx-border-color: #e2e8f0;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: center-left;
+}
+
+.header-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #1e293b;
+}
+
+.btn-back {
+    -fx-background-color: white;
+    -fx-text-fill: #64748b;
+    -fx-background-radius: 50;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 50;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+    -fx-font-weight: 700;
+}
+.btn-back:hover {
+    -fx-background-color: #f1f5f9;
+    -fx-text-fill: #dc3545;
+    -fx-border-color: #dc3545;
+}
+
+/* ── SECTION TITLES ────────────────────────────────── */
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #dc3545;
+    -fx-padding: 10 0;
+}
+
+/* ── STAT CARDS ────────────────────────────────────── */
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 10, 0, 0, 4);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+}
+.stat-value {
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #1e293b;
+}
+.stat-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #64748b;
+}
+
+/* Specific Stat Card Variants */
+.stat-card-urgent { -fx-border-left-color: #dc3545; -fx-border-left-width: 4; }
+.stat-card-rdv { -fx-border-left-color: #3b82f6; -fx-border-left-width: 4; }
+.stat-card-wait { -fx-border-left-color: #f59e0b; -fx-border-left-width: 4; }
+
+/* ── FILTER SECTION ────────────────────────────────── */
+.filter-box {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 15, 0, 0, 8);
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+}
+
+.search-field {
+    -fx-background-color: #f8f9fb;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 10 15;
+    -fx-font-size: 13px;
+}
+.search-field:focused {
+    -fx-border-color: #dc3545;
+    -fx-background-color: white;
+}
+
+.combo-box {
+    -fx-background-color: #f8f9fb;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-font-size: 12px;
+}
+
+/* ── BUTTONS ────────────────────────────────────────── */
+.btn-primary {
+    -fx-background-color: linear-gradient(to right, #dc3545, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-weight: 800;
+    -fx-background-radius: 12;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.3), 10, 0, 0, 5);
+}
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to right, #b91c1c, #991b1b);
+    -fx-translate-y: -1;
+}
+
+.btn-secondary {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover {
+    -fx-background-color: #0f172a;
+}
+
+.btn-accent {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-background-radius: 12;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+/* ── TABLE VIEW ─────────────────────────────────────── */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: #e2e8f0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.02), 10, 0, 0, 5);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f8f9fb;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 45;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #64748b;
+    -fx-font-weight: 800;
+    -fx-font-size: 12px;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f1f5f9 transparent;
+    -fx-padding: 8;
+}
+.table-row-cell:odd { -fx-background-color: #fafafa; }
+.table-row-cell:hover { -fx-background-color: #fff1f2; }
+.table-row-cell:selected {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #1e293b;
+}

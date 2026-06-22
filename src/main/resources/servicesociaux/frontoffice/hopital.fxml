@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fitToWidth="true"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.servicesociaux.frontoffice.controller.controllers.HopitalController"
+            styleClass="main-container">
+
+    <stylesheets>
+        <URL value="@hopital_style.css" />
+    </stylesheets>
+
+    <VBox spacing="0">
+
+        <!-- ═══ HEADER ═══ -->
+        <HBox styleClass="header-box" spacing="20">
+            <Button text="←" onAction="#retourAccueil" styleClass="btn-back"/>
+            <Label text="🏥  Consultation des Hôpitaux" styleClass="header-title"/>
+        </HBox>
+
+        <!-- ═══ BODY ═══ -->
+        <VBox spacing="25" style="-fx-padding: 30;">
+
+            <!-- ── STATISTIQUES ── -->
+            <VBox spacing="10">
+                <Label text="✦  Statistiques globales" styleClass="section-title"/>
+                <HBox spacing="20">
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card">
+                        <Label fx:id="statTotalHopitaux" text="0" styleClass="stat-value"/>
+                        <Label text="Hôpitaux" styleClass="stat-label"/>
+                    </VBox>
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card, stat-card-urgent">
+                        <Label fx:id="statUrgence" text="0" styleClass="stat-value" style="-fx-text-fill: #dc3545;"/>
+                        <Label text="Avec urgence" styleClass="stat-label"/>
+                    </VBox>
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card, stat-card-rdv">
+                        <Label fx:id="statTotalRdv" text="0" styleClass="stat-value" style="-fx-text-fill: #3b82f6;"/>
+                        <Label text="Total RDV" styleClass="stat-label"/>
+                    </VBox>
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card, stat-card-wait">
+                        <Label fx:id="statEnAttente" text="0" styleClass="stat-value" style="-fx-text-fill: #f59e0b;"/>
+                        <Label text="En attente" styleClass="stat-label"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- ── FILTRES + RECHERCHE ── -->
+            <VBox spacing="15">
+                <Label text="✦  Liste des hôpitaux" styleClass="section-title"/>
+                <VBox spacing="15" styleClass="filter-box">
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="🔍" style="-fx-font-size: 16;"/>
+                        <TextField fx:id="searchField"
+                                   promptText="Rechercher par nom, adresse, spécialité, téléphone..."
+                                   HBox.hgrow="ALWAYS"
+                                   styleClass="search-field"/>
+                        <Button text="⬇  Exporter CSV" onAction="#exporterCSV" styleClass="btn-secondary"/>
+                        <Button text="📄 Exporter PDF" onAction="#exporterPDF" styleClass="btn-secondary"/>
+                        <Button text="🗺 Voir sur carte" onAction="#ouvrirCarte" styleClass="btn-accent"/>
+                    </HBox>
+
+                    <HBox spacing="20" alignment="CENTER_LEFT">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Urgence :" styleClass="stat-label" style="-fx-min-width: 60;"/>
+                            <ComboBox fx:id="filterUrgence" prefWidth="180" styleClass="combo-box"/>
+                        </HBox>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                            <Label text="Trier par :" styleClass="stat-label" style="-fx-min-width: 60;"/>
+                            <ComboBox fx:id="sortCombo" maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="combo-box"/>
+                        </HBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- ── TABLEAU ── -->
+            <TableView fx:id="tableView" VBox.vgrow="ALWAYS" minHeight="450" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="colId"      text="ID"           prefWidth="60"/>
+                    <TableColumn fx:id="colNom"     text="Nom"          prefWidth="220"/>
+                    <TableColumn fx:id="colAdresse" text="Adresse"      prefWidth="220"/>
+                    <TableColumn fx:id="colTel"     text="Téléphone"    prefWidth="140"/>
+                    <TableColumn fx:id="colSpec"    text="Spécialités"  prefWidth="200"/>
+                    <TableColumn fx:id="colUrgence" text="Urgence"      prefWidth="100"/>
+                    <TableColumn fx:id="colNbRdv"   text="Nb RDV"       prefWidth="90"/>
+                    <TableColumn fx:id="colRdvWait" text="En attente"   prefWidth="100"/>
+                </columns>
+                <placeholder>
+                    <Label text="Aucun hôpital disponible 🏥" styleClass="stat-label" style="-fx-font-size: 15;"/>
+                </placeholder>
+            </TableView>
+
+            <Label fx:id="errorLabel" wrapText="true" styleClass="stat-label" style="-fx-text-fill: #dc3545;"/>
+
+        </VBox>
+    </VBox>
+</ScrollPane>

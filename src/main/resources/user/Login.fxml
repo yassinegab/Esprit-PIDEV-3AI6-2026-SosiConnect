@@ -82,6 +82,22 @@
                            onAction="#goToRegister"
                            styleClass="link-auth"/>
             </HBox>
+
+            <Separator maxWidth="200"/>
+
+            <HBox spacing="10.0" alignment="CENTER">
+                <Button text="Google" onAction="#handleGoogleLogin" styleClass="social-button">
+                    <graphic>
+                        <Label text="G" style="-fx-text-fill: #DB4437; -fx-font-weight: bold;"/>
+                    </graphic>
+                </Button>
+                <Button text="Facebook" styleClass="social-button">
+                    <graphic>
+                        <Label text="F" style="-fx-text-fill: #4267B2; -fx-font-weight: bold;"/>
+                    </graphic>
+                </Button>
+            </HBox>
+
         </VBox>
     </VBox>
 </StackPane>

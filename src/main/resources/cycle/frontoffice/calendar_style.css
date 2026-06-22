@@ -1,0 +1,123 @@
+/* =========================================================
+   INTERACTIVE CALENDAR - SOSI RED DESIGN
+   ========================================================= */
+
+.calendar-header {
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #1e293b;
+    -fx-letter-spacing: 1px;
+}
+
+.calendar-grid {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-hgap: 8px;
+    -fx-vgap: 8px;
+}
+
+.calendar-day-header {
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+    -fx-text-fill: #94a3b8;
+    -fx-padding: 0 0 10 0;
+    -fx-text-transform: uppercase;
+}
+
+/* --- Base Cell --- */
+.calendar-cell {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-border-color: #f1f5f9;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.02), 5, 0, 0, 2);
+}
+
+.calendar-cell:hover {
+    -fx-background-color: #fff1f2;
+    -fx-border-color: #fecaca;
+    -fx-translate-y: -2;
+    -fx-effect: dropshadow(three-pass-box, rgba(220,53,69,0.08), 10, 0, 0, 4);
+}
+
+.calendar-cell-empty {
+    -fx-background-color: rgba(248, 250, 252, 0.5);
+    -fx-background-radius: 12;
+    -fx-border-color: transparent;
+}
+
+.calendar-day-number {
+    -fx-font-size: 15px;
+    -fx-text-fill: #1e293b;
+    -fx-font-weight: 800;
+}
+
+/* --- Menstruation Day (Strong Red) --- */
+.cycle-active-day {
+    -fx-background-color: #fff1f2;
+    -fx-border-color: #fecaca;
+}
+
+.cycle-label {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-padding: 4 8;
+    -fx-background-radius: 20;
+    -fx-margin: 5 0 0 0;
+    -fx-alignment: center;
+}
+
+/* --- Fertile Day (Soft Red/Gray) --- */
+.fertile-day {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e2e8f0;
+}
+
+.fertile-label {
+    -fx-background-color: #94a3b8;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-padding: 4 8;
+    -fx-background-radius: 20;
+    -fx-alignment: center;
+}
+
+/* --- Ovulation Day (Medium Red) --- */
+.ovulation-day {
+    -fx-background-color: #fee2e2;
+    -fx-border-color: #fca5a5;
+}
+
+.ovulation-label {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-padding: 4 8;
+    -fx-background-radius: 20;
+    -fx-alignment: center;
+}
+
+/* --- Navigation --- */
+.calendar-btn-nav {
+    -fx-background-color: white;
+    -fx-text-fill: #64748b;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 6 14;
+    -fx-font-weight: 900;
+    -fx-cursor: hand;
+}
+
+.calendar-btn-nav:hover {
+    -fx-background-color: #fff1f2;
+    -fx-border-color: #fecaca;
+    -fx-text-fill: #dc3545;
+}

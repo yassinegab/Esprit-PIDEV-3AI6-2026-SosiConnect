@@ -83,18 +83,58 @@ public class RegisterController {
         handicapCheckBox.setOnAction(e -> handicapDescriptionField.setDisable(!handicapCheckBox.isSelected()));
     }
 
-    private void updatePatientFields() {
-        boolean isPatient = roleComboBox.getValue() == UserRole.PATIENT;
+    @FXML
+    private void handleRegister(ActionEvent event) {
+        try {
+            String selectedRole = roleBox.getValue();
+            String dbUserRole = "ROLE_PATIENT"; 
+            if ("Professionnel".equals(selectedRole)) {
+                dbUserRole = "ROLE_MEDECIN"; 
+            } else if ("Administrateur".equals(selectedRole)) {
+                dbUserRole = "ROLE_ADMIN";
+            }
 
-        patientFieldsBox.setManaged(isPatient);
-        patientFieldsBox.setVisible(isPatient);
+            String ageText = ageField.getText();
+            int age = (ageText == null || ageText.trim().isEmpty()) ? 0 : Integer.parseInt(ageText.trim());
 
-        if (!isPatient) {
-            poidsField.clear();
-            tailleField.clear();
-            handicapCheckBox.setSelected(false);
-            handicapDescriptionField.clear();
-            handicapDescriptionField.setDisable(true);
+            String tailleText = tailleField.getText();
+            double taille = (tailleText == null || tailleText.trim().isEmpty()) ? 0.0 : Double.parseDouble(tailleText.trim());
+
+            String poidsText = poidsField.getText();
+            double poids = (poidsText == null || poidsText.trim().isEmpty()) ? 0.0 : Double.parseDouble(poidsText.trim());
+
+            User user = new User(
+                nomField.getText(),
+                prenomField.getText(),
+                emailField.getText(),
+                passwordField.getText(),
+                telephoneField.getText(),
+                age,
+                sexeBox.getValue(),
+                taille,
+                poids,
+                handicapBox.isSelected(),
+                "[\"" + dbUserRole + "\"]", 
+                dbUserRole, 
+                specialiteField.getText()
+            );
+
+            serviceUser.ajouter(user);
+            System.out.println("User registered successfully!");
+            navigateToLogin(event);
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de saisie");
+            alert.setHeaderText("Valeur numérique invalide");
+            alert.setContentText("Veuillez entrer des nombres valides pour l'âge, la taille et le poids.");
+            alert.showAndWait();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de base de données");
+            alert.setHeaderText("Erreur lors de l'inscription");
+            alert.setContentText("Une erreur est survenue lors de l'enregistrement de l'utilisateur.");
+            alert.showAndWait();
         }
     }
 

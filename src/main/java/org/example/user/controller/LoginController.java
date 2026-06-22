@@ -25,6 +25,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 
+import org.example.user.service.ServiceUser;
+import org.example.user.service.GoogleAuthService;
+import org.example.user.model.User;
+import org.example.home.controller.HomeController;
+import org.example.backoffice.controller.AdminBaseController;
+import org.json.JSONObject;
+
+import javafx.application.Platform;
+
 public class LoginController {
 
     @FXML
@@ -87,10 +96,12 @@ public class LoginController {
 
         try {
             User user = serviceUser.login(email, password);
-
-            if (user == null) {
-                showError("Email ou mot de passe incorrect.");
-                return;
+            if (user != null) {
+                System.out.println("Login Successful: " + user.getNom());
+                org.example.utils.SessionManager.setCurrentUser(user);
+                navigateAfterLogin(user);
+            } else {
+                System.out.println("Invalid email or password.");
             }
 
             handleRememberMe(email);
@@ -100,10 +111,34 @@ public class LoginController {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            AlertUtil.showError("Base de donnees", "Erreur lors de la connexion a la base de donnees.");
+        }
+    }
+
+    private void navigateAfterLogin(User user) {
+        try {
+            String fxmlPath = "/home/Home.fxml";
+            boolean isAdmin = "ROLE_ADMIN".equals(user.getUser_role());
+            
+            if (isAdmin) {
+                fxmlPath = "/backoffice/AdminLayout.fxml";
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+            
+            if (!isAdmin) {
+                HomeController homeController = loader.getController();
+                homeController.setUser(user);
+            } else {
+                AdminBaseController adminController = loader.getController();
+                // adminController.setUser(user);
+            }
+
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            stage.getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
-            AlertUtil.showError("Navigation", "Impossible d'ouvrir la page demandee.");
+            System.err.println("Error navigating after login: " + e.getMessage());
         }
     }
 
@@ -183,11 +218,35 @@ public class LoginController {
         }
     }
 
-    private void showError(String message) {
-        if (errorLabel != null) {
-            errorLabel.setText(message);
-        }
+    @FXML
+    private void handleGoogleLogin(ActionEvent event) {
+        System.out.println("Starting Google OAuth Flow...");
+        // Run in background thread to not freeze UI
+        new Thread(() -> {
+            try {
+                JSONObject userInfo = GoogleAuthService.authenticateAndGetUserInfo();
+                System.out.println("Google User Info: " + userInfo.toString());
+                
+                String email = userInfo.optString("email");
+                String prenom = userInfo.optString("given_name");
+                String nom = userInfo.optString("family_name");
+                
+                if (email == null || email.isEmpty()) {
+                    System.err.println("Could not retrieve email from Google.");
+                    return;
+                }
 
-        AlertUtil.showWarning("Validation", message);
+                User user = serviceUser.loginOrRegisterWithGoogle(email, nom, prenom);
+                
+                if (user != null) {
+                    org.example.utils.SessionManager.setCurrentUser(user);
+                    // Navigate on UI Thread
+                    Platform.runLater(() -> navigateAfterLogin(user));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Google Login Failed: " + e.getMessage());
+            }
+        }).start();
     }
 }

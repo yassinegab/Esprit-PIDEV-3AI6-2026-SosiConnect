@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import java.net.URL?>
+
+<ScrollPane fitToWidth="true" styleClass="main-container" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.servicesociaux.frontoffice.controller.controllers.MainMenuController" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+
+    <stylesheets>
+        <URL value="@premium_hospital.css" />
+    </stylesheets>
+
+    <VBox spacing="25" style="-fx-padding: 30;" styleClass="main-container">
+
+        <!-- HEADER / TITLE -->
+        <VBox spacing="5">
+            <Label text="🏥 Gestion Médicale" style="-fx-font-size: 28; -fx-font-weight: 900; -fx-text-fill: -fx-text-dark;" />
+            <Label text="Tableau de bord des hôpitaux et rendez-vous" style="-fx-font-size: 14; -fx-text-fill: -fx-text-muted;" />
+        </VBox>
+
+        <!-- STATS GRID -->
+        <HBox spacing="20">
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card" spacing="10">
+                <Label text="🏥" styleClass="stat-icon"/>
+                <Label fx:id="countHopital" text="—" styleClass="stat-value" />
+                <Label text="Hôpitaux" styleClass="stat-label"/>
+            </VBox>
+
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card" spacing="10">
+                <Label text="📅" styleClass="stat-icon"/>
+                <Label fx:id="countRdv" text="—" styleClass="stat-value" />
+                <Label text="Rendez-vous" styleClass="stat-label"/>
+            </VBox>
+
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card" spacing="10">
+                <Label text="⏳" styleClass="stat-icon"/>
+                <Label fx:id="countEnAttente" text="—" styleClass="stat-value" style="-fx-text-fill: #f59e0b;"/>
+                <Label text="En attente" styleClass="stat-label"/>
+            </VBox>
+
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card" spacing="10">
+                <Label text="📋" styleClass="stat-icon"/>
+                <Label fx:id="countDossiers" text="—" styleClass="stat-value" />
+                <Label text="Dossiers" styleClass="stat-label"/>
+            </VBox>
+        </HBox>
+
+        <!-- NAVIGATION ACTIONS -->
+        <HBox spacing="20">
+            <Button text="🏥  Consulter les Hôpitaux"
+                    onAction="#ouvrirHopital"
+                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                    styleClass="btn-premium" />
+
+            <Button text="📅  Gérer les Rendez-vous"
+                    onAction="#ouvrirRendezVous"
+                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                    styleClass="btn-premium, btn-accent" />
+        </HBox>
+
+        <!-- SPECIAL ACTION: DOSSIER MÉDICAL -->
+        <Button text="📋  Mon Dossier Médical — Analyse IA Groq &amp; Hugging Face"
+                onAction="#ouvrirDossierMedical"
+                maxWidth="Infinity"
+                styleClass="btn-premium, btn-lavender" />
+
+        <!-- CHART SECTION -->
+        <VBox styleClass="chart-container" spacing="15">
+            <Label text="📈 Rendez-vous par hôpital" styleClass="chart-title" />
+            <LineChart fx:id="lineChart"
+                       prefHeight="300"
+                       animated="true"
+                       createSymbols="true"
+                       legendSide="BOTTOM">
+                <xAxis>
+                    <CategoryAxis label="Hôpitaux" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis label="Nb RDV" minorTickVisible="false"/>
+                </yAxis>
+            </LineChart>
+        </VBox>
+
+        <!-- FOOTER / STATUS -->
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="status-bar">
+            <Label text="●" style="-fx-text-fill: #10b981; -fx-font-size: 14;"/>
+            <Label text="Système Connecté · Base de données active · Localhost:3306"
+                   style="-fx-font-size: 12; -fx-text-fill: -fx-text-muted; -fx-font-weight: 700;" />
+        </HBox>
+
+    </VBox>
+</ScrollPane>
+

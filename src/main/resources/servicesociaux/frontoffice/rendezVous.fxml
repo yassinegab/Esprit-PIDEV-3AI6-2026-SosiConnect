@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane fitToWidth="true"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.servicesociaux.frontoffice.controller.controllers.RendezVousController"
+            styleClass="main-container">
+
+    <stylesheets>
+        <URL value="@rendezvous_style.css" />
+    </stylesheets>
+
+    <VBox spacing="0">
+
+        <!-- ═══ HEADER ═══ -->
+        <HBox styleClass="header-box" spacing="20">
+            <Button text="←" onAction="#retourAccueil" styleClass="btn-back"/>
+            <Label text="📅  Gestion des Rendez-Vous" styleClass="header-title"/>
+        </HBox>
+
+        <!-- ═══ BODY ═══ -->
+        <HBox spacing="0" minHeight="700">
+
+            <!-- ── PANNEAU FORMULAIRE (gauche) ── -->
+            <VBox styleClass="form-sidebar" spacing="15" minWidth="320" maxWidth="320">
+                <Label text="✦  Nouveau rendez-vous" styleClass="section-title"/>
+
+                <VBox spacing="5">
+                    <Label text="Hôpital" styleClass="form-label"/>
+                    <ComboBox fx:id="hopitalCombo" maxWidth="Infinity" promptText="Sélectionner un hôpital" styleClass="combo-box"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Type de consultation" styleClass="form-label"/>
+                    <ComboBox fx:id="typeConsultation" maxWidth="Infinity" promptText="Choisir le type" styleClass="combo-box"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Statut" styleClass="form-label"/>
+                    <ComboBox fx:id="statut" maxWidth="Infinity" promptText="Choisir le statut" styleClass="combo-box"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Date et heure" styleClass="form-label"/>
+                    <DatePicker fx:id="datePicker" maxWidth="Infinity" promptText="Choisir une date" styleClass="date-picker"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 5 0 0 0;">
+                        <ComboBox fx:id="heureCombo" promptText="HH" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="combo-box"/>
+                        <Label text="h" styleClass="form-label"/>
+                        <ComboBox fx:id="minuteCombo" promptText="MM" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="combo-box"/>
+                        <Label text="min" styleClass="form-label"/>
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="Notes" styleClass="form-label"/>
+                    <TextArea fx:id="notesField" prefRowCount="3" promptText="Remarques..." wrapText="true" styleClass="text-area"/>
+                </VBox>
+
+                <Label fx:id="errorLabel" wrapText="true" style="-fx-text-fill: #dc3545; -fx-font-size: 11;"/>
+
+                <VBox spacing="10" style="-fx-padding: 10 0 0 0;">
+                    <Button text="✚   Ajouter" onAction="#ajouter" maxWidth="Infinity" styleClass="btn-add"/>
+                    <Button text="✎   Modifier" onAction="#modifier" maxWidth="Infinity" styleClass="btn-modify"/>
+                    <Button text="✖   Supprimer" onAction="#supprimer" maxWidth="Infinity" styleClass="btn-delete"/>
+                    <Button fx:id="annulerBtn" text="↺   Annuler" onAction="#annuler" maxWidth="Infinity" visible="false" managed="false" styleClass="btn-modify"/>
+                </VBox>
+            </VBox>
+
+            <!-- ── PANNEAU DROIT (stats + filtres + tableau) ── -->
+            <VBox VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" spacing="25" style="-fx-padding: 30;">
+
+                <!-- ── STATISTIQUES GLOBALES ── -->
+                <VBox spacing="10">
+                    <Label text="✦  Statistiques globales" styleClass="section-title"/>
+                    <HBox spacing="15">
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card">
+                            <Label fx:id="statTotal" text="0" styleClass="stat-value"/>
+                            <Label text="Total RDV" styleClass="stat-label"/>
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card, stat-card-wait">
+                            <Label fx:id="statEnAttente" text="0" styleClass="stat-value" style="-fx-text-fill: #f59e0b;"/>
+                            <Label text="En attente" styleClass="stat-label"/>
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card, stat-card-confirm">
+                            <Label fx:id="statConfirme" text="0" styleClass="stat-value" style="-fx-text-fill: #10b981;"/>
+                            <Label text="Confirmés" styleClass="stat-label"/>
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card, stat-card-done">
+                            <Label fx:id="statTermine" text="0" styleClass="stat-value" style="-fx-text-fill: #3b82f6;"/>
+                            <Label text="Terminés" styleClass="stat-label"/>
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="stat-card, stat-card-cancel">
+                            <Label fx:id="statAnnule" text="0" styleClass="stat-value" style="-fx-text-fill: #dc3545;"/>
+                            <Label text="Annulés" styleClass="stat-label"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ── FILTRES ── -->
+                <VBox spacing="10">
+                    <Label text="✦  Liste des rendez-vous" styleClass="section-title"/>
+                    <VBox spacing="15" styleClass="filter-box">
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="🔍" style="-fx-font-size: 16;"/>
+                            <TextField fx:id="searchField" promptText="Rechercher par patient, hôpital, notes..." HBox.hgrow="ALWAYS" styleClass="input-field"/>
+                            <Button text="⬇  Exporter CSV" onAction="#exporterCSV" styleClass="btn-export"/>
+                        </HBox>
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="Statut :" styleClass="stat-label"/>
+                                <ComboBox fx:id="filterStatut" prefWidth="120" styleClass="combo-box"/>
+                            </HBox>
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="Type :" styleClass="stat-label"/>
+                                <ComboBox fx:id="filterType" prefWidth="130" styleClass="combo-box"/>
+                            </HBox>
+                            <HBox spacing="8" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                                <Label text="Hôpital :" styleClass="stat-label"/>
+                                <ComboBox fx:id="filterHopital" maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="combo-box"/>
+                            </HBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- ── TABLEAU ── -->
+                <TableView fx:id="tableView" VBox.vgrow="ALWAYS" minHeight="400" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="colId"      text="ID"               prefWidth="50"/>
+                        <TableColumn fx:id="colPatient"  text="Patient"          prefWidth="80"/>
+                        <TableColumn fx:id="colHopital"  text="Hôpital"          prefWidth="180"/>
+                        <TableColumn fx:id="colType"     text="Type"             prefWidth="130"/>
+                        <TableColumn fx:id="colStatut"   text="Statut"           prefWidth="110"/>
+                        <TableColumn fx:id="colDate"     text="Date &amp; Heure" prefWidth="160"/>
+                        <TableColumn fx:id="colNotes"    text="Notes"            prefWidth="180"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Aucun rendez-vous trouvé 🌸" styleClass="stat-label" style="-fx-font-size: 15;"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </HBox>
+    </VBox>
+</ScrollPane>

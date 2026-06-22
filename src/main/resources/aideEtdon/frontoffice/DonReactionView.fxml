@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.aideEtdon.frontoffice.controller.DonReactionController"
+      alignment="TOP_CENTER" spacing="0"
+      stylesheets="@don_styles.css"
+      styleClass="main-bg"
+      style="-fx-padding: 14 24 14 24;">
+
+    <!-- Compact Page Header -->
+    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="page-header-banner" style="-fx-padding: 10 18;">
+        <VBox styleClass="page-header-icon, page-header-icon-green" alignment="CENTER" style="-fx-min-width: 32; -fx-min-height: 32; -fx-max-width: 32; -fx-max-height: 32;">
+            <Label text="💚" style="-fx-font-size: 18px;" />
+        </VBox>
+        <VBox spacing="1">
+            <HBox spacing="6" alignment="CENTER_LEFT">
+                <Label text="Repondre a une Demande" styleClass="page-title" style="-fx-font-size: 18px;" />
+                <Label text="✨" style="-fx-font-size: 16px;" />
+            </HBox>
+            <Label text="Choisissez comment vous souhaitez aider" styleClass="page-subtitle-muted" style="-fx-font-size: 11px;" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="⬅ Retour" onAction="#handleRetour" styleClass="back-button" />
+    </HBox>
+
+    <Label fx:id="errorLabel" visible="false" text="" style="-fx-text-fill: #ef4444; -fx-font-weight: bold; -fx-font-size: 12px; -fx-padding: 4 0 0 0;" />
+
+    <!-- Scrollable content -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background: transparent; -fx-background-color: transparent; -fx-border-width: 0; -fx-padding: 0;">
+      <HBox spacing="14" style="-fx-padding: 8 2 14 2;">
+
+        <!-- LEFT: Demande Info Card -->
+        <VBox spacing="10" prefWidth="300" style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-border-color: #e2e8f0; -fx-border-width: 1; -fx-border-radius: 14;">
+            
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="📄 Demande" style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #64748b;" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="urgenceBadge" style="-fx-padding: 2 8; -fx-background-radius: 12; -fx-font-size: 10px; -fx-font-weight: 700;" />
+            </HBox>
+            
+            <Label fx:id="demandeTitleLabel" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #0f172a; -fx-wrap-text: true;" wrapText="true" />
+            <Label fx:id="demandeDescLabel" style="-fx-text-fill: #475569; -fx-font-size: 12px; -fx-wrap-text: true;" wrapText="true" />
+
+            <Region style="-fx-background-color: #e2e8f0; -fx-min-height: 1; -fx-max-height: 1;" />
+
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Type:" style="-fx-font-weight: 700; -fx-text-fill: #475569; -fx-font-size: 11px;" />
+                <Label fx:id="typeInfoLabel" style="-fx-font-weight: 700; -fx-text-fill: #0f172a; -fx-font-size: 11px;" />
+            </HBox>
+            <HBox fx:id="bloodGroupRow" spacing="8" alignment="CENTER_LEFT" visible="false" managed="false">
+                <Label text="Groupe:" style="-fx-font-weight: 700; -fx-text-fill: #475569; -fx-font-size: 11px;" />
+                <Label fx:id="bloodGroupLabel" style="-fx-font-weight: 800; -fx-text-fill: #dc2626; -fx-font-size: 12px;" />
+            </HBox>
+            <HBox fx:id="organeRow" spacing="8" alignment="CENTER_LEFT" visible="false" managed="false">
+                <Label text="Organe:" style="-fx-font-weight: 700; -fx-text-fill: #475569; -fx-font-size: 11px;" />
+                <Label fx:id="organeInfoLabel" style="-fx-font-weight: 800; -fx-text-fill: #7c3aed; -fx-font-size: 12px;" />
+            </HBox>
+
+            <VBox fx:id="compatibilityBox" visible="false" managed="false" spacing="4" style="-fx-background-color: #f0fdf4; -fx-background-radius: 10; -fx-padding: 10; -fx-border-color: #bbf7d0; -fx-border-width: 1; -fx-border-radius: 10;">
+                <Label fx:id="compatibilityLabel" style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #166534;" wrapText="true" />
+            </VBox>
+        </VBox>
+
+        <!-- RIGHT: Response Form -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-background-radius: 14; -fx-padding: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2); -fx-border-color: #e2e8f0; -fx-border-width: 1; -fx-border-radius: 14;">
+
+            <!-- Quick Actions -->
+            <HBox spacing="6" alignment="CENTER_LEFT">
+                <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 22; -fx-min-height: 22; -fx-max-width: 22; -fx-max-height: 22;">
+                    <Label text="1" styleClass="form-step-number" style="-fx-font-size: 10px;" />
+                </VBox>
+                <Label text="⚡ Action rapide" styleClass="form-step-title" style="-fx-font-size: 12px;" />
+            </HBox>
+
+            <HBox fx:id="quickActionsRow" spacing="6" alignment="CENTER_LEFT" />
+
+            <Region style="-fx-background-color: #e2e8f0; -fx-min-height: 1; -fx-max-height: 1;" />
+
+            <!-- Blood Group Selection (conditional) -->
+            <VBox fx:id="donorBloodSection" visible="false" managed="false" spacing="6">
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 22; -fx-min-height: 22; -fx-max-width: 22; -fx-max-height: 22;">
+                        <Label text="2" styleClass="form-step-number" style="-fx-font-size: 10px;" />
+                    </VBox>
+                    <Label text="🩸 Votre groupe sanguin" styleClass="form-step-title" style="-fx-font-size: 12px;" />
+                </HBox>
+                <ComboBox fx:id="donorBloodGroup" maxWidth="Infinity" promptText="Selectionnez votre groupe sanguin" styleClass="modern-input">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="A+" />
+                            <String fx:value="A-" />
+                            <String fx:value="B+" />
+                            <String fx:value="B-" />
+                            <String fx:value="AB+" />
+                            <String fx:value="AB-" />
+                            <String fx:value="O+" />
+                            <String fx:value="O-" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <Label fx:id="bloodMatchLabel" style="-fx-font-size: 11px; -fx-font-weight: 700;" />
+                <Region style="-fx-background-color: #e2e8f0; -fx-min-height: 1; -fx-max-height: 1;" />
+            </VBox>
+
+            <!-- Message -->
+            <HBox spacing="6" alignment="CENTER_LEFT">
+                <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 22; -fx-min-height: 22; -fx-max-width: 22; -fx-max-height: 22;">
+                    <Label fx:id="messageStepLabel" text="2" styleClass="form-step-number" style="-fx-font-size: 10px;" />
+                </VBox>
+                <Label text="💬 Message complementaire" styleClass="form-step-title" style="-fx-font-size: 12px;" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="aiSuggestBtn" text="Suggerer avec IA" onAction="#handleAiSuggest"
+                        style="-fx-background-color: linear-gradient(to right, #8b5cf6, #6366f1); -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: 700; -fx-padding: 3 10; -fx-background-radius: 14; -fx-cursor: hand;" />
+            </HBox>
+
+            <TextArea fx:id="messageArea" promptText="Ajoutez des details ou cliquez 'Suggerer avec IA'..." prefRowCount="2" styleClass="modern-input" wrapText="true" />
+            <Label fx:id="aiStatusLabel" visible="false" style="-fx-font-size: 10px; -fx-text-fill: #8b5cf6; -fx-font-weight: 600;" />
+
+            <Region style="-fx-background-color: #e2e8f0; -fx-min-height: 1; -fx-max-height: 1;" />
+
+            <!-- Contact sharing -->
+            <HBox spacing="6" alignment="CENTER_LEFT">
+                <VBox styleClass="form-step-badge" alignment="CENTER" style="-fx-min-width: 22; -fx-min-height: 22; -fx-max-width: 22; -fx-max-height: 22;">
+                    <Label fx:id="contactStepLabel" text="3" styleClass="form-step-number" style="-fx-font-size: 10px;" />
+                </VBox>
+                <Label text="📞 Coordonnees" styleClass="form-step-title" style="-fx-font-size: 12px;" />
+            </HBox>
+
+            <CheckBox fx:id="shareContactCheck" text="📧 Partager mes coordonnees avec le demandeur" style="-fx-font-size: 11px; -fx-text-fill: #475569;" />
+            <CheckBox fx:id="availableNowCheck" text="⏰ Je suis disponible immediatement" style="-fx-font-size: 11px; -fx-text-fill: #475569;" />
+
+            <!-- Submit -->
+            <Button text="✅ Confirmer ma reponse" onAction="#handleValider" maxWidth="Infinity" styleClass="success-button" style="-fx-padding: 8 0;" />
+        </VBox>
+      </HBox>
+    </ScrollPane>
+</VBox>

@@ -21,35 +21,15 @@ import java.util.List;
 
 public class HomeController {
 
-    @FXML
-    private Label userNameLabel;
+    private static HomeController instance;
 
-    @FXML
-    private Label userRoleLabel;
-
-    @FXML
-    private Label avatarLabel;
-
-    @FXML
-    private StackPane contentArea;
-
-    @FXML
-    private VBox dashboardView;
-
-    @FXML
-    private Button btnWellbeing;
-
-    @FXML
-    private Button btnServicesSociaux;
-
-    @FXML
-    private Button btnJournal;
-
-    @FXML
-    private Button btnAideEtdon;
-
-    @FXML
-    private Button btnCycle;
+    @FXML private Label avatarLabel;
+    @FXML private StackPane contentArea;
+    @FXML private Button btnWellbeing;
+    @FXML private Button btnServicesSociaux;
+    @FXML private Button btnJournal;
+    @FXML private Button btnAideEtdon;
+    @FXML private Button btnCycle;
 
     @FXML
     private Button btnMonProfil;
@@ -60,55 +40,37 @@ public class HomeController {
 
     @FXML
     public void initialize() {
-        currentUser = SessionManager.getCurrentUser();
+        instance = this;
+        navButtons = Arrays.asList(btnWellbeing, btnServicesSociaux, btnJournal, btnAideEtdon, btnCycle);
+        showDashboard(); // Load the dashboard automatically on init
+    }
 
-        if (currentUser == null) {
-            AlertUtil.showError("Session", "Aucun utilisateur connecté.");
-            return;
+    public static void navigateTo(Parent view) {
+        if (instance != null && instance.contentArea != null) {
+            instance.contentArea.getChildren().setAll(view);
+        } else {
+            System.err.println("HomeController instance non disponible.");
         }
+    }
 
-        setUser(currentUser);
-
-        if (btnWellbeing != null) navButtons.add(btnWellbeing);
-        if (btnServicesSociaux != null) navButtons.add(btnServicesSociaux);
-        if (btnJournal != null) navButtons.add(btnJournal);
-        if (btnAideEtdon != null) navButtons.add(btnAideEtdon);
-        if (btnCycle != null) navButtons.add(btnCycle);
-        if (btnMonProfil != null) navButtons.add(btnMonProfil);
-
-        configureHomeByRole();
-        showDashboard();
+    public void setContent(Parent view) {
+        contentArea.getChildren().setAll(view);
     }
 
     public void setUser(User user) {
-        this.currentUser = user;
+        // Dynamic Initials
+        String initials = "";
+        if (user.getNom() != null && !user.getNom().isEmpty()) initials += user.getNom().substring(0, 1).toUpperCase();
+        if (user.getPrenom() != null && !user.getPrenom().isEmpty()) initials += user.getPrenom().substring(0, 1).toUpperCase();
+        avatarLabel.setText(initials);
 
-        if (userNameLabel != null) {
-            userNameLabel.setText(user.getNom() + " " + user.getPrenom());
-        }
-
-        if (userRoleLabel != null) {
-            userRoleLabel.setText(user.getRole().name());
-        }
-
-        if (avatarLabel != null) {
-            String initials = "";
-            if (user.getNom() != null && !user.getNom().isEmpty()) {
-                initials += user.getNom().substring(0, 1).toUpperCase();
+        // Hide Cycle button for male users
+        if (user.getSexe() != null && (user.getSexe().equalsIgnoreCase("Homme") || user.getSexe().equalsIgnoreCase("Male"))) {
+            if (btnCycle != null) {
+                btnCycle.setVisible(false);
+                btnCycle.setManaged(false);
             }
-            if (user.getPrenom() != null && !user.getPrenom().isEmpty()) {
-                initials += user.getPrenom().substring(0, 1).toUpperCase();
-            }
-            avatarLabel.setText(initials);
         }
-    }
-
-    private void configureHomeByRole() {
-        if (currentUser == null || currentUser.getRole() == null || btnMonProfil == null) {
-            return;
-        }
-
-
     }
 
     @FXML
@@ -117,7 +79,7 @@ public class HomeController {
             SessionManager.clear();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/user/Login.fxml"));
             Parent root = loader.load();
-            Stage stage = (Stage) userNameLabel.getScene().getWindow();
+            Stage stage = (Stage) avatarLabel.getScene().getWindow();
             stage.getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
@@ -127,10 +89,26 @@ public class HomeController {
 
     @FXML
     private void showDashboard() {
-        if (contentArea != null && dashboardView != null) {
-            contentArea.getChildren().setAll(dashboardView);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/home/ClientDashboard.fxml"));
+            Parent dashboard = loader.load();
+            
+            // Set the home controller reference so it can navigate
+            Object controller = loader.getController();
+            if (controller instanceof ClientDashboardController) {
+                ((ClientDashboardController) controller).setHomeController(this);
+            }
+            
+            contentArea.getChildren().setAll(dashboard);
+            updateActiveButton(null);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        updateActiveButton(null);
+    }
+
+    @FXML
+    private void showProfile() {
+        loadView("/user/ProfileView.fxml", null);
     }
 
     @FXML
@@ -140,7 +118,7 @@ public class HomeController {
 
     @FXML
     private void showServicesSociaux() {
-        loadView("/servicesociaux/frontoffice/ServicesSociauxClientView.fxml", btnServicesSociaux);
+        loadView("/servicesociaux/frontoffice/MainMenu.fxml", btnServicesSociaux);
     }
 
     @FXML
@@ -150,7 +128,7 @@ public class HomeController {
 
     @FXML
     private void showCycle() {
-        loadView("/cycle/frontoffice/CycleClientView.fxml", btnCycle);
+        loadView("/cycle/frontoffice/DisplayCycle.fxml", btnCycle);
     }
 
     @FXML
@@ -180,21 +158,13 @@ public class HomeController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent view = loader.load();
 
-            ScrollPane scrollPane = new ScrollPane();
-            scrollPane.setContent(view);
-            scrollPane.setFitToWidth(true);
-            scrollPane.setFitToHeight(false);
-            scrollPane.setPannable(true);
-            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+            // Handle sub-controller injections if needed
+            Object controller = loader.getController();
+            if (controller instanceof org.example.cycle.frontoffice.controller.DisplayCycleController) {
+                ((org.example.cycle.frontoffice.controller.DisplayCycleController) controller).setHomeController(this);
+            }
 
-            scrollPane.setStyle(
-                    "-fx-background-color: transparent;" +
-                            "-fx-background: transparent;" +
-                            "-fx-border-color: transparent;"
-            );
-
-            contentArea.getChildren().setAll(scrollPane);
+            contentArea.getChildren().setAll(view);
             updateActiveButton(activeBtn);
 
         } catch (IOException e) {
@@ -205,7 +175,9 @@ public class HomeController {
 
     private void updateActiveButton(Button activeBtn) {
         for (Button btn : navButtons) {
-            btn.getStyleClass().remove("active-nav");
+            if (btn != null) {
+                btn.getStyleClass().remove("active-nav");
+            }
         }
 
         if (activeBtn != null) {

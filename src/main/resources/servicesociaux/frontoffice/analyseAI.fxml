@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.servicesociaux.frontoffice.controller.controllers.AnalyseIAController"
+      spacing="0"
+      styleClass="main-container"
+      minWidth="1200" minHeight="720">
+
+    <stylesheets>
+        <URL value="@analyseia_style.css" />
+    </stylesheets>
+
+    <!-- ══ HEADER ══ -->
+    <HBox styleClass="header-box" spacing="15">
+        <Button text="← Retour" onAction="#retour" styleClass="btn-back"/>
+        <Label fx:id="titreLabel" text="Analyse IA — Dossier" styleClass="header-title" HBox.hgrow="ALWAYS"/>
+        <Label fx:id="engineLabel" text="" styleClass="engine-badge"/>
+        <Label fx:id="statusLabel" text="" style="-fx-font-size: 12; -fx-text-fill: #10b981; -fx-font-weight: 800;"/>
+        <Label fx:id="errorLabel" text="" style="-fx-text-fill: #dc3545; -fx-font-size: 12;" wrapText="true"/>
+    </HBox>
+
+    <!-- ══ BODY ══ -->
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+
+        <!-- ═ GAUCHE : Résumé dossier + moteurs ═ -->
+        <VBox prefWidth="320" minWidth="300" styleClass="sidebar-container">
+            <HBox styleClass="sidebar-header">
+                <Label text="📋 Dossier analysé" styleClass="sidebar-title"/>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background:transparent; -fx-background-color:transparent; -fx-border-color:transparent;">
+                <VBox fx:id="recapPanel" spacing="10" style="-fx-padding:15;"/>
+            </ScrollPane>
+
+            <Separator style="-fx-opacity: 0.5;"/>
+
+            <!-- Boutons des moteurs IA -->
+            <VBox spacing="10" style="-fx-padding:15;">
+                <Label text="🤖 Moteurs IA disponibles" styleClass="sidebar-title" style="-fx-padding: 0 0 5 0;"/>
+
+                <VBox spacing="2">
+                    <Button fx:id="btnGroq" text="🧠 Groq LLaMA — Analyse clinique" onAction="#lancerGroq" maxWidth="Infinity" styleClass="btn-ai, btn-groq"/>
+                    <Label text="Scores + médecins + hôpitaux + plan suivi" styleClass="sub-label"/>
+                </VBox>
+
+                <VBox spacing="2">
+                    <Button fx:id="btnHF" text="🤗 HuggingFace — Classification" onAction="#lancerHF" maxWidth="Infinity" styleClass="btn-ai, btn-hf"/>
+                    <Label text="Probabilités zero-shot 6 dimensions" styleClass="sub-label"/>
+                </VBox>
+
+                <VBox spacing="5" style="-fx-padding: 5 0;">
+                    <Button fx:id="btnImportImage" text="🖼 Importer image médicale" onAction="#choisirImage" maxWidth="Infinity" styleClass="btn-back" style="-fx-background-color: white; -fx-border-color: #e2e8f0;"/>
+                    <Label fx:id="imageChoisieLabel" text="Aucune image choisie" styleClass="sub-label" style="-fx-padding: 0;"/>
+                    <Button fx:id="btnVision" text="👁 OpenAI Vision — Analyser image" onAction="#lancerVision" maxWidth="Infinity" styleClass="btn-ai, btn-vision"/>
+                    <Label text="Radio / IRM / ECG → anomalies détectées" styleClass="sub-label"/>
+                </VBox>
+
+                <VBox spacing="2">
+                    <Button fx:id="btnGemini" text="🌿 Gemini — Plan nutrition + sport" onAction="#lancerGemini" maxWidth="Infinity" styleClass="btn-ai, btn-gemini"/>
+                    <Label text="Menus 7 jours + programme exercice 30j" styleClass="sub-label"/>
+                </VBox>
+
+                <VBox spacing="2">
+                    <Button fx:id="btnVoix" text="🎤 ElevenLabs — Écouter diagnostic" onAction="#lancerVoix" maxWidth="Infinity" styleClass="btn-ai, btn-voix"/>
+                    <Label text="Synthèse vocale multilingue" styleClass="sub-label"/>
+                </VBox>
+            </VBox>
+        </VBox>
+
+        <!-- ═ DROITE : TabPane ═ -->
+        <VBox VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+                
+                <Tab fx:id="tabGroq" text="🧠 Groq LLaMA">
+                    <ScrollPane fitToWidth="true" style="-fx-background:transparent; -fx-background-color:#f8f9fb; -fx-border-color:transparent;">
+                        <VBox fx:id="groqPanel" spacing="20" style="-fx-padding:30;">
+                            <VBox alignment="CENTER" spacing="20" style="-fx-padding:100 0;">
+                                <Label text="🧠 Groq LLaMA 3.3-70B" styleClass="sidebar-title" style="-fx-font-size: 20; -fx-opacity: 0.3;"/>
+                                <Label text="Analyse clinique approfondie : score santé, médecins experts, hôpitaux..." styleClass="sub-label" style="-fx-font-size: 13;"/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <Tab fx:id="tabHF" text="🤗 HuggingFace">
+                    <ScrollPane fitToWidth="true" style="-fx-background:transparent; -fx-background-color:#f8f9fb; -fx-border-color:transparent;">
+                        <VBox fx:id="hfPanel" spacing="20" style="-fx-padding:30;"/>
+                    </ScrollPane>
+                </Tab>
+
+                <Tab fx:id="tabVision" text="👁 Vision IA">
+                    <ScrollPane fitToWidth="true" style="-fx-background:transparent; -fx-background-color:#f8f9fb; -fx-border-color:transparent;">
+                        <VBox fx:id="visionPanel" spacing="20" style="-fx-padding:30;"/>
+                    </ScrollPane>
+                </Tab>
+
+                <Tab fx:id="tabGemini" text="🌿 Gemini Plan">
+                    <ScrollPane fitToWidth="true" style="-fx-background:transparent; -fx-background-color:#f8f9fb; -fx-border-color:transparent;">
+                        <VBox fx:id="geminiPanel" spacing="20" style="-fx-padding:30;"/>
+                    </ScrollPane>
+                </Tab>
+
+                <Tab fx:id="tabVoix" text="🎤 Voix IA">
+                    <ScrollPane fitToWidth="true" style="-fx-background:transparent; -fx-background-color:#f8f9fb; -fx-border-color:transparent;">
+                        <VBox fx:id="voixPanel" spacing="20" style="-fx-padding:30;"/>
+                    </ScrollPane>
+                </Tab>
+
+            </TabPane>
+        </VBox>
+    </HBox>
+</VBox>

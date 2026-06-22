@@ -36,3 +36,12 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Environment Variables ###
+.env
+.env.local
+.env.*.local
+*.class
+old_creds.txt
+*.log
+*.png

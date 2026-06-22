@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+
+<BorderPane prefHeight="700.0" prefWidth="900.0" styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cycle.frontoffice.controller.CycleCalendarController">
+    <stylesheets>
+        <URL value="@DisplayCss.css" />
+        <URL value="@calendar_style.css" />
+    </stylesheets>
+
+    <!-- Header Section -->
+    <top>
+        <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20 30; -fx-border-color: #f1f5f9; -fx-border-width: 0 0 1 0;">
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Button onAction="#goBack" styleClass="btn-outline" text="← Retour" />
+                <HBox HBox.hgrow="ALWAYS" alignment="CENTER" spacing="25">
+                    <Button onAction="#prevMonth" styleClass="calendar-btn-nav" text="‹" />
+                    <Label fx:id="lblMonthYear" styleClass="calendar-header" text="Mois Année" prefWidth="250" alignment="CENTER" />
+                    <Button onAction="#nextMonth" styleClass="calendar-btn-nav" text="›" />
+                </HBox>
+                <Region prefWidth="100" /> <!-- Spacer to balance the Back button -->
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Calendar Grid Section -->
+    <center>
+        <VBox spacing="15" style="-fx-padding: 30;">
+            <!-- Days Header -->
+            <GridPane fx:id="daysHeaderGrid" hgap="8" vgap="8" alignment="CENTER">
+                <!-- Programmatically populated -->
+            </GridPane>
+            
+            <!-- Calendar Days -->
+            <GridPane fx:id="calendarGrid" hgap="8" vgap="8" alignment="CENTER" VBox.vgrow="ALWAYS" styleClass="calendar-grid">
+                <!-- Programmatically populated -->
+            </GridPane>
+        </VBox>
+    </center>
+</BorderPane>

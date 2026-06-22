@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.shape.Circle?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" 
+          xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+          fx:controller="org.example.home.controller.ClientDashboardController">
+    
+    <VBox spacing="30" styleClass="dashboard-pro-container">
+        
+        <!-- Header Section -->
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label fx:id="welcomeLabel" text="Bonjour !" style="-fx-font-size: 28px; -fx-font-weight: 900; -fx-text-fill: #0f172a;" />
+                <Label fx:id="dateLabel" text="Date du jour" style="-fx-font-size: 14px; -fx-text-fill: #64748b;" />
+            </VBox>
+            <Button text="Refresh" styleClass="btn-wb-secondary" />
+        </HBox>
+
+        <!-- Stats Row -->
+        <HBox spacing="25">
+            <!-- Cycle Stat -->
+            <VBox fx:id="cycleStatCard" styleClass="stat-card-pro" HBox.hgrow="ALWAYS">
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <StackPane styleClass="stat-icon-bg" style="-fx-background-color: #fee2e2;">
+                        <Label text="C" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #dc3545;" />
+                    </StackPane>
+                    <VBox>
+                        <Label text="PROCHAIN CYCLE" styleClass="stat-label-pro" />
+                        <Label fx:id="lblNextPeriod" text="--" styleClass="stat-value-pro" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Wellness Stat -->
+            <VBox styleClass="stat-card-pro" HBox.hgrow="ALWAYS">
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <StackPane styleClass="stat-icon-bg" style="-fx-background-color: #ecfdf5;">
+                        <Label text="W" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #10b981;" />
+                    </StackPane>
+                    <VBox>
+                        <Label text="BIEN-ETRE (STRESS)" styleClass="stat-label-pro" />
+                        <Label fx:id="lblStressScore" text="--" styleClass="stat-value-pro" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Appointments Stat -->
+            <VBox styleClass="stat-card-pro" HBox.hgrow="ALWAYS">
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <StackPane styleClass="stat-icon-bg" style="-fx-background-color: #f1f5f9;">
+                        <Label text="H" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #dc3545;" />
+                    </StackPane>
+                    <VBox>
+                        <Label text="PROCHAIN RDV" styleClass="stat-label-pro" />
+                        <Label fx:id="lblNextAppointment" text="Aucun" styleClass="stat-value-pro" />
+                    </VBox>
+                </HBox>
+            </VBox>
+        </HBox>
+
+        <!-- Main Content (Chart + Activity) -->
+        <HBox spacing="25">
+            <!-- Stress Trend Chart -->
+            <VBox styleClass="chart-card-pro" HBox.hgrow="ALWAYS" spacing="15">
+                <Label text="Evolution du Stress" style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+                <LineChart fx:id="stressChart" prefHeight="250" styleClass="mini-chart">
+                    <xAxis><CategoryAxis side="BOTTOM" /></xAxis>
+                    <yAxis><NumberAxis side="LEFT" lowerBound="0" upperBound="100" tickUnit="20" /></yAxis>
+                </LineChart>
+            </VBox>
+
+            <!-- Recent Activity -->
+            <VBox styleClass="activity-list" prefWidth="350" spacing="15">
+                <Label text="Activites Recentes" style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+                <VBox fx:id="activityContainer" spacing="5">
+                    <!-- Placeholder items -->
+                    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="activity-item-pro">
+                        <StackPane styleClass="activity-icon-bg" style="-fx-background-color: #fef2f2; -fx-min-width: 35; -fx-min-height: 35; -fx-background-radius: 10;">
+                            <Label text="!" style="-fx-font-weight: bold;"/>
+                        </StackPane>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label text="Bienvenue sur votre Dashboard" styleClass="activity-title-pro" />
+                            <Label text="A l'instant" styleClass="activity-time-pro" />
+                        </VBox>
+                    </HBox>
+                </VBox>
+                <Region VBox.vgrow="ALWAYS" />
+                <Button text="Voir tout l'historique" style="-fx-background-color: transparent; -fx-text-fill: #dc3545; -fx-font-weight: bold; -fx-cursor: hand;" />
+            </VBox>
+        </HBox>
+
+        <!-- Quick Access Section -->
+        <VBox spacing="15">
+            <Label text="Acces Rapides" style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+            <HBox spacing="20">
+                <Button onAction="#goToWellbeing" styleClass="quick-action-btn" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="W" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                            <VBox>
+                                <Label text="Bien-etre" style="-fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+                                <Label text="ChatBot &amp; Stress" style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;" />
+                            </VBox>
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnQuickCycle" onAction="#goToCycle" styleClass="quick-action-btn" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="C" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                            <VBox>
+                                <Label text="Cycle Menstruel" style="-fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+                                <Label text="Suivi &amp; Calendrier" style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;" />
+                            </VBox>
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button onAction="#goToMedicalServices" styleClass="quick-action-btn" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="H" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #dc3545;" />
+                            <VBox>
+                                <Label text="Rendez-vous" style="-fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+                                <Label text="Medecins &amp; Hopitaux" style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;" />
+                            </VBox>
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button onAction="#goToAideDon" styleClass="quick-action-btn" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308">
+                    <graphic>
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="A" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                            <VBox>
+                                <Label text="Aide &amp; Don" style="-fx-font-weight: 800; -fx-text-fill: #1e293b;" />
+                                <Label text="Communaute" style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;" />
+                            </VBox>
+                        </HBox>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+
+    </VBox>
+</ScrollPane>

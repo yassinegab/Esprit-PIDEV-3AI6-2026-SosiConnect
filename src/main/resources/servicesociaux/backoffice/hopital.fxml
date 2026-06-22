@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<ScrollPane fitToWidth="true"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.servicesociaux.backoffice.controllers.HopitalController"
+            styleClass="admin-view-bg">
+
+    <stylesheets>
+        <URL value="@admin_services.css"/>
+    </stylesheets>
+
+    <VBox spacing="0" styleClass="admin-view-bg">
+
+        <!-- ═══ HEADER ═══════════════════════════════════════════ -->
+        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="admin-header-strip">
+            <Button text="←" onAction="#retourAccueil"
+                    style="-fx-background-color: rgba(255,255,255,0.1);
+                           -fx-text-fill: white;
+                           -fx-background-radius: 50;
+                           -fx-font-size: 14; -fx-font-weight: bold;
+                           -fx-padding: 4 13;
+                           -fx-cursor: hand;"/>
+            <Label text="🏥  Gestion des Hôpitaux — Administration"
+                   style="-fx-font-size: 16; -fx-font-weight: 800;
+                          -fx-text-fill: white;" HBox.hgrow="ALWAYS"/>
+            <Label text="Backoffice"
+                   style="-fx-text-fill: rgba(255,255,255,0.4); -fx-font-size: 11; -fx-font-weight: 600;"/>
+        </HBox>
+
+        <VBox spacing="16" style="-fx-padding: 24;">
+
+            <!-- ═══ STATISTIQUES ══════════════════════════════════ -->
+            <HBox spacing="12">
+                <VBox HBox.hgrow="ALWAYS" styleClass="stat-card-admin, stat-card-total">
+                    <Label text="TOTAL HÔPITAUX" styleClass="stat-label-small"/>
+                    <Label fx:id="statTotalHopitaux" text="0" styleClass="stat-value-large"/>
+                </VBox>
+                <VBox HBox.hgrow="ALWAYS" styleClass="stat-card-admin, stat-card-success">
+                    <Label text="AVEC URGENCE" styleClass="stat-label-small"/>
+                    <Label fx:id="statUrgence" text="0" styleClass="stat-value-large"/>
+                </VBox>
+                <VBox HBox.hgrow="ALWAYS" styleClass="stat-card-admin, stat-card-purple">
+                    <Label text="TOTAL RDV" styleClass="stat-label-small"/>
+                    <Label fx:id="statTotalRdv" text="0" styleClass="stat-value-large"/>
+                </VBox>
+                <VBox HBox.hgrow="ALWAYS" styleClass="stat-card-admin, stat-card-warning">
+                    <Label text="EN ATTENTE" styleClass="stat-label-small"/>
+                    <Label fx:id="statEnAttente" text="0" styleClass="stat-value-large"/>
+                </VBox>
+            </HBox>
+
+            <!-- ═══ LAYOUT : FORMULAIRE | TABLEAU ════════════════ -->
+            <HBox spacing="16" VBox.vgrow="ALWAYS">
+
+                <!-- ── FORMULAIRE (gauche) ───────────────────────── -->
+                <VBox spacing="12" prefWidth="290" styleClass="admin-side-panel">
+                    <Label text="Formulaire hôpital" style="-fx-font-size: 14; -fx-font-weight: 800; -fx-text-fill: #1e293b;"/>
+                    
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+                        <VBox spacing="10">
+                            <VBox spacing="4">
+                                <Label text="Nom *" styleClass="admin-field-label"/>
+                                <TextField fx:id="fieldNom" promptText="Nom..." styleClass="admin-input-small"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Adresse *" styleClass="admin-field-label"/>
+                                <TextField fx:id="fieldAdresse" promptText="Adresse..." styleClass="admin-input-small"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Téléphone *" styleClass="admin-field-label"/>
+                                <TextField fx:id="fieldTel" promptText="Téléphone..." styleClass="admin-input-small"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Ville *" styleClass="admin-field-label"/>
+                                <TextField fx:id="fieldVille" promptText="Ville..." styleClass="admin-input-small"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Spécialités" styleClass="admin-field-label"/>
+                                <TextField fx:id="fieldSpecialites" promptText="Spécialités..." styleClass="admin-input-small"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Type" styleClass="admin-field-label"/>
+                                <ComboBox fx:id="fieldType" maxWidth="Infinity" styleClass="admin-input-small"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Capacité" styleClass="admin-field-label"/>
+                                <TextField fx:id="fieldCapacite" promptText="Capacité..." styleClass="admin-input-small"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Localisation" styleClass="admin-field-label"/>
+                                <HBox spacing="6">
+                                    <TextField fx:id="fieldLatitude" promptText="Lat" HBox.hgrow="ALWAYS" styleClass="admin-input-small"/>
+                                    <TextField fx:id="fieldLongitude" promptText="Lon" HBox.hgrow="ALWAYS" styleClass="admin-input-small"/>
+                                </HBox>
+                                <Button fx:id="btnCarteLatLon" text="📍 Choisir sur la carte" onAction="#ouvrirCarte"
+                                        maxWidth="Infinity" styleClass="btn-admin-outline" style="-fx-padding: 6; -fx-font-size: 11;"/>
+                            </VBox>
+                            <CheckBox fx:id="checkUrgence" text="Urgence disponible" style="-fx-font-size: 12; -fx-font-weight: 600;"/>
+                        </VBox>
+                    </ScrollPane>
+
+                    <Region VBox.vgrow="ALWAYS"/>
+
+                    <HBox spacing="8">
+                        <Button fx:id="btnAjouter" text="＋ Ajouter" onAction="#ajouter" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="btn-admin-primary"/>
+                        <Button fx:id="btnModifier" text="✎ Modifier" onAction="#modifier" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="btn-admin-outline"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <Button fx:id="btnSupprimer" text="✕ Supprimer" onAction="#supprimer" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="btn-admin-danger"/>
+                        <Button fx:id="btnVider" text="↺ Vider" onAction="#viderFormulaire" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="btn-admin-outline"/>
+                    </HBox>
+                    <Label fx:id="errorLabel" wrapText="true" style="-fx-font-size: 11; -fx-text-fill: #ef4444;"/>
+                </VBox>
+
+                <!-- ── TABLEAU + FILTRES (droite) ────────────────── -->
+                <VBox spacing="12" HBox.hgrow="ALWAYS">
+                    <VBox spacing="10" styleClass="admin-side-panel">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="searchField" promptText="Rechercher..." HBox.hgrow="ALWAYS" styleClass="admin-input-small"/>
+                            <Button text="⬇ Export CSV" onAction="#exporterCSV" styleClass="btn-admin-primary" style="-fx-font-size: 11;"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <ComboBox fx:id="filterUrgence" promptText="Urgence" styleClass="admin-input-small" prefWidth="120"/>
+                            <ComboBox fx:id="sortCombo" promptText="Trier par" styleClass="admin-input-small" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        </HBox>
+                    </VBox>
+
+                    <TableView fx:id="tableView" VBox.vgrow="ALWAYS" styleClass="admin-table">
+                        <columns>
+                            <TableColumn fx:id="colId" text="ID" prefWidth="45"/>
+                            <TableColumn fx:id="colNom" text="Nom" prefWidth="140"/>
+                            <TableColumn fx:id="colVille" text="Ville" prefWidth="90"/>
+                            <TableColumn fx:id="colAdresse" text="Adresse" prefWidth="150"/>
+                            <TableColumn fx:id="colTel" text="Tel" prefWidth="110"/>
+                            <TableColumn fx:id="colType" text="Type" prefWidth="80"/>
+                            <TableColumn fx:id="colSpec" text="Spécialités" prefWidth="140"/>
+                            <TableColumn fx:id="colCapacite" text="Cap." prefWidth="60"/>
+                            <TableColumn fx:id="colUrgence" text="Urg." prefWidth="50"/>
+                            <TableColumn fx:id="colNbRdv" text="RDV" prefWidth="50"/>
+                            <TableColumn fx:id="colRdvWait" text="Att." prefWidth="50"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </HBox>
+        </VBox>
+    </VBox>
+</ScrollPane>

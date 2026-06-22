@@ -1,0 +1,43 @@
+CREATE TABLE IF NOT EXISTS demande (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    groupe_sanguin VARCHAR(10),
+    organe VARCHAR(50),
+    urgence VARCHAR(50) NOT NULL,
+    date_creation DATETIME DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS don (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    demande_id INT NOT NULL,
+    donor_id INT NOT NULL,
+    message TEXT,
+    date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (demande_id) REFERENCES demande(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS video (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    youtube_url VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS map_location (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    latitude DOUBLE NOT NULL,
+    longitude DOUBLE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS alerte_urgence (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type_besoin VARCHAR(255) NOT NULL,
+    latitude DOUBLE,
+    longitude DOUBLE,
+    date_alerte DATETIME DEFAULT CURRENT_TIMESTAMP,
+    statut VARCHAR(50) DEFAULT 'En Attente'
+);

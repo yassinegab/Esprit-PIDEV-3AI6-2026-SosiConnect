@@ -63,11 +63,53 @@ public class ServiceUser {
         }
     }
 
-    public void updateAdminUser(User user) throws SQLException {
-        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, telephone = ?, role = ?, age = ?, sexe = ?, poids = ?, taille = ?, handicap = ? WHERE id = ?";
+    @Override
+    public void ajouter(User user) throws SQLException {
+        String query = "INSERT INTO user (nom, prenom, email, password, telephone, age, sexe, taille, poids, handicap, roles, user_role, specialite, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement ps = connection.prepareStatement(query);
+        
+        // Hash password if not already hashed (supports Java $2a$ and PHP $2y$ prefixes)
+        String password = user.getPassword();
+        if (!password.startsWith("$2a$") && !password.startsWith("$2y$")) {
+            password = BCrypt.hashpw(password, BCrypt.gensalt(12));
+        }
 
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
+        ps.setString(1, user.getNom());
+        ps.setString(2, user.getPrenom());
+        ps.setString(3, user.getEmail());
+        ps.setString(4, password);
+        ps.setString(5, user.getTelephone());
+        ps.setInt(6, user.getAge());
+        ps.setString(7, user.getSexe());
+        ps.setDouble(8, user.getTaille());
+        ps.setDouble(9, user.getPoids());
+        ps.setBoolean(10, user.isHandicap());
+        ps.setString(11, user.getRoles());
+        ps.setString(12, user.getUser_role());
+        ps.setString(13, user.getSpecialite());
+        ps.setTimestamp(14, new Timestamp(System.currentTimeMillis()));
+        ps.executeUpdate();
+    }
+
+    @Override
+    public void modifier(User user) throws SQLException {
+        String query = "UPDATE user SET nom=?, prenom=?, email=?, telephone=?, age=?, sexe=?, taille=?, poids=?, handicap=?, roles=?, user_role=?, specialite=? WHERE id=?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setString(1, user.getNom());
+        ps.setString(2, user.getPrenom());
+        ps.setString(3, user.getEmail());
+        ps.setString(4, user.getTelephone());
+        ps.setInt(5, user.getAge());
+        ps.setString(6, user.getSexe());
+        ps.setDouble(7, user.getTaille());
+        ps.setDouble(8, user.getPoids());
+        ps.setBoolean(9, user.isHandicap());
+        ps.setString(10, user.getRoles());
+        ps.setString(11, user.getUser_role());
+        ps.setString(12, user.getSpecialite());
+        ps.setInt(13, user.getId());
+        ps.executeUpdate();
+    }
 
             ps.setString(1, user.getNom());
             ps.setString(2, user.getPrenom());
@@ -81,179 +123,36 @@ public class ServiceUser {
             ps.setString(10, user.getHandicap());
             ps.setInt(11, user.getId());
 
-            ps.executeUpdate();
-        }
-    }
-
-    public void updatePatientProfile(User user) throws SQLException {
-        String sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, telephone = ?, age = ?, sexe = ?, poids = ?, taille = ?, handicap = ? WHERE id = ?";
-
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-
-            ps.setString(1, user.getNom());
-            ps.setString(2, user.getPrenom());
-            ps.setString(3, user.getEmail());
-            ps.setString(4, user.getTelephone());
-            ps.setInt(5, user.getAge());
-            ps.setString(6, user.getSexe());
-            ps.setDouble(7, user.getPoids());
-            ps.setDouble(8, user.getTaille());
-            ps.setString(9, user.getHandicap());
-            ps.setInt(10, user.getId());
-
-            ps.executeUpdate();
-        }
-    }
-
-    public void delete(int id) throws SQLException {
-        String sql = "DELETE FROM user WHERE id = ?";
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
+    @Override
+    public List<User> afficher() throws SQLException {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM user ORDER BY id DESC";
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(query);
+        while (rs.next()) {
+            users.add(extractUserFromResultSet(rs));
         }
     }
 
     public User login(String email, String password) throws SQLException {
-        String sql = "SELECT * FROM user WHERE email = ?";
-
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-
-            ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                String storedPassword = rs.getString("password");
-
-                boolean valid;
-                if (storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2b$") || storedPassword.startsWith("$2y$")) {
-                    valid = BCrypt.checkpw(password, storedPassword);
-                } else {
-                    valid = password.equals(storedPassword);
-                    if (valid) {
-                        migratePlainPasswordToHashed(rs.getInt("id"), password);
-                    }
-                }
-
-                if (valid) {
-                    return mapResultSetToUser(rs);
-                }
+        String query = "SELECT * FROM user WHERE email = ?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setString(1, email);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            String storedPassword = rs.getString("password");
+            boolean valid = false;
+            // Supports standard BCrypt ($2a$) and PHP-specific BCrypt ($2y$)
+            if (storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2y$")) {
+                // jBCrypt expects $2a$ prefix, so we normalize $2y$ to $2a$ for verification
+                String normalizedHash = storedPassword.replace("$2y$", "$2a$");
+                valid = BCrypt.checkpw(password, normalizedHash);
+            } else {
+                valid = password.equals(storedPassword);
+                // Optional: migrate plain password to bcrypt here
             }
-        }
-
-        return null;
-    }
-
-    private void migratePlainPasswordToHashed(int userId, String plainPassword) throws SQLException {
-        String sql = "UPDATE user SET password = ? WHERE id = ?";
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setString(1, BCrypt.hashpw(plainPassword, BCrypt.gensalt()));
-            ps.setInt(2, userId);
-            ps.executeUpdate();
-        }
-    }
-
-    public List<User> getAll() throws SQLException {
-        List<User> list = new ArrayList<>();
-        String sql = "SELECT * FROM user ORDER BY id DESC";
-
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(mapResultSetToUser(rs));
-            }
-        }
-
-        return list;
-    }
-
-    public List<User> searchUsers(String keyword, String roleFilter) throws SQLException {
-        List<User> list = new ArrayList<>();
-
-        StringBuilder sql = new StringBuilder("SELECT * FROM user WHERE 1=1 ");
-        List<Object> params = new ArrayList<>();
-
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            sql.append("AND (nom LIKE ? OR prenom LIKE ? OR email LIKE ? OR CONCAT(nom, ' ', prenom) LIKE ?) ");
-            String pattern = "%" + keyword.trim() + "%";
-            params.add(pattern);
-            params.add(pattern);
-            params.add(pattern);
-            params.add(pattern);
-        }
-
-        if (roleFilter != null && !roleFilter.equalsIgnoreCase("TOUS")) {
-            sql.append("AND role = ? ");
-            params.add(roleFilter.toUpperCase());
-        }
-
-        sql.append("ORDER BY id DESC");
-
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql.toString())) {
-
-            for (int i = 0; i < params.size(); i++) {
-                ps.setObject(i + 1, params.get(i));
-            }
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(mapResultSetToUser(rs));
-            }
-        }
-
-        return list;
-    }
-
-    public List<User> getPatients() throws SQLException {
-        List<User> list = new ArrayList<>();
-        String sql = "SELECT * FROM user WHERE role = 'PATIENT' ORDER BY nom, prenom";
-
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(mapResultSetToUser(rs));
-            }
-        }
-
-        return list;
-    }
-
-    public List<User> searchPatientsByName(String keyword) throws SQLException {
-        List<User> list = new ArrayList<>();
-        String sql = "SELECT * FROM user WHERE role = 'PATIENT' AND (nom LIKE ? OR prenom LIKE ? OR CONCAT(nom, ' ', prenom) LIKE ?) ORDER BY nom, prenom";
-
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-
-            String pattern = "%" + keyword + "%";
-            ps.setString(1, pattern);
-            ps.setString(2, pattern);
-            ps.setString(3, pattern);
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(mapResultSetToUser(rs));
-            }
-        }
-
-        return list;
-    }
-
-    public User findById(int id) throws SQLException {
-        String sql = "SELECT * FROM user WHERE id = ?";
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return mapResultSetToUser(rs);
+            if (valid) {
+                return extractUserFromResultSet(rs);
             }
         }
         return null;
@@ -276,94 +175,116 @@ public class ServiceUser {
         return null;
     }
 
-    public User findOrCreateGoogleUser(String email, String firstName, String lastName) throws SQLException {
-        User existing = findByEmail(email);
-
-        if (existing != null) {
-            return existing;
+    // Methods for Hospital Module
+    public List<User> getPatients() throws SQLException {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM user WHERE user_role = 'CLIENT' OR user_role = 'PATIENT' ORDER BY nom, prenom";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(extractUserFromResultSet(rs));
         }
+        return list;
+    }
 
-        User user = new User();
-        user.setNom(lastName == null || lastName.isBlank() ? "Google" : lastName.trim());
-        user.setPrenom(firstName == null || firstName.isBlank() ? "Utilisateur" : firstName.trim());
-        user.setEmail(email);
-        user.setPassword(java.util.UUID.randomUUID().toString() + "Aa1");
-        user.setTelephone("00000000");
-        user.setRole(UserRole.PATIENT);
-        user.setAge(18);
-        user.setSexe("Autre");
-        user.setPoids(0);
-        user.setTaille(0);
-        user.setHandicap("");
+    public User findById(int id) throws SQLException {
+        String sql = "SELECT * FROM user WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return extractUserFromResultSet(rs);
+        }
+        return null;
+    }
 
-        add(user);
-
-        return findByEmail(email);
+    public User getUserById(int id) {
+        try {
+            return findById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public int countAllUsers() throws SQLException {
-        return countByQuery("SELECT COUNT(*) FROM user");
+        String sql = "SELECT COUNT(*) FROM user";
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
     }
 
     public int countByRole(UserRole role) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM user WHERE role = ?";
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setString(1, role.name());
+        String sql = "SELECT COUNT(*) FROM user WHERE user_role = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            String roleName = role.name();
+            if (role == UserRole.PATIENT) roleName = "CLIENT"; // Adapt to existing schema
+            ps.setString(1, roleName);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1);
         }
         return 0;
     }
 
-    public int countAgeBetween(int min, int max) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM user WHERE age BETWEEN ? AND ?";
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setInt(1, min);
-            ps.setInt(2, max);
+    public boolean emailExists(String email) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM user WHERE email = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+            if (rs.next()) return rs.getInt(1) > 0;
         }
-        return 0;
+        return false;
     }
 
-    public int countAgeGreaterThan(int min) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM user WHERE age > ?";
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
-            ps.setInt(1, min);
+    /**
+     * Gère la connexion ou l'inscription via Google OAuth.
+     * Si l'utilisateur existe, retourne ses informations.
+     * Sinon, crée un nouveau compte avec les informations de base de Google.
+     */
+    public User loginOrRegisterWithGoogle(String email, String nom, String prenom) throws SQLException {
+        // 1. Check if user already exists
+        String query = "SELECT * FROM user WHERE email = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+            if (rs.next()) {
+                // Utilisateur existant, on le retourne directement (Connexion réussie)
+                return extractUserFromResultSet(rs);
+            }
         }
-        return 0;
-    }
 
-    private int countByQuery(String sql) throws SQLException {
-        try (Connection cnx = MyConnection.getConnection();
-             PreparedStatement ps = cnx.prepareStatement(sql)) {
+        // 2. User doesn't exist, register them
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setNom(nom != null ? nom : "GoogleUser");
+        newUser.setPrenom(prenom != null ? prenom : "");
+        
+        // Mot de passe aléatoire très fort (inutilisable par l'utilisateur, ce qui force l'usage de Google ou du mot de passe oublié)
+        String randomPassword = java.util.UUID.randomUUID().toString();
+        newUser.setPassword(BCrypt.hashpw(randomPassword, BCrypt.gensalt()));
+        
+        // Valeurs par défaut
+        newUser.setRoles("[\"ROLE_PATIENT\"]");
+        newUser.setUser_role("ROLE_PATIENT");
+        newUser.setTelephone("");
+        newUser.setAge(18);
+        newUser.setSexe("Homme");
+        newUser.setTaille(0);
+        newUser.setPoids(0);
+        newUser.setHandicap(false);
+        newUser.setSpecialite("");
+
+        // On l'ajoute en base de données
+        this.ajouter(newUser);
+
+        // On le récupère pour avoir son ID auto-généré
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+            if (rs.next()) {
+                return extractUserFromResultSet(rs);
+            }
         }
-        return 0;
-    }
-
-    private User mapResultSetToUser(ResultSet rs) throws SQLException {
-        return new User(
-                rs.getInt("id"),
-                rs.getString("nom"),
-                rs.getString("prenom"),
-                rs.getString("email"),
-                rs.getString("password"),
-                rs.getString("telephone"),
-                UserRole.valueOf(rs.getString("role")),
-                rs.getInt("age"),
-                rs.getString("sexe"),
-                rs.getDouble("poids"),
-                rs.getDouble("taille"),
-                rs.getString("handicap"),
-                rs.getTimestamp("dateCreation"),
-                rs.getTimestamp("derniereMiseAJour")
-        );
+        return null;
     }
 }

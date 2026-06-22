@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.shape.*?>
+<?import java.net.URL?>
+
+<ScrollPane fitToWidth="true"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.servicesociaux.backoffice.controllers.MainMenuController"
+            styleClass="admin-view-bg">
+
+    <stylesheets>
+        <URL value="@admin_services.css"/>
+    </stylesheets>
+
+    <VBox spacing="20" style="-fx-padding: 24;" styleClass="admin-view-bg">
+
+        <!-- ══ CARTES STATS ════════════════════════════════════ -->
+        <HBox spacing="16" alignment="CENTER_LEFT">
+            <VBox prefWidth="180" styleClass="stat-card-admin, stat-card-total">
+                <Label text="HÔPITAUX" styleClass="stat-label-small"/>
+                <Label fx:id="countHopital" text="—" styleClass="stat-value-large"/>
+            </VBox>
+            <VBox prefWidth="180" styleClass="stat-card-admin, stat-card-success">
+                <Label text="TOTAL RDV" styleClass="stat-label-small"/>
+                <Label fx:id="countRdv" text="—" styleClass="stat-value-large"/>
+            </VBox>
+            <VBox prefWidth="180" styleClass="stat-card-admin, stat-card-warning">
+                <Label text="EN ATTENTE" styleClass="stat-label-small"/>
+                <Label fx:id="countEnAttente" text="—" styleClass="stat-value-large"/>
+            </VBox>
+        </HBox>
+
+        <!-- ══ BOUTONS D'ACTION ═══════════════════════════════ -->
+        <HBox spacing="16">
+            <Button onAction="#ouvrirHopital" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="btn-dash-card">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="8">
+                        <Label text="🏥" styleClass="dash-card-icon"/>
+                        <Label text="Gérer les Hôpitaux" styleClass="dash-card-title"/>
+                    </VBox>
+                </graphic>
+            </Button>
+
+            <Button onAction="#ouvrirRendezVous" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="btn-dash-card">
+                <graphic>
+                    <VBox alignment="CENTER" spacing="8">
+                        <Label text="📅" styleClass="dash-card-icon"/>
+                        <Label text="Gérer les Rendez-vous" styleClass="dash-card-title"/>
+                    </VBox>
+                </graphic>
+            </Button>
+        </HBox>
+
+        <!-- ══ BARCHART ════════════════════════════════════════ -->
+        <VBox spacing="12" styleClass="admin-side-panel" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Répartition des rendez-vous par établissement" 
+                       style="-fx-font-size: 16; -fx-font-weight: 800; -fx-text-fill: #1e293b;" HBox.hgrow="ALWAYS"/>
+                <HBox spacing="12" alignment="CENTER_RIGHT">
+                    <HBox spacing="6" alignment="CENTER">
+                        <Rectangle width="12" height="12" arcWidth="4" arcHeight="4" fill="#dc3545"/>
+                        <Label text="Total RDV" style="-fx-font-size: 11; -fx-text-fill: #64748b; -fx-font-weight: 600;"/>
+                    </HBox>
+                    <HBox spacing="6" alignment="CENTER">
+                        <Rectangle width="12" height="12" arcWidth="4" arcHeight="4" fill="#f59e0b"/>
+                        <Label text="En attente" style="-fx-font-size: 11; -fx-text-fill: #64748b; -fx-font-weight: 600;"/>
+                    </HBox>
+                </HBox>
+            </HBox>
+
+            <BarChart fx:id="barChart" animated="true" legendVisible="false" VBox.vgrow="ALWAYS"
+                      style="-fx-background-color: transparent;">
+                <xAxis>
+                    <CategoryAxis label="Hôpitaux" tickLabelRotation="0"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis label="Nb RDV" minorTickVisible="false"/>
+                </yAxis>
+            </BarChart>
+        </VBox>
+    </VBox>
+</ScrollPane>

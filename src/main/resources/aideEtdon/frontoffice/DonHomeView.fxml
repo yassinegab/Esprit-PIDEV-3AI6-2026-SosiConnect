@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.aideEtdon.frontoffice.controller.DonHomeController"
+      alignment="CENTER" spacing="32"
+      stylesheets="@don_styles.css"
+      styleClass="main-bg">
+
+    <!-- Page Header Banner with emoji -->
+    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="page-header-banner" style="-fx-max-width: 960;">
+        <VBox styleClass="page-header-icon" alignment="CENTER">
+            <Label text="🤝" style="-fx-font-size: 26px;" />
+        </VBox>
+        <VBox spacing="4">
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="Centre de Solidarite" styleClass="page-title-accent" />
+                <Label text="💚" style="-fx-font-size: 22px;" />
+            </HBox>
+            <Label text="Demandez de l'aide ou offrez votre soutien a la communaute" styleClass="page-subtitle-muted" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="🟢 Plateforme Active" styleClass="badge-pill" />
+    </HBox>
+
+    <HBox alignment="CENTER" spacing="28">
+        <!-- Card 1: Create Request -->
+        <VBox fx:id="cardCreate" onMouseClicked="#goToCreateDemande" alignment="CENTER" spacing="12" prefWidth="270" prefHeight="280" styleClass="modern-card, card-accent-blue">
+            <VBox styleClass="icon-box-blue">
+                <Label text="📝" style="-fx-font-size: 30px;" />
+            </VBox>
+            <Label text="Nouvelle Demande" styleClass="card-title" />
+            <Label text="Soumettez une demande d'aide medicale ou materielle" styleClass="card-desc" wrapText="true" />
+            <Region VBox.vgrow="ALWAYS" />
+            <Label text="➕ Creer" styleClass="btn-card-blue" />
+        </VBox>
+
+        <!-- Card 2: View Requests -->
+        <VBox fx:id="cardView" onMouseClicked="#goToViewDemandes" alignment="CENTER" spacing="12" prefWidth="270" prefHeight="280" styleClass="modern-card, card-accent-lavender">
+            <VBox styleClass="icon-box-lavender">
+                <Label text="🔍" style="-fx-font-size: 30px;" />
+            </VBox>
+            <Label text="Consulter les Demandes" styleClass="card-title" />
+            <Label text="Parcourez et repondez aux appels a l'aide" styleClass="card-desc" wrapText="true" />
+            <Region VBox.vgrow="ALWAYS" />
+            <Label text="🔎 Explorer" styleClass="btn-card-lavender" />
+        </VBox>
+
+        <!-- Card 3: Videos -->
+        <VBox fx:id="cardVideo" onMouseClicked="#goToVideos" alignment="CENTER" spacing="12" prefWidth="270" prefHeight="280" styleClass="modern-card, card-accent-rose">
+            <VBox styleClass="icon-box-rose">
+                <Label text="🎬" style="-fx-font-size: 30px;" />
+            </VBox>
+            <Label text="Sensibilisation" styleClass="card-title" />
+            <Label text="Regardez des videos educatives sur le don et l'entraide" styleClass="card-desc" wrapText="true" />
+            <Region VBox.vgrow="ALWAYS" />
+            <Label text="▶ Regarder" styleClass="btn-card-rose" />
+        </VBox>
+    </HBox>
+
+    <!-- Stats Marquee -->
+    <HBox alignment="CENTER" spacing="24" style="-fx-max-width: 700;">
+        <VBox alignment="CENTER" spacing="2" styleClass="stat-mini-card, stat-mini-green">
+            <Label text="🩸" style="-fx-font-size: 20px;" />
+            <Label text="Don de Sang" styleClass="stat-mini-label-green" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="2" styleClass="stat-mini-card, stat-mini-blue">
+            <Label text="🫁" style="-fx-font-size: 20px;" />
+            <Label text="Don d'Organe" styleClass="stat-mini-label-blue" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="2" styleClass="stat-mini-card, stat-mini-amber">
+            <Label text="💊" style="-fx-font-size: 20px;" />
+            <Label text="Medicaments" styleClass="stat-mini-label-amber" />
+        </VBox>
+        <VBox alignment="CENTER" spacing="2" styleClass="stat-mini-card, stat-mini-rose">
+            <Label text="❤️" style="-fx-font-size: 20px;" />
+            <Label text="Solidarite" styleClass="stat-mini-label-rose" />
+        </VBox>
+    </HBox>
+
+    <!-- Info Tip -->
+    <HBox alignment="CENTER" spacing="8" styleClass="info-tip-bar" style="-fx-max-width: 640;">
+        <Label text="💡" style="-fx-font-size: 16px;" />
+        <Label text="Selectionnez une action pour commencer. Vos demandes sont traitees en priorite." styleClass="info-tip-text" />
+    </HBox>
+</VBox>

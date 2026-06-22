@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.servicesociaux.frontoffice.controller.controllers.DossierMedicalController"
+      spacing="0"
+      styleClass="main-container">
+
+    <stylesheets>
+        <URL value="@dossiermedical_style.css" />
+    </stylesheets>
+
+    <!-- ══ HEADER ══ -->
+    <HBox styleClass="header-box" spacing="15">
+        <Button text="← Accueil" onAction="#retourAccueil" styleClass="btn-back"/>
+        <Label text="🗂 Dossiers Médicaux" styleClass="header-title" HBox.hgrow="ALWAYS"/>
+        <Label fx:id="statusLabel" text="0 dossier(s)" styleClass="badge-activite"/>
+    </HBox>
+
+    <!-- ══ BODY ══ -->
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+
+        <!-- ═════════════════════════════════════════
+             COLONNE GAUCHE : Liste / Formulaire
+        ═════════════════════════════════════════ -->
+        <VBox prefWidth="420" minWidth="380" styleClass="sidebar-container">
+
+            <!-- ── PANEL LISTE ── -->
+            <VBox fx:id="listPanel" VBox.vgrow="ALWAYS">
+                <HBox styleClass="sidebar-header" alignment="CENTER_LEFT">
+                    <Label text="📋 Mes dossiers" styleClass="sidebar-title" HBox.hgrow="ALWAYS"/>
+                    <Button text="＋ Nouveau dossier" onAction="#afficherFormulaireNouveauDossier" styleClass="btn-new"/>
+                </HBox>
+
+                <Label fx:id="errorLabel" wrapText="true" style="-fx-font-size:11; -fx-padding:10 20;"/>
+
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background:transparent; -fx-background-color:transparent; -fx-border-color:transparent;">
+                    <VBox fx:id="dossiersListBox" spacing="15" style="-fx-padding:20;"/>
+                </ScrollPane>
+            </VBox>
+
+            <!-- ── PANEL FORMULAIRE ── -->
+            <VBox fx:id="formPanel" VBox.vgrow="ALWAYS" managed="false" visible="false">
+                <HBox styleClass="sidebar-header" alignment="CENTER_LEFT" spacing="10">
+                    <Button text="← Liste" onAction="#fermerFormulaire" styleClass="btn-back" style="-fx-padding: 5 12;"/>
+                    <Label fx:id="formTitleLabel" text="Nouveau dossier" styleClass="sidebar-title"/>
+                </HBox>
+
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background:transparent; -fx-background-color:transparent; -fx-border-color:transparent;">
+                    <VBox spacing="15" style="-fx-padding:20;">
+                        
+                        <VBox spacing="5">
+                            <Label text="🏥 Antécédents médicaux" styleClass="sidebar-title" style="-fx-text-fill: #64748b;"/>
+                            <TextArea fx:id="antecedentsArea" prefRowCount="3" promptText="Antécédents..." styleClass="form-input-area"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="🦠 Maladies chroniques" styleClass="sidebar-title" style="-fx-text-fill: #dc3545;"/>
+                            <TextArea fx:id="maladiesArea" prefRowCount="3" promptText="Maladies..." styleClass="form-input-area"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="⚗ Allergies" styleClass="sidebar-title" style="-fx-text-fill: #ea580c;"/>
+                            <TextArea fx:id="allergiesArea" prefRowCount="3" promptText="Allergies..." styleClass="form-input-area"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="💊 Traitements en cours" styleClass="sidebar-title" style="-fx-text-fill: #3b82f6;"/>
+                            <TextArea fx:id="traitementsArea" prefRowCount="3" promptText="Traitements..." styleClass="form-input-area"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="🩺 Diagnostics" styleClass="sidebar-title" style="-fx-text-fill: #10b981;"/>
+                            <TextArea fx:id="diagnosticsArea" prefRowCount="3" promptText="Diagnostics..." styleClass="form-input-area"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="📝 Notes du médecin" styleClass="sidebar-title" style="-fx-text-fill: #475569;"/>
+                            <TextArea fx:id="notesArea" prefRowCount="3" promptText="Notes..." styleClass="form-input-area"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="🎯 Objectif santé" styleClass="sidebar-title" style="-fx-text-fill: #dc3545;"/>
+                            <TextArea fx:id="objectifArea" prefRowCount="3" promptText="Objectifs..." styleClass="form-input-area"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="🏃 Niveau d'activité" styleClass="sidebar-title" style="-fx-text-fill: #64748b;"/>
+                            <ComboBox fx:id="activiteCombo" maxWidth="Infinity" styleClass="combo-box"/>
+                        </VBox>
+
+                        <HBox spacing="10" style="-fx-padding: 10 0 0 0;">
+                            <Button text="💾 Enregistrer" onAction="#sauvegarder" HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="btn-new"/>
+                            <Button text="🗑 Vider" onAction="#vider" styleClass="btn-back" style="-fx-padding: 10 16;"/>
+                        </HBox>
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+        </VBox>
+
+        <!-- ═════════════════════════════════════════
+             COLONNE DROITE : Détail du dossier
+        ═════════════════════════════════════════ -->
+        <VBox VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" spacing="0" styleClass="detail-container">
+
+            <!-- En-tête détail -->
+            <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 0 0 20 0;">
+                <Label fx:id="detailTitleLabel" text="Détail du dossier médical" styleClass="header-title" HBox.hgrow="ALWAYS"/>
+                <HBox spacing="10">
+                    <Button fx:id="btnGroq" text="🧠 Analyser Groq" onAction="#ouvrirAnalyseGroq" styleClass="btn-ia-groq"/>
+                    <Button fx:id="btnHF" text="🤗 HuggingFace" onAction="#ouvrirAnalyseHF" styleClass="btn-ia-hf"/>
+                </HBox>
+            </HBox>
+
+            <!-- Contenu détail scrollable -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background:transparent; -fx-background-color:transparent; -fx-border-color:transparent;">
+                <VBox fx:id="detailPanel" spacing="20">
+                    <!-- Placeholder -->
+                    <VBox alignment="CENTER" spacing="20" style="-fx-padding: 100 0;">
+                        <Label text="📂" style="-fx-font-size: 64; -fx-opacity: 0.2;"/>
+                        <Label text="Aucun dossier sélectionné" styleClass="sidebar-title" style="-fx-text-fill: #94a3b8;"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </HBox>
+</VBox>

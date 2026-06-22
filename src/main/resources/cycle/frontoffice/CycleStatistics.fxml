@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefHeight="700.0" prefWidth="950.0" styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.cycle.frontoffice.controller.CycleStatisticsController">
+
+    <stylesheets>
+        <URL value="@DisplayCss.css" />
+    </stylesheets>
+
+    <!-- HEADER SECTION -->
+    <HBox style="-fx-padding: 20 30; -fx-alignment: center-left;">
+        <VBox spacing="5">
+            <Label style="-fx-font-size: 26px; -fx-font-weight: 900; -fx-text-fill: -fx-text-dark;" text="📊 Statistiques Cliniques" />
+            <Label style="-fx-font-size: 14px; -fx-text-fill: -fx-text-muted;" text="Indicateurs clés de votre santé menstruelle" />
+        </VBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+        <content>
+            <GridPane hgap="25" vgap="25" style="-fx-padding: 30;">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <!-- CARD 1 -->
+                <VBox alignment="CENTER" spacing="10" styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label styleClass="stat-label" text="Total Cycles Enregistrés" />
+                    <Label fx:id="lblTotalCycles" styleClass="stat-value" style="-fx-text-fill: #3b82f6;" text="0" />
+                </VBox>
+
+                <!-- CARD 2 -->
+                <VBox alignment="CENTER" spacing="10" styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label styleClass="stat-label" text="Durée Moyenne d'un Cycle" />
+                    <Label fx:id="lblAvgDuration" styleClass="stat-value" style="-fx-text-fill: #ff6b81;" text="0 j" />
+                </VBox>
+
+                <!-- CARD 3 -->
+                <VBox alignment="CENTER" spacing="10" styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Label styleClass="stat-label" text="Cycle le Plus Court" />
+                    <Label fx:id="lblShortest" styleClass="stat-value" style="-fx-text-fill: #10b981;" text="0 j" />
+                </VBox>
+
+                <!-- CARD 4 -->
+                <VBox alignment="CENTER" spacing="10" styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Label styleClass="stat-label" text="Cycle le Plus Long" />
+                    <Label fx:id="lblLongest" styleClass="stat-value" style="-fx-text-fill: #f59e0b;" text="0 j" />
+                </VBox>
+
+                <!-- CARD 5 -->
+                <VBox alignment="CENTER" spacing="10" styleClass="stat-card" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                    <Label styleClass="stat-label" text="Taux de Régularité" />
+                    <Label fx:id="lblRegularity" styleClass="stat-value" style="-fx-text-fill: #6366f1;" text="0%" />
+                </VBox>
+
+                <!-- CARD 6 -->
+                <VBox alignment="CENTER" spacing="10" styleClass="stat-card" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <Label styleClass="stat-label" text="Durée Moyenne des Règles" />
+                    <Label fx:id="lblAvgPeriod" styleClass="stat-value" style="-fx-text-fill: #ec4899;" text="0 j" />
+                </VBox>
+            </GridPane>
+        </content>
+    </ScrollPane>
+
+</VBox>
+
